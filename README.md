@@ -26,6 +26,10 @@ The first milestone is a small but completely closed loop: a modest set of mathl
 
 A curated benchmark of Stacks Project results with gold formalizations and dependency-aware evaluation splits is planned as a named artifact of the project.
 
+## Architecture
+
+![AI4Algebra architecture](./assets/architecture.png)
+
 ## Status
 
 Early stage. This repository currently holds the project charter only; implementation has not yet been committed.
