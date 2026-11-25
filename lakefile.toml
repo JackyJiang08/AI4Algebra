@@ -1,7 +1,7 @@
 name = "AI4Algebra"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["AI4Algebra"]
+defaultTargets = ["AI4Algebra", "ai4algebra-observer", "ai4algebra-verifier"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -16,3 +16,13 @@ rev = "v4.34.0-rc1"
 
 [[lean_lib]]
 name = "AI4Algebra"
+
+[[lean_exe]]
+name = "ai4algebra-observer"
+root = "AI4Algebra.Bridge.Main"
+supportInterpreter = true
+
+[[lean_exe]]
+name = "ai4algebra-verifier"
+root = "AI4Algebra.Verification.Main"
+supportInterpreter = true

@@ -1,0 +1,1 @@
+Let R be a unital ring, with multiplication not assumed commutative, and let a, b, c, and d be arbitrary elements of R. Show that left multiplication by a sends (b - c) + d to (ab - ac) + ad.

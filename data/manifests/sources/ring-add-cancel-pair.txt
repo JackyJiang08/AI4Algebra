@@ -1,0 +1,1 @@
+Let R be a unital ring, with multiplication not assumed commutative, and let a, b, c, d, e, and f be arbitrary elements of R. Assume a + b = a + c and d + e = f + e. Prove both b = c and d = f.

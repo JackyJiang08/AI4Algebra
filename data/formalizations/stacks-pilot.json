@@ -1,0 +1,478 @@
+{
+  "schema_version": 1,
+  "mappings": [
+    {
+      "schema_version": 1,
+      "evidence_id": "stacks-00E5-image-mapping-v1",
+      "task_id": "stacks-00E5-image",
+      "source_digest": "25107dcaf47ca2e5a3031f587622c4854329aacf436045deecf74dfe79cb39ff",
+      "statement_digest": "01853c71d706067e076df93da2d4697fe0e1feeea630eaf58d705bf931113291",
+      "imports_digest": "f8c7fe1da338e48c897b5186bdd7071e6e91d429616491c373251ce67fcb2f34",
+      "status": "curated_validated",
+      "status_reason": "Reviewed against the pinned Stacks statement; the corresponding Lean source type and proof were re-elaborated.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[CommRing R]",
+          "(I : Ideal R)"
+        ],
+        "conclusion": "Set.range (PrimeSpectrum.comap (Ideal.Quotient.mk I)) = PrimeSpectrum.zeroLocus (I : Set R)"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(R : Type u)",
+          "source_meaning": "The arbitrary base ring R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 1,
+          "lean_fragment": "[CommRing R]",
+          "source_meaning": "Commutative, unital ring structure."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(I : Ideal R)",
+          "source_meaning": "The ideal I defining the quotient."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "Set.range (PrimeSpectrum.comap (Ideal.Quotient.mk I)) = PrimeSpectrum.zeroLocus (I : Set R)",
+          "source_meaning": "For a commutative ring R and ideal I, the image of the prime-spectrum map induced by the quotient R → R/I consists exactly of the primes of R that contain I. This is the image-on-points subclaim of Stacks tag 00E5."
+        }
+      ],
+      "reviewer": "AI4Algebra Stacks pilot curation",
+      "review_basis": "Manual comparison to algebra-lemma-spec-closed at lines 3226–3235 of the pinned algebra.tex. Lean definitional equality was checked against the separately authored StacksStatements.lean type, including binder kinds.",
+      "conventions": [
+        "CommRing is unital and includes the zero ring.",
+        "The morphism on prime spectra is contravariant and induced by the quotient ring homomorphism.",
+        "The closed locus V(I) is represented by PrimeSpectrum.zeroLocus on the underlying set of I."
+      ],
+      "source_scope": "subclaim",
+      "source_scope_note": "The image on prime-spectrum points is formalized. The homeomorphism, continuity, and the formula for its inverse are outside this subclaim.",
+      "reviewed_informal_digest": "654aa6442be96deb53f61f037be85af8121f797b34af43f6de124c3cf2daf17b",
+      "target_declaration": "AI4Algebra.Benchmarks.StacksTasks.quotient_spectrum_image",
+      "aliases": [],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "b044a11f68cb7442d93a7c0e01d8be53e0102ba03c8f88537d4be23d25652eca",
+        "statement_digest": "01853c71d706067e076df93da2d4697fe0e1feeea630eaf58d705bf931113291",
+        "reference_type_digest": "ce4bc568731d7a45a69ac230ac0e5f7df098784e19da50da75ef1ca1b3ee66b0",
+        "reference_type_key": "59593537",
+        "detail": "Pinned Lean compared the original-aligned source type, proposed type, and protected proof type."
+      }
+    },
+    {
+      "schema_version": 1,
+      "evidence_id": "stacks-00GJ-mapping-v1",
+      "task_id": "stacks-00GJ",
+      "source_digest": "9f7c0388ea08ce28549811dd0086d3cef50e8c491fe1f6fa29c55d0f7b0788ff",
+      "statement_digest": "f95c853c6ca342d2abd8f7724ff601c9f86adf98b922a2831aac89bca23c73fa",
+      "imports_digest": "d22d606143bf373a455d57b054a1cb025809c81f5c40497c775527d418a6dc1c",
+      "status": "curated_validated",
+      "status_reason": "Reviewed against the pinned Stacks statement; the corresponding Lean source type and proof were re-elaborated.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u",
+          "v",
+          "w"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "(S : Type v)",
+          "(M : Type w)",
+          "[CommRing R]",
+          "[CommRing S]",
+          "[Algebra R S]",
+          "[AddCommGroup M]",
+          "[Module R M]",
+          "[Module S M]",
+          "[IsScalarTower R S M]",
+          "[Module.Finite R S]"
+        ],
+        "conclusion": "Module.Finite R M ↔ Module.Finite S M"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 1,
+          "lean_fragment": "v",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 2,
+          "lean_fragment": "w",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(R : Type u)",
+          "source_meaning": "The source ring R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 1,
+          "lean_fragment": "(S : Type v)",
+          "source_meaning": "The target ring S."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(M : Type w)",
+          "source_meaning": "The underlying carrier of M."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 3,
+          "lean_fragment": "[CommRing R]",
+          "source_meaning": "The commutative unital structure on R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 4,
+          "lean_fragment": "[CommRing S]",
+          "source_meaning": "The commutative unital structure on S."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 5,
+          "lean_fragment": "[Algebra R S]",
+          "source_meaning": "The given ring map R → S, expressed as an algebra structure."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 6,
+          "lean_fragment": "[AddCommGroup M]",
+          "source_meaning": "The additive group of M."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 7,
+          "lean_fragment": "[Module R M]",
+          "source_meaning": "The restricted R-module action on M."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 8,
+          "lean_fragment": "[Module S M]",
+          "source_meaning": "The original S-module action."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 9,
+          "lean_fragment": "[IsScalarTower R S M]",
+          "source_meaning": "Compatibility defining restriction of scalars through R → S."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 10,
+          "lean_fragment": "[Module.Finite R S]",
+          "source_meaning": "The ring map is finite, meaning S is finitely generated over R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "Module.Finite R M ↔ Module.Finite S M",
+          "source_meaning": "Let R → S be a finite homomorphism of commutative rings, and let M be an S-module. Then M is finitely generated over R precisely when it is finitely generated over S."
+        }
+      ],
+      "reviewer": "AI4Algebra Stacks pilot curation",
+      "review_basis": "Manual comparison to algebra-lemma-finite-module-over-finite-extension at lines 641–647 of the pinned algebra.tex. Lean definitional equality was checked against the separately authored StacksStatements.lean type, including binder kinds.",
+      "conventions": [
+        "CommRing is unital and includes the zero ring.",
+        "Algebra R S is the given unital ring homomorphism between commutative rings.",
+        "Module R M and IsScalarTower R S M express the compatible restricted action, which is determined by the S action and R → S.",
+        "Module.Finite expresses finite generation, with no finiteness-of-cardinality hypothesis."
+      ],
+      "source_scope": "full",
+      "source_scope_note": null,
+      "reviewed_informal_digest": "3f3d59b86b959fef76c825091bbdfa0cd1ebd7d1d89b43909e493bc3450a3f5d",
+      "target_declaration": "AI4Algebra.Benchmarks.StacksTasks.finite_over_extension",
+      "aliases": [],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "0339d3f3342c8b3352dc677d436f0e7b6ace56159523d7c9f8a2898d87451e54",
+        "statement_digest": "f95c853c6ca342d2abd8f7724ff601c9f86adf98b922a2831aac89bca23c73fa",
+        "reference_type_digest": "be4de0422761d9cc799a03c26850a8d0264e99e0e2dc3e25acecadaa04d9616f",
+        "reference_type_key": "2271363924",
+        "detail": "Pinned Lean compared the original-aligned source type, proposed type, and protected proof type."
+      }
+    },
+    {
+      "schema_version": 1,
+      "evidence_id": "stacks-05CI-mapping-v1",
+      "task_id": "stacks-05CI",
+      "source_digest": "86696b22a10702bdbfc095e65251d9ba75e224089cd93b72be62e44748ebf26c",
+      "statement_digest": "c3f0ff18cf422d31a2f289c50ad518a0427d7f2c3dcfd4a04dc941dc9a6bb957",
+      "imports_digest": "f259487bf23998d5a822735f88b73f99825ff92ab89dc31086f78896781a1383",
+      "status": "curated_validated",
+      "status_reason": "Reviewed against the pinned Stacks statement; the corresponding Lean source type and proof were re-elaborated.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u",
+          "v",
+          "w",
+          "x",
+          "y"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[CommRing R]",
+          "(M : Type v)",
+          "(N : Type w)",
+          "(P : Type x)",
+          "[AddCommGroup M]",
+          "[Module R M]",
+          "[AddCommGroup N]",
+          "[Module R N]",
+          "[AddCommGroup P]",
+          "[Module R P]",
+          "(f : M →ₗ[R] N)",
+          "(g : N →ₗ[R] P)",
+          "(hf : ∀ (Q : Type y) [AddCommGroup Q] [Module R Q], Function.Injective (f.rTensor Q))",
+          "(hg : ∀ (Q : Type y) [AddCommGroup Q] [Module R Q], Function.Injective (g.rTensor Q))",
+          "(Q : Type y)",
+          "[AddCommGroup Q]",
+          "[Module R Q]"
+        ],
+        "conclusion": "Function.Injective ((g.comp f).rTensor Q)"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 1,
+          "lean_fragment": "v",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 2,
+          "lean_fragment": "w",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 3,
+          "lean_fragment": "x",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 4,
+          "lean_fragment": "y",
+          "source_meaning": "An independently arbitrary universe level for the corresponding carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(R : Type u)",
+          "source_meaning": "The arbitrary common base ring."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 1,
+          "lean_fragment": "[CommRing R]",
+          "source_meaning": "Commutative, unital ring structure."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(M : Type v)",
+          "source_meaning": "The first module carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 3,
+          "lean_fragment": "(N : Type w)",
+          "source_meaning": "The middle module carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 4,
+          "lean_fragment": "(P : Type x)",
+          "source_meaning": "The final module carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 5,
+          "lean_fragment": "[AddCommGroup M]",
+          "source_meaning": "Additive group of M."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 6,
+          "lean_fragment": "[Module R M]",
+          "source_meaning": "R-module action on M."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 7,
+          "lean_fragment": "[AddCommGroup N]",
+          "source_meaning": "Additive group of N."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 8,
+          "lean_fragment": "[Module R N]",
+          "source_meaning": "R-module action on N."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 9,
+          "lean_fragment": "[AddCommGroup P]",
+          "source_meaning": "Additive group of P."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 10,
+          "lean_fragment": "[Module R P]",
+          "source_meaning": "R-module action on P."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 11,
+          "lean_fragment": "(f : M →ₗ[R] N)",
+          "source_meaning": "The first R-linear map."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 12,
+          "lean_fragment": "(g : N →ₗ[R] P)",
+          "source_meaning": "The second R-linear map."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 13,
+          "lean_fragment": "(hf : ∀ (Q : Type y) [AddCommGroup Q] [Module R Q], Function.Injective (f.rTensor Q))",
+          "source_meaning": "Universal injectivity of f after tensoring on the right."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 14,
+          "lean_fragment": "(hg : ∀ (Q : Type y) [AddCommGroup Q] [Module R Q], Function.Injective (g.rTensor Q))",
+          "source_meaning": "Universal injectivity of g after tensoring on the right."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 15,
+          "lean_fragment": "(Q : Type y)",
+          "source_meaning": "An arbitrary test module carrier."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 16,
+          "lean_fragment": "[AddCommGroup Q]",
+          "source_meaning": "Additive group of the test module."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 17,
+          "lean_fragment": "[Module R Q]",
+          "source_meaning": "R-module action on the test module."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "Function.Injective ((g.comp f).rTensor Q)",
+          "source_meaning": "Over a commutative ring, the composite of two universally injective module maps is universally injective. Here a map is universally injective when tensoring it on the right with the identity on any module preserves injectivity."
+        }
+      ],
+      "reviewer": "AI4Algebra Stacks pilot curation",
+      "review_basis": "Manual comparison to algebra-lemma-composition-universally-injective at lines 20084–20088 of the pinned algebra.tex. Lean definitional equality was checked against the separately authored StacksStatements.lean type, including binder kinds.",
+      "conventions": [
+        "CommRing is unital and includes the zero ring.",
+        "Right tensoring by Q means applying f ⊗ id_Q for every R-module Q, as in algebra-definition-universally-injective.",
+        "The three original module carriers have independent universe levels. The arbitrary test-module universe is separately polymorphic."
+      ],
+      "source_scope": "full",
+      "source_scope_note": null,
+      "reviewed_informal_digest": "0cb94407cc2618b63c6356c6fec05ab624e053fed49fa44e596e2f5bb9e03a60",
+      "target_declaration": "AI4Algebra.Benchmarks.StacksTasks.universal_injective_composition",
+      "aliases": [],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "e1751aacae6a09afa107b026cbb1fed1cc44b152d8381bbb62f78b9e6349db0d",
+        "statement_digest": "c3f0ff18cf422d31a2f289c50ad518a0427d7f2c3dcfd4a04dc941dc9a6bb957",
+        "reference_type_digest": "f794ce6a0b8f0f94d1cf39696839b33e34de771984ce3d7d1c243b93d14584c4",
+        "reference_type_key": "4223408133",
+        "detail": "Pinned Lean compared the original-aligned source type, proposed type, and protected proof type."
+      }
+    }
+  ]
+}

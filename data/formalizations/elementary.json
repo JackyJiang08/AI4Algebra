@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "mappings": [
+    {
+      "schema_version": 1,
+      "evidence_id": "group-inverse-identity-v1",
+      "task_id": "group-inverse-identity",
+      "source_digest": "db68f60aad19d142d0e80d2bbb0a0213d862aee68ccae763dca9d360c710c4a0",
+      "statement_digest": "b2e095495613369dc5bafc7adb846cf99e4f1d4e8d70c5aedc9c0f47fdeb3377",
+      "imports_digest": "f6af34acf884375e84abffbb794c4632371a97da640be8b4481129c75ecd3773",
+      "status": "curated_validated",
+      "status_reason": "The reviewed source type and the manifest type matched in pinned Lean.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(G : Type u)",
+          "[Group G]",
+          "(a b : G)"
+        ],
+        "conclusion": "a * (b * b⁻¹) = a"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "The carrier may have any universe level."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(G : Type u)",
+          "source_meaning": "An arbitrary carrier G."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 1,
+          "lean_fragment": "[Group G]",
+          "source_meaning": "The group axioms on G."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(a b : G)",
+          "source_meaning": "The two arbitrary elements a and b."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "a * (b * b⁻¹) = a",
+          "source_meaning": "The right-hand factor of a is b times the inverse of b, in that order."
+        }
+      ],
+      "reviewer": "AI4Algebra elementary fixture curation",
+      "review_basis": "The original text and independent reference type were checked for every quantified object, assumption and conclusion. The full Lean types were compared by definitional equality with telescope binder kinds checked separately.",
+      "conventions": [
+        "Multiplication is associative and need not commute.",
+        "The inverse notation refers to the inverse in G.",
+        "Every element ranges over the whole group."
+      ],
+      "target_declaration": "AI4Algebra.Benchmarks.Tasks.group_inverse_identity",
+      "aliases": [
+        {
+          "schema_version": 1,
+          "declaration": "mul_inv_cancel_right",
+          "relationship": "Reassociated product.",
+          "basis": "Mathlib.Algebra.Group.Defs and the checked associativity equivalence in tests/fixtures/corpus/audit.lean."
+        },
+        {
+          "schema_version": 1,
+          "declaration": "mul_div_cancel_right",
+          "relationship": "Reassociated product written with division.",
+          "basis": "Mathlib.Algebra.Group.Defs and the checked division equivalence in tests/fixtures/corpus/audit.lean."
+        }
+      ],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "b6c8199e464e33c84384bc18ccd1573282163324dd421129d4933c1cff774243",
+        "statement_digest": "b2e095495613369dc5bafc7adb846cf99e4f1d4e8d70c5aedc9c0f47fdeb3377",
+        "reference_type_digest": "a390d66a35e4bf4dcf8d79e3e4d4d1b3ffcf54ad3059e5657a21ab6b247fb32d",
+        "reference_type_key": "1444518865",
+        "detail": "Pinned Lean checked the full reviewed reference type and its protected reference proof."
+      }
+    },
+    {
+      "schema_version": 1,
+      "evidence_id": "group-ordered-inverse-v1",
+      "task_id": "group-ordered-inverse",
+      "source_digest": "bf5974cd5318b3629e12046e7cc6f1ad2a2a6b41b3578801c5bee029b63aff29",
+      "statement_digest": "8c5428a092ad9e37d4308f458e5cca10fe8abfa709dfc8685056a486a8cc9593",
+      "imports_digest": "f6af34acf884375e84abffbb794c4632371a97da640be8b4481129c75ecd3773",
+      "status": "curated_validated",
+      "status_reason": "The reviewed source type and the manifest type matched in pinned Lean.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(G : Type u)",
+          "[Group G]",
+          "(a b c : G)"
+        ],
+        "conclusion": "((a * b) * (c * c⁻¹)) * b⁻¹ = a"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "The carrier may have any universe level."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(G : Type u)",
+          "source_meaning": "An arbitrary carrier G."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 1,
+          "lean_fragment": "[Group G]",
+          "source_meaning": "The group axioms on G."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(a b c : G)",
+          "source_meaning": "The three arbitrary elements a, b and c."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "((a * b) * (c * c⁻¹)) * b⁻¹ = a",
+          "source_meaning": "The product ab is multiplied by c and its inverse as a single factor, then by b inverse."
+        }
+      ],
+      "reviewer": "AI4Algebra elementary fixture curation",
+      "review_basis": "The original text and independent reference type were checked for every quantified object, assumption and conclusion. The full Lean types were compared by definitional equality with telescope binder kinds checked separately.",
+      "conventions": [
+        "Multiplication is associative and need not commute.",
+        "The inverse notation refers to the inverse in G.",
+        "Every element ranges over the whole group."
+      ],
+      "target_declaration": "AI4Algebra.Benchmarks.Tasks.group_ordered_inverse",
+      "aliases": [],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "b6c8199e464e33c84384bc18ccd1573282163324dd421129d4933c1cff774243",
+        "statement_digest": "8c5428a092ad9e37d4308f458e5cca10fe8abfa709dfc8685056a486a8cc9593",
+        "reference_type_digest": "f48a83c0cd9b408918e836607ccbfd92712aebb243510ca442c1bf1d371edb02",
+        "reference_type_key": "272262946",
+        "detail": "Pinned Lean checked the full reviewed reference type and its protected reference proof."
+      }
+    },
+    {
+      "schema_version": 1,
+      "evidence_id": "ring-distribute-sub-v1",
+      "task_id": "ring-distribute-sub",
+      "source_digest": "38dd5f5ca1c10fef8ca2dde6e365e04a303aa643d86a39ac59534e76ec31f361",
+      "statement_digest": "aad42d0927df32c10cac46ae73d3992a3c14105c4f1e1c5c0345311ca1aa8abc",
+      "imports_digest": "2b52851675e04e161c3f0df27b9da5444d070bfd975c3757513f0ebf8efa0747",
+      "status": "curated_validated",
+      "status_reason": "The reviewed source type and the manifest type matched in pinned Lean.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[Ring R]",
+          "(a b c d : R)"
+        ],
+        "conclusion": "a * (b - c + d) = a * b - a * c + a * d"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "The carrier may have any universe level."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(R : Type u)",
+          "source_meaning": "An arbitrary carrier R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 1,
+          "lean_fragment": "[Ring R]",
+          "source_meaning": "The unital ring axioms on R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(a b c d : R)",
+          "source_meaning": "The four arbitrary elements a, b, c and d."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "a * (b - c + d) = a * b - a * c + a * d",
+          "source_meaning": "Left multiplication by a distributes over the addition and subtraction in (b - c) + d."
+        }
+      ],
+      "reviewer": "AI4Algebra elementary fixture curation",
+      "review_basis": "The original text and independent reference type were checked for every quantified object, assumption and conclusion. The full Lean types were compared by definitional equality with telescope binder kinds checked separately.",
+      "conventions": [
+        "Ring denotes an associative unital ring. Multiplication need not commute.",
+        "Ring addition is an abelian group operation.",
+        "The rightmost sum in the distributivity target groups subtraction before addition."
+      ],
+      "target_declaration": "AI4Algebra.Benchmarks.Tasks.ring_distribute_sub",
+      "aliases": [],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "47118b8e7d7c028e9763ef1c8137feed68f4f5c162328b12d5d855af26327ad5",
+        "statement_digest": "aad42d0927df32c10cac46ae73d3992a3c14105c4f1e1c5c0345311ca1aa8abc",
+        "reference_type_digest": "8f33a35bc0a09e9649a4be194c88bf6a6e97e628a2ca4ec365715817cf6b4025",
+        "reference_type_key": "793559841",
+        "detail": "Pinned Lean checked the full reviewed reference type and its protected reference proof."
+      }
+    },
+    {
+      "schema_version": 1,
+      "evidence_id": "ring-add-cancel-pair-v1",
+      "task_id": "ring-add-cancel-pair",
+      "source_digest": "fa4acc4067bfbdc4d10665cf18657568453cc829d859f76568da10b4cce59569",
+      "statement_digest": "85b66d18070273ba3b9e00f01bb0d05cbe630d327d71f94287b987cdbbec5ef9",
+      "imports_digest": "2b52851675e04e161c3f0df27b9da5444d070bfd975c3757513f0ebf8efa0747",
+      "status": "curated_validated",
+      "status_reason": "The reviewed source type and the manifest type matched in pinned Lean.",
+      "reference_type": {
+        "schema_version": 1,
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[Ring R]",
+          "(a b c d e f : R)",
+          "(_ : a + b = a + c)",
+          "(_ : d + e = f + e)"
+        ],
+        "conclusion": "b = c ∧ d = f"
+      },
+      "alignment": [
+        {
+          "schema_version": 1,
+          "kind": "universe",
+          "position": 0,
+          "lean_fragment": "u",
+          "source_meaning": "The carrier may have any universe level."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 0,
+          "lean_fragment": "(R : Type u)",
+          "source_meaning": "An arbitrary carrier R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 1,
+          "lean_fragment": "[Ring R]",
+          "source_meaning": "The unital ring axioms on R."
+        },
+        {
+          "schema_version": 1,
+          "kind": "object",
+          "position": 2,
+          "lean_fragment": "(a b c d e f : R)",
+          "source_meaning": "The six arbitrary elements a, b, c, d, e and f."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 3,
+          "lean_fragment": "(_ : a + b = a + c)",
+          "source_meaning": "The first supplied equality has common left summand a."
+        },
+        {
+          "schema_version": 1,
+          "kind": "assumption",
+          "position": 4,
+          "lean_fragment": "(_ : d + e = f + e)",
+          "source_meaning": "The second supplied equality has common right summand e."
+        },
+        {
+          "schema_version": 1,
+          "kind": "conclusion",
+          "position": 0,
+          "lean_fragment": "b = c ∧ d = f",
+          "source_meaning": "Both conclusions must hold, one for each independently given equality."
+        }
+      ],
+      "reviewer": "AI4Algebra elementary fixture curation",
+      "review_basis": "The original text and independent reference type were checked for every quantified object, assumption and conclusion. The full Lean types were compared by definitional equality with telescope binder kinds checked separately.",
+      "conventions": [
+        "Ring denotes an associative unital ring. Multiplication need not commute.",
+        "The two premises are independent equalities in the additive group of R.",
+        "The conclusion is a conjunction."
+      ],
+      "target_declaration": "AI4Algebra.Benchmarks.Tasks.ring_add_cancel_pair",
+      "aliases": [],
+      "check": {
+        "schema_version": 1,
+        "result": "definitionally_equal",
+        "environment_digest": "47118b8e7d7c028e9763ef1c8137feed68f4f5c162328b12d5d855af26327ad5",
+        "statement_digest": "85b66d18070273ba3b9e00f01bb0d05cbe630d327d71f94287b987cdbbec5ef9",
+        "reference_type_digest": "405c26006238dcfea70889261122bfeeff4fc7c38db445b42735e393b6a32e4f",
+        "reference_type_key": "2578206416",
+        "detail": "Pinned Lean checked the full reviewed reference type and its protected reference proof."
+      }
+    }
+  ]
+}

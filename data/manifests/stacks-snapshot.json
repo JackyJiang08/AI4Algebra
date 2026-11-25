@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/stacks/stacks-project",
+  "commit": "a04446e57ec1fbc252a871afcec7752fb2807b14",
+  "attribution": "The Stacks Project, Johan de Jong and contributors",
+  "license_ref": "GFDL-1.2-or-later (COPYING and introduction.tex at the pinned commit)",
+  "tag_index_digest": "098f77cce75f8359f1eacb22b7aa0088099b09e5b3ffcad2de513cbd1a8a9f1c",
+  "license_digest": "4b2c8fc390f802cd92f0622dc00a708a588bec54d0145d2ee135d6d7672bfe85",
+  "license_notice_source_digest": "43abd6493bf48325878d6573966e97025770d4b4e12db1dda31da7fd181d4acf",
+  "entries": [
+    {
+      "schema_version": 1,
+      "tag": "00AR",
+      "full_label": "algebra-section-rings-basic",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "1888f9c6d40749b2b98b67e23599011b57bfc17e24a8ac63930b76a23a658ff0",
+      "kind": "section",
+      "start_line": 51,
+      "end_line": 51,
+      "statement_digest": null,
+      "citations": []
+    },
+    {
+      "schema_version": 1,
+      "tag": "00BT",
+      "full_label": "algebra-item-inverse-image-ideal",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "83582c6447a689bfd3bd9681f0d1756b9080dad0d9a1d66e47886f7caffac323",
+      "kind": "item",
+      "start_line": 161,
+      "end_line": 161,
+      "statement_digest": null,
+      "citations": []
+    },
+    {
+      "schema_version": 1,
+      "tag": "00BV",
+      "full_label": "algebra-item-inverse-image-prime",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "d2e5dfe0372b08aa6c571185644ae319767115c03f5a99e6691d1ae22c3eb611",
+      "kind": "item",
+      "start_line": 172,
+      "end_line": 172,
+      "statement_digest": null,
+      "citations": []
+    },
+    {
+      "schema_version": 1,
+      "tag": "00CQ",
+      "full_label": "algebra-lemma-localization-zero",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "c8b6c39dddd89ab778c08847d739d091d390923a7c2080430443e2913ae27e39",
+      "kind": "lemma",
+      "start_line": 1110,
+      "end_line": 1113,
+      "statement_digest": "5f4c5a2cd129a16b4601fda62e76c255bda41f7a9781545b7ab927d16be4b200",
+      "citations": []
+    },
+    {
+      "schema_version": 1,
+      "tag": "00E5",
+      "full_label": "algebra-lemma-spec-closed",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "9f258a2b5bbf46df988308b35317bd27b40c68d2a9d8c1e9be09dedbb722bcf4",
+      "kind": "lemma",
+      "start_line": 3226,
+      "end_line": 3235,
+      "statement_digest": "2b1ab378535fdb1986d01a33f9c926dddf1d69a469b2282392d3e798c853ecd9",
+      "citations": [
+        {
+          "schema_version": 1,
+          "label": "item-isomorphism-theorem",
+          "tag": "00C3",
+          "scope": "proof"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "tag": "00GJ",
+      "full_label": "algebra-lemma-finite-module-over-finite-extension",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "8d62e89350352650be102728e3c3df94c9a455dd714d5c31a808bcdb10608022",
+      "kind": "lemma",
+      "start_line": 641,
+      "end_line": 647,
+      "statement_digest": "4dbf81d8e842a465f2360854ee6aaf48ff978a9ceecd341655ae83e9e3286bc3",
+      "citations": [
+        {
+          "schema_version": 1,
+          "label": "lemma-finite-over-subring",
+          "tag": "0560",
+          "scope": "proof"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "tag": "0560",
+      "full_label": "algebra-lemma-finite-over-subring",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "842e65cfd29605d5f58475ab77a43ec716e3e071d150a9a00b31681b6fac957c",
+      "kind": "lemma",
+      "start_line": 500,
+      "end_line": 505,
+      "statement_digest": "d2dc8ef609dc9d0708cd2cc4db661b616363497f2dd99420984ab1303d02863f",
+      "citations": []
+    },
+    {
+      "schema_version": 1,
+      "tag": "05CI",
+      "full_label": "algebra-lemma-composition-universally-injective",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "c1986b0bcb275ee6b8a1567cd79845c25ad6c3bb277b4be9a11dc7c5361ffd49",
+      "kind": "lemma",
+      "start_line": 20084,
+      "end_line": 20088,
+      "statement_digest": "97e902e756f5da22438753beca3248d68227822118c6c5b255187f967ea22a21",
+      "citations": []
+    },
+    {
+      "schema_version": 1,
+      "tag": "090M",
+      "full_label": "algebra-lemma-spec-spectral",
+      "source_file": "algebra.tex",
+      "source_file_digest": "fa8bb92e58a4f78a2bd01b3b6a4a87de0a0d279f5dd90641b574dd5fbfffa4f3",
+      "tag_record_digest": "e55562da5197f0d5588282a93baafa9e96d3f4e33fc8656ee13a1dfc6627412c",
+      "kind": "lemma",
+      "start_line": 4706,
+      "end_line": 4710,
+      "statement_digest": "2f0ec14096bc6b34d21019256d045e7b154838b352458bffe41084f552224f03",
+      "citations": [
+        {
+          "schema_version": 1,
+          "label": "topology-definition-spectral-space",
+          "tag": "08YG",
+          "scope": "statement"
+        },
+        {
+          "schema_version": 1,
+          "label": "lemma-irreducible",
+          "tag": "00ES",
+          "scope": "proof"
+        },
+        {
+          "schema_version": 1,
+          "label": "lemma-topology-spec",
+          "tag": "04PM",
+          "scope": "proof"
+        }
+      ]
+    }
+  ]
+}

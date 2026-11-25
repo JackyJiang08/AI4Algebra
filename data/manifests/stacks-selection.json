@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/stacks/stacks-project",
+  "commit": "a04446e57ec1fbc252a871afcec7752fb2807b14",
+  "snapshot": "data/manifests/stacks-snapshot.json",
+  "manifest": "data/manifests/stacks-pilot.json",
+  "license": "data/manifests/sources/STACKS_COPYING",
+  "attribution": "data/manifests/sources/STACKS_NOTICE.txt",
+  "counts": {
+    "considered_tags": 9,
+    "admitted_tasks": 3,
+    "full_tag_mappings": 2,
+    "subclaim_mappings": 1,
+    "excluded_tags": 6
+  },
+  "selected": [
+    {
+      "tag": "00E5",
+      "task_id": "stacks-00E5-image",
+      "split": "train",
+      "family": "prime-spectrum-quotient",
+      "scope": "subclaim",
+      "reason": "The image on prime-spectrum points is the closed locus of the quotient ideal. The source tag also asserts a homeomorphism and describes its inverse, which this pilot does not score."
+    },
+    {
+      "tag": "00GJ",
+      "task_id": "stacks-00GJ",
+      "split": "validation",
+      "family": "finite-module-restriction-of-scalars",
+      "scope": "full",
+      "reason": "Both implications of finite generation over a finite ring extension are covered. The compatible scalar tower expresses the original restricted action."
+    },
+    {
+      "tag": "05CI",
+      "task_id": "stacks-05CI",
+      "split": "test",
+      "family": "universal-injectivity-composition",
+      "scope": "full",
+      "reason": "Both universally injective assumptions and the universally injective conclusion are expanded using the source definition of right tensoring by the identity."
+    }
+  ],
+  "excluded": [
+    {"tag": "00AR", "reason": "Section heading and list of basic notions."},
+    {"tag": "00BT", "reason": "An item in that list covering the inverse image of an ideal."},
+    {"tag": "00BV", "reason": "An item in that list covering the inverse image of a prime ideal."},
+    {"tag": "00CQ", "reason": "The localization vanishing equivalence has an existing exact Mathlib answer and the pilot did not establish an eligible typed proof of both directions."},
+    {"tag": "0560", "reason": "A cited direction of 00GJ already represented by a library premise. Avoid a separately scored equivalent target in another partition."},
+    {"tag": "090M", "reason": "Spectrality depends on topology outside the selected pilot. The snapshot retains its cross-chapter citation for provenance."}
+  ],
+  "alias_review": [
+    {
+      "tag": "00E5",
+      "quarantined": [
+        "Ideal.primeSpectrumQuotientOrderIsoZeroLocus",
+        "Ideal.primeSpectrumOrderIsoZeroLocusOfSurj"
+      ],
+      "reason": "The quotient-specific order isomorphism and its generic construction expose stronger answer data. The allowed general range formula still requires surjectivity and identifying the kernel."
+    },
+    {
+      "tag": "00GJ",
+      "reason": "The two reviewed Mathlib premises each prove just one direction. No equivalent whole biconditional was located in the reviewed import."
+    },
+    {
+      "tag": "05CI",
+      "reason": "The reviewed Mathlib premises concern ordinary function injectivity and tensor functoriality. No equivalent universal-composition target was located in the reviewed import."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "seed": 7,
+  "episodes": 40,
+  "chain_length": 7,
+  "max_steps": 12,
+  "hidden_dim": 32,
+  "gamma": 0.95,
+  "learning_rate": 0.01,
+  "batch_size": 16,
+  "replay_capacity": 2000,
+  "target_update_interval": 20,
+  "epsilon_start": 0.8,
+  "epsilon_end": 0.1,
+  "retrieval_enabled": true,
+  "retrieval_weight": 0.5,
+  "retrieval_capacity": 2000,
+  "retrieval_k": 3,
+  "retrieval_max_distance": 0.01
+}

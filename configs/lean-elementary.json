@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "limits": {
+    "schema_version": 1,
+    "max_depth": 8,
+    "max_nodes": 32,
+    "max_candidates": 8,
+    "max_steps": 8,
+    "step_timeout_seconds": 120.0,
+    "task_timeout_seconds": 600.0,
+    "max_input_tokens": 4096,
+    "max_output_tokens": 1024
+  },
+  "provider": "deterministic",
+  "model": "gpt-6.2-astra",
+  "base_url": "https://api.openai.com/v1",
+  "reasoning_effort": "high",
+  "allow_paid_api": false,
+  "api_budget_usd": "1.00"
+}

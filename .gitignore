@@ -1,1 +1,12 @@
 /.lake
+/.venv/
+/.venv-uv/
+/runs/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+.env
+.env.*
+!.env.example
+/.mypy_cache/
+/.ruff_cache/

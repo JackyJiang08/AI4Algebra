@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "corpus_id": "stacks-pilot",
+  "revision": "1",
+  "partition_digest": "69bdc28152948fd9fab216d32b20bb52621fecb1c31c87d18256e9a4663faa7d",
+  "mapping_evidence_path": "data/formalizations/stacks-pilot.json",
+  "declarations": [
+    {
+      "schema_version": 1,
+      "name": "range_comap_of_surjective",
+      "module": "Mathlib.RingTheory.Spectrum.Prime.RingHom",
+      "family_id": "prime-spectrum-quotient",
+      "disposition": "premise",
+      "depends_on": [
+        "Function.Injective.comp"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "Ideal.mk_ker",
+      "module": "Mathlib.RingTheory.Ideal.Quotient.Operations",
+      "family_id": "prime-spectrum-quotient",
+      "disposition": "premise",
+      "depends_on": [
+        "Function.Injective.comp"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "Ideal.Quotient.mk_surjective",
+      "module": "Mathlib.RingTheory.Ideal.Quotient.Defs",
+      "family_id": "prime-spectrum-quotient",
+      "disposition": "premise",
+      "depends_on": [
+        "Function.Injective.comp"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.StacksTasks.quotient_spectrum_image",
+      "module": "AI4Algebra.Benchmarks.StacksTasks",
+      "family_id": "prime-spectrum-quotient",
+      "disposition": "answer",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "Module.Finite.of_restrictScalars_finite",
+      "module": "Mathlib.RingTheory.Finiteness.Basic",
+      "family_id": "finite-module-restriction-of-scalars",
+      "disposition": "premise",
+      "depends_on": [
+        "Function.Injective.comp"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "Module.Finite.trans",
+      "module": "Mathlib.RingTheory.Finiteness.Basic",
+      "family_id": "finite-module-restriction-of-scalars",
+      "disposition": "premise",
+      "depends_on": [
+        "Function.Injective.comp"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.StacksTasks.finite_over_extension",
+      "module": "AI4Algebra.Benchmarks.StacksTasks",
+      "family_id": "finite-module-restriction-of-scalars",
+      "disposition": "answer",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "LinearMap.rTensor_comp",
+      "module": "Mathlib.LinearAlgebra.TensorProduct.Map",
+      "family_id": "universal-injectivity-composition",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "LinearMap.coe_comp",
+      "module": "Mathlib.Algebra.Module.LinearMap.Defs",
+      "family_id": "universal-injectivity-composition",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "Function.Injective.comp",
+      "module": "Init.Data.Function",
+      "family_id": "universal-injectivity-composition",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.StacksTasks.universal_injective_composition",
+      "module": "AI4Algebra.Benchmarks.StacksTasks",
+      "family_id": "universal-injectivity-composition",
+      "disposition": "answer",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "Ideal.primeSpectrumQuotientOrderIsoZeroLocus",
+      "module": "Mathlib.RingTheory.Spectrum.Prime.RingHom",
+      "family_id": "prime-spectrum-quotient",
+      "disposition": "quarantined",
+      "depends_on": [
+        "Ideal.mk_ker",
+        "Ideal.Quotient.mk_surjective",
+        "Function.Injective.comp",
+        "Ideal.primeSpectrumOrderIsoZeroLocusOfSurj"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "Ideal.primeSpectrumOrderIsoZeroLocusOfSurj",
+      "module": "Mathlib.RingTheory.Spectrum.Prime.RingHom",
+      "family_id": "prime-spectrum-quotient",
+      "disposition": "quarantined",
+      "depends_on": [
+        "Function.Injective.comp"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "stacks-00E5-image",
+        "source": {
+          "schema_version": 1,
+          "kind": "stacks-tag",
+          "source_id": "00E5",
+          "revision": "a04446e57ec1fbc252a871afcec7752fb2807b14",
+          "location": "data/manifests/stacks-snapshot.json",
+          "content_digest": "25107dcaf47ca2e5a3031f587622c4854329aacf436045deecf74dfe79cb39ff",
+          "attribution": "The Stacks Project, Johan de Jong and contributors",
+          "license_ref": "GFDL-1.2-or-later (COPYING and introduction.tex at the pinned commit)"
+        },
+        "informal_statement": "For a commutative ring R and ideal I, the image of the prime-spectrum map induced by the quotient R → R/I consists exactly of the primes of R that contain I. This is the image-on-points subclaim of Stacks tag 00E5.",
+        "family_id": "prime-spectrum-quotient",
+        "split": "train",
+        "imports": [
+          "Mathlib.RingTheory.Spectrum.Prime.RingHom"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.StacksTasks.quotient_spectrum_image",
+        "lean_statement": "Set.range (PrimeSpectrum.comap (Ideal.Quotient.mk I)) = PrimeSpectrum.zeroLocus (I : Set R)",
+        "mapping_evidence_id": "stacks-00E5-image-mapping-v1",
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[CommRing R]",
+          "(I : Ideal R)"
+        ],
+        "statement_digest": "01853c71d706067e076df93da2d4697fe0e1feeea630eaf58d705bf931113291"
+      },
+      "category": "commutative-algebra",
+      "beginner_description": "Compute the image of the spectrum map induced by a quotient and identify the quotient map's kernel.",
+      "expected_proof_steps": 3,
+      "definitions": [
+        "PrimeSpectrum.comap",
+        "PrimeSpectrum.zeroLocus",
+        "Ideal.Quotient.mk",
+        "Set.range"
+      ],
+      "premises": [
+        "range_comap_of_surjective",
+        "Ideal.mk_ker",
+        "Ideal.Quotient.mk_surjective"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "stacks-00GJ",
+        "source": {
+          "schema_version": 1,
+          "kind": "stacks-tag",
+          "source_id": "00GJ",
+          "revision": "a04446e57ec1fbc252a871afcec7752fb2807b14",
+          "location": "data/manifests/stacks-snapshot.json",
+          "content_digest": "9f7c0388ea08ce28549811dd0086d3cef50e8c491fe1f6fa29c55d0f7b0788ff",
+          "attribution": "The Stacks Project, Johan de Jong and contributors",
+          "license_ref": "GFDL-1.2-or-later (COPYING and introduction.tex at the pinned commit)"
+        },
+        "informal_statement": "Let R → S be a finite homomorphism of commutative rings, and let M be an S-module. Then M is finitely generated over R precisely when it is finitely generated over S.",
+        "family_id": "finite-module-restriction-of-scalars",
+        "split": "validation",
+        "imports": [
+          "Mathlib.RingTheory.Finiteness.Basic"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.StacksTasks.finite_over_extension",
+        "lean_statement": "Module.Finite R M ↔ Module.Finite S M",
+        "mapping_evidence_id": "stacks-00GJ-mapping-v1",
+        "universes": [
+          "u",
+          "v",
+          "w"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "(S : Type v)",
+          "(M : Type w)",
+          "[CommRing R]",
+          "[CommRing S]",
+          "[Algebra R S]",
+          "[AddCommGroup M]",
+          "[Module R M]",
+          "[Module S M]",
+          "[IsScalarTower R S M]",
+          "[Module.Finite R S]"
+        ],
+        "statement_digest": "f95c853c6ca342d2abd8f7724ff601c9f86adf98b922a2831aac89bca23c73fa"
+      },
+      "category": "commutative-algebra",
+      "beginner_description": "Separate both directions of finite generation over a finite ring extension.",
+      "expected_proof_steps": 5,
+      "definitions": [
+        "Algebra",
+        "Module.Finite",
+        "IsScalarTower"
+      ],
+      "premises": [
+        "Module.Finite.of_restrictScalars_finite",
+        "Module.Finite.trans"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "stacks-05CI",
+        "source": {
+          "schema_version": 1,
+          "kind": "stacks-tag",
+          "source_id": "05CI",
+          "revision": "a04446e57ec1fbc252a871afcec7752fb2807b14",
+          "location": "data/manifests/stacks-snapshot.json",
+          "content_digest": "86696b22a10702bdbfc095e65251d9ba75e224089cd93b72be62e44748ebf26c",
+          "attribution": "The Stacks Project, Johan de Jong and contributors",
+          "license_ref": "GFDL-1.2-or-later (COPYING and introduction.tex at the pinned commit)"
+        },
+        "informal_statement": "Over a commutative ring, the composite of two universally injective module maps is universally injective. Here a map is universally injective when tensoring it on the right with the identity on any module preserves injectivity.",
+        "family_id": "universal-injectivity-composition",
+        "split": "test",
+        "imports": [
+          "Mathlib.LinearAlgebra.TensorProduct.Map"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.StacksTasks.universal_injective_composition",
+        "lean_statement": "Function.Injective ((g.comp f).rTensor Q)",
+        "mapping_evidence_id": "stacks-05CI-mapping-v1",
+        "universes": [
+          "u",
+          "v",
+          "w",
+          "x",
+          "y"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[CommRing R]",
+          "(M : Type v)",
+          "(N : Type w)",
+          "(P : Type x)",
+          "[AddCommGroup M]",
+          "[Module R M]",
+          "[AddCommGroup N]",
+          "[Module R N]",
+          "[AddCommGroup P]",
+          "[Module R P]",
+          "(f : M →ₗ[R] N)",
+          "(g : N →ₗ[R] P)",
+          "(hf : ∀ (Q : Type y) [AddCommGroup Q] [Module R Q], Function.Injective (f.rTensor Q))",
+          "(hg : ∀ (Q : Type y) [AddCommGroup Q] [Module R Q], Function.Injective (g.rTensor Q))",
+          "(Q : Type y)",
+          "[AddCommGroup Q]",
+          "[Module R Q]"
+        ],
+        "statement_digest": "c3f0ff18cf422d31a2f289c50ad518a0427d7f2c3dcfd4a04dc941dc9a6bb957"
+      },
+      "category": "commutative-algebra",
+      "beginner_description": "Use functoriality of the tensor product to compose two injective maps after an arbitrary base module is chosen.",
+      "expected_proof_steps": 5,
+      "definitions": [
+        "LinearMap.rTensor",
+        "LinearMap.comp",
+        "Function.Injective"
+      ],
+      "premises": [
+        "LinearMap.rTensor_comp",
+        "LinearMap.coe_comp",
+        "Function.Injective.comp"
+      ]
+    }
+  ]
+}

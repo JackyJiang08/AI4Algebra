@@ -1,0 +1,1 @@
+Let G be a group and let a, b, and c be arbitrary elements of G. Multiply ab on the right by the product of c with its inverse, then multiply the result on the right by the inverse of b. Show that this gives a.

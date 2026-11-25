@@ -1,0 +1,14 @@
+The Stacks Project
+Official source: https://github.com/stacks/stacks-project
+Pinned commit: a04446e57ec1fbc252a871afcec7752fb2807b14
+Upstream notice from introduction.tex
+SHA-256 of the complete pinned introduction.tex: 43abd6493bf48325878d6573966e97025770d4b4e12db1dda31da7fd181d4acf
+Verbatim license text: STACKS_COPYING (upstream COPYING)
+
+Copyright (C) 2005 -- 2025 Johan de Jong
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.2 or any later version published by the Free Software
+Foundation; with no Invariant Sections, no Front-Cover Texts,
+and no Back-Cover Texts. A copy of the license is included in
+the section entitled "GNU Free Documentation License".

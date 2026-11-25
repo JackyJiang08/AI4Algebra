@@ -1,0 +1,1 @@
+Let G be a group and let a and b be arbitrary elements of G. Show that multiplying a on the right by the product of b with its inverse gives a.

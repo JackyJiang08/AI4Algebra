@@ -28,11 +28,162 @@ A curated benchmark of Stacks Project results with gold formalizations and depen
 
 ## Architecture
 
-![AI4Algebra architecture](./assets/architecture.png)
+![AI4Algebra architecture](./assets/mermaid-diagram.png)
 
 ## Status
 
-Early stage. This repository currently holds the project charter only; implementation has not yet been committed.
+The real Lean loop has produced an independently verified two-step proof of
+`a * (b * b⁻¹) = a` in a group. See the [generated proof](runs/elementary-search-smoke/proof.lean)
+and [audit result](runs/elementary-search-smoke/verdict.json). All four curated elementary
+reference certificates also pass verification. The real training/evaluation loop and
+curated Stacks pilot are implemented and tested; the separate synthetic DDQN baseline
+stays runnable. Live-provider validation remains blocked by a missing local key.
+
+Final offline checks passed 348 tests, strict mypy and Ruff. Elementary validation and
+test each proved their one task in all six seed/policy trials. The Stacks training
+subclaim was verified, but both harder held-out tasks exhausted their fixed probe
+budgets. These small results do not establish a learned or retrieval advantage.
+
+Implementation follows [RETRIEVAL_DDQN_PLAN.md](RETRIEVAL_DDQN_PLAN.md):
+elementary group/ring exercises first, then curated Stacks Project statements. See the
+[requirements](docs/proposal.md), [detailed design](docs/detailed-design.md),
+[module progress](docs/tasks/progress.md), and [implementation prompt](docs/prompt.md).
+Proof training defaults to offline deterministic proposals and needs no API key.
+Optional paid tactic generation supports GPT-6.2 Astra with high reasoning and a
+USD 1.00 whole-run limit; its live validation remains pending. No paid API requests
+have been made. `.env.example` documents settings for the ignored local `.env`.
+
+### Optional retrieval API benchmark
+
+Stacks Project tag lookup, LeanExplore semantic search, and Loogle declaration search
+have a separate [benchmark and setup guide](docs/retrieval-api-benchmark.md).
+Their current endpoints need no API key. Nine cases and endpoint/timeout settings
+are provided; network access requires an explicit `--live` command. Stacks live use
+is disabled pending the maintainer coordination requested by its API documentation.
+
+```powershell
+uv run python -m ai4algebra.api_benchmark --queries configs/retrieval-api-benchmark.json --output runs/retrieval-api-dry/report.json
+```
+
+### Development setup
+
+The proof-loop Python package uses `src/ai4algebra` to avoid a Windows filename
+collision with the Lean `AI4Algebra` directory. Build the native Lean workers before
+running the real proof tests.
+
+```powershell
+python -m pip install uv==0.13.10
+uv sync --locked --group dev --extra test
+lake build
+uv run pytest -q
+uv run mypy --strict src/ai4algebra retrieval_ddqn tests
+uv run ruff check src/ai4algebra retrieval_ddqn tests
+uv run ruff format --check src/ai4algebra retrieval_ddqn tests
+```
+
+If OneDrive prevents updating an existing environment, use a fresh environment
+outside the synchronized directory before running the same commands:
+
+```powershell
+$env:UV_PROJECT_ENVIRONMENT = Join-Path $env:LOCALAPPDATA 'AI4Algebra/venv-copy'
+```
+
+The uv configuration uses copied files to avoid cloud filesystem hardlink failures.
+Keep `lean-toolchain` and `lake-manifest.json` pinned; no Lean upgrade is needed.
+
+### Prove an elementary exercise
+
+After the setup above, this command searches for the distributive ring identity
+`a * (b - c + d) = a * b - a * c + a * d`:
+
+```powershell
+uv run python -m ai4algebra corpus-check --offline
+uv run python -m ai4algebra solve --offline --task ring-distribute-sub --output runs/ring-example --max-candidates 8 --max-steps 4 --probes-per-node 1 --step-timeout-seconds 120 --task-timeout-seconds 600
+uv run python -m ai4algebra verify --offline --task ring-distribute-sub --certificate runs/ring-example/result/certificate.json --output runs/ring-replay
+```
+
+Use `group-inverse-identity` for `a * (b * b⁻¹) = a`. Each successful search exports
+`proof.lean`, `certificate.json`, `verdict.json` and `search.json` in its `result`
+directory. A verified result means that fresh Lean replay established the original
+curated statement and passed the configured axiom/dependency checks. The source-to-Lean
+mapping has separate curation evidence; a successful proof alone does not establish that
+an informal translation is faithful.
+
+`--offline` overrides provider settings in `.env` and needs no credentials. For paid
+tactic proposals, enter your own `OPENAI_API_KEY` locally in `.env` and omit `--offline`.
+The selected model is `gpt-6.2-astra` with high reasoning. One durable ledger reserves
+at most USD 1.00 across all tasks and retries in a run, including unresolved requests.
+Keep the same output directory and run ID when retrying that run. Local Lean and the
+public Stacks source need no API keys. Live API validation is pending a configured key.
+
+### Train and evaluate the elementary loop
+
+The following reproduces the small two-seed training setup. It uses one verified
+warmup episode followed by one DDQN rollout per seed. Keep validation and test outputs
+separate; evaluate fixed checkpoints without changing their weights or return memory.
+
+```powershell
+foreach ($seed in @(7, 11)) {
+  uv run python -m ai4algebra train --offline --config configs/lean-elementary.json --task group-inverse-identity --seed $seed --warmup-episodes 1 --episodes 1 --batch-size 2 --updates-per-episode 2 --probes-per-node 2 --stop-on-closure --output "runs/example-train-$seed"
+}
+uv run python -m ai4algebra evaluate --offline --config configs/lean-elementary.json --training-run runs/example-train-7 --training-run runs/example-train-11 --split validation --probes-per-node 2 --stop-on-closure --output runs/example-validation
+uv run python -m ai4algebra evaluate --offline --config configs/lean-elementary.json --training-run runs/example-train-7 --training-run runs/example-train-11 --split test --probes-per-node 2 --stop-on-closure --output runs/example-test
+```
+
+Training saves the exact collected transitions/features, optimizer records, checkpoint
+and frozen return memory. Evaluation compares deterministic, DDQN and DDQN-with-return
+retrieval under the same limits. Results include proof outcomes, actual Lean requests,
+known token charges, unresolved reservations and descriptive differences across seeds.
+This tiny benchmark cannot establish general performance or a retrieval advantage.
+
+Use a fresh directory for a new training experiment. Checkpoints are evaluation artifacts;
+partial training is not resumable. Concurrent writers to one output directory are rejected.
+The Stacks pilot uses the same loop with pinned sources and curated mappings. It does not
+automatically translate arbitrary Stacks pages into Lean.
+
+### Curated Stacks pilot
+
+The pilot pins the official source to commit
+`a04446e57ec1fbc252a871afcec7752fb2807b14`. Its
+[selection report](data/manifests/stacks-selection.json) records nine reviewed tags,
+six exclusions and these three admitted tasks:
+
+| Task | Split | Source coverage |
+|---|---|---|
+| `stacks-00E5-image` | Train | Image-on-points subclaim of [00E5](https://stacks.math.columbia.edu/tag/00E5); excludes the homeomorphism and inverse |
+| `stacks-00GJ` | Validation | Full [00GJ](https://stacks.math.columbia.edu/tag/00GJ), finite generation over a finite ring extension |
+| `stacks-05CI` | Test | Full [05CI](https://stacks.math.columbia.edu/tag/05CI), composition of universally injective maps |
+
+The protected reference certificates pass fresh Lean audit. Autonomous search also
+verified the training subclaim, producing three transitions and two DDQN optimizer
+updates. On both full held-out statements, all three policies exhausted the fixed
+probe budget without a proof. To inspect the public catalog:
+
+```powershell
+uv run python -m ai4algebra corpus-check --offline --manifest data/manifests/stacks-pilot.json
+```
+
+To reproduce the bounded Stacks smoke, train from one verified warmup trajectory,
+then evaluate the fixed checkpoint on validation before test:
+
+```powershell
+uv run python -m ai4algebra train --offline --manifest data/manifests/stacks-pilot.json --config configs/lean-stacks-pilot.json --task stacks-00E5-image --seed 7 --warmup-episodes 1 --episodes 0 --batch-size 2 --updates-per-episode 2 --probes-per-node 2 --stop-on-closure --output runs/stacks-example
+uv run python -m ai4algebra evaluate --offline --manifest data/manifests/stacks-pilot.json --config configs/lean-stacks-pilot.json --training-run runs/stacks-example --split validation --probes-per-node 2 --stop-on-closure --output runs/stacks-example-validation
+uv run python -m ai4algebra evaluate --offline --manifest data/manifests/stacks-pilot.json --config configs/lean-stacks-pilot.json --training-run runs/stacks-example --split test --probes-per-node 2 --stop-on-closure --output runs/stacks-example-test
+```
+
+Normal runs use the checked-in public metadata and curated statements. Raw source proofs
+are kept outside the runtime corpus. To independently reproduce the pinned source metadata,
+obtain the official Git checkout with that commit and its blobs available, then run:
+
+```powershell
+$env:AI4ALGEBRA_TEST_STACKS_CHECKOUT = 'C:/path/to/stacks-source'
+uv run pytest -q -p no:cacheprovider tests/unit/test_stacks.py
+```
+
+The importer reads immutable Git objects, rejects source mismatches and distinguishes
+theorem tags from section headings and list items. The optional real-checkout test skips
+when this path is unset; its fixture-based importer tests remain part of the offline suite.
 
 ## Contributors
 
@@ -41,4 +192,36 @@ Early stage. This repository currently holds the project charter only; implement
 
 ## License
 
-MIT
+Project code: MIT. Stacks-derived records retain the upstream attribution and
+GFDL-1.2-or-later terms; see [Stacks notice](data/manifests/sources/STACKS_NOTICE.txt)
+and [upstream license](data/manifests/sources/STACKS_COPYING).
+
+## Experimental retrieval-guided Double DQN
+
+An isolated NumPy baseline now exercises replay, Double DQN, causal retrieval,
+checkpointing, and frozen evaluation on a synthetic left/right chain task. It is
+not integrated with Lean proof search and does not establish mathematical proof
+capability or retrieval performance gains. The chain observation is one-hot;
+actions move left/right; reaching the rightmost state gives +1, other steps cost
+0.01, and the configured time limit truncates an episode.
+
+From the repository root (PowerShell):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e '.[test]'
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m retrieval_ddqn.train --config configs/smoke.json --output runs/retrieval
+.\.venv\Scripts\python.exe -m retrieval_ddqn.evaluate --checkpoint runs/retrieval/checkpoint.json --episodes 10 --seed 101
+.\.venv\Scripts\python.exe -m retrieval_ddqn.train --config configs/smoke.json --output runs/baseline --disable-retrieval
+.\.venv\Scripts\python.exe -m retrieval_ddqn.evaluate --checkpoint runs/baseline/checkpoint.json --episodes 10 --seed 101
+```
+
+Training writes `checkpoint.json` and `train_metrics.json`; evaluation prints JSON
+and never updates the checkpoint or memory. Checkpoints are evaluation artifacts,
+not resumable training snapshots (replay and RNG state are not saved). Retrieval
+averages nearby state/action returns from completed training episodes, blends them
+with network action scores, and falls back to the network without eligible matches.
+Time-limit transitions bootstrap in DDQN; their entire truncated episodes are excluded from return memory.
+See [the archived synthetic plan](docs/history/retrieval-ddqn-synthetic-baseline.md) for contracts, ownership, causal
+filters, numerical verification, review findings, and recorded smoke results.

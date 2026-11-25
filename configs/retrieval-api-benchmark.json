@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "queries": [
+    {"id": "stacks-quotient-spectrum", "service": "stacks", "query": "00E5", "category": "tag_statement_lookup"},
+    {"id": "stacks-finite-module", "service": "stacks", "query": "00GJ", "category": "tag_statement_lookup"},
+    {"id": "stacks-injectivity", "service": "stacks", "query": "05CI", "category": "tag_statement_lookup"},
+    {"id": "leanexplore-identity", "service": "leanexplore", "query": "multiplying a group element by one leaves it unchanged", "expected_names": ["mul_one"], "category": "group_identity"},
+    {"id": "leanexplore-commutativity", "service": "leanexplore", "query": "addition is commutative in a commutative additive group", "expected_names": ["add_comm"], "category": "additive_commutativity"},
+    {"id": "leanexplore-distributivity", "service": "leanexplore", "query": "multiplication distributes over addition on the left in a ring", "expected_names": ["mul_add"], "category": "ring_distributivity"},
+    {"id": "loogle-identity", "service": "loogle", "query": "\"mul_one\"", "expected_names": ["mul_one"], "category": "group_identity"},
+    {"id": "loogle-commutativity", "service": "loogle", "query": "\"add_comm\"", "expected_names": ["add_comm"], "category": "additive_commutativity"},
+    {"id": "loogle-distributivity", "service": "loogle", "query": "\"mul_add\"", "expected_names": ["mul_add"], "category": "ring_distributivity"}
+  ]
+}

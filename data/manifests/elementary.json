@@ -1,0 +1,368 @@
+{
+  "schema_version": 1,
+  "corpus_id": "elementary",
+  "revision": "1",
+  "partition_digest": "ebabb083a1aee4ece6768f91366ac9862d3df958d217692ba54cdf2d341761a4",
+  "mapping_evidence_path": "data/formalizations/elementary.json",
+  "declarations": [
+    {
+      "schema_version": 1,
+      "name": "mul_inv_cancel",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "premise",
+      "depends_on": [
+        "mul_one",
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_one",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_assoc",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_inv_cancel_right",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "answer",
+      "depends_on": [
+        "mul_inv_cancel",
+        "mul_one",
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_div_cancel_right",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "answer",
+      "depends_on": [
+        "mul_inv_cancel",
+        "mul_one",
+        "mul_assoc",
+        "mul_inv_cancel_right"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_inv_cancel_left",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "quarantined",
+      "depends_on": [
+        "mul_inv_cancel",
+        "mul_one",
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "inv_mul_cancel_right",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "quarantined",
+      "depends_on": [
+        "mul_one",
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "inv_mul_cancel_left",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "quarantined",
+      "depends_on": [
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "div_mul_cancel",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "group-inverse-normalization",
+      "disposition": "quarantined",
+      "depends_on": [
+        "mul_one",
+        "mul_assoc",
+        "inv_mul_cancel_right"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_add",
+      "module": "Mathlib.Algebra.Ring.Defs",
+      "family_id": "ring-distributive-expansion",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "mul_sub",
+      "module": "Mathlib.Algebra.Ring.Defs",
+      "family_id": "ring-distributive-expansion",
+      "disposition": "premise",
+      "depends_on": [
+        "mul_add"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "name": "add_left_cancel",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "ring-additive-cancellation",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "add_right_cancel",
+      "module": "Mathlib.Algebra.Group.Defs",
+      "family_id": "ring-additive-cancellation",
+      "disposition": "premise",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.Tasks.group_inverse_identity",
+      "module": "AI4Algebra.Benchmarks.Tasks",
+      "family_id": "group-inverse-normalization",
+      "disposition": "answer",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.Tasks.group_ordered_inverse",
+      "module": "AI4Algebra.Benchmarks.Tasks",
+      "family_id": "group-inverse-normalization",
+      "disposition": "answer",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.Tasks.ring_distribute_sub",
+      "module": "AI4Algebra.Benchmarks.Tasks",
+      "family_id": "ring-distributive-expansion",
+      "disposition": "answer",
+      "depends_on": []
+    },
+    {
+      "schema_version": 1,
+      "name": "AI4Algebra.Benchmarks.Tasks.ring_add_cancel_pair",
+      "module": "AI4Algebra.Benchmarks.Tasks",
+      "family_id": "ring-additive-cancellation",
+      "disposition": "answer",
+      "depends_on": []
+    }
+  ],
+  "tasks": [
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "group-inverse-identity",
+        "source": {
+          "schema_version": 1,
+          "kind": "authored-fixture",
+          "source_id": "group-inverse-identity",
+          "revision": "1",
+          "location": "data/manifests/sources/group-inverse-identity.txt",
+          "content_digest": "db68f60aad19d142d0e80d2bbb0a0213d862aee68ccae763dca9d360c710c4a0",
+          "attribution": "AI4Algebra contributors (original benchmark exercise)",
+          "license_ref": "MIT (repository LICENSE)"
+        },
+        "informal_statement": "Let G be a group and let a and b be arbitrary elements of G. Show that multiplying a on the right by the product of b with its inverse gives a.",
+        "family_id": "group-inverse-normalization",
+        "split": "train",
+        "imports": [
+          "Mathlib.Algebra.Group.Defs"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.Tasks.group_inverse_identity",
+        "lean_statement": "a * (b * b⁻¹) = a",
+        "mapping_evidence_id": "group-inverse-identity-v1",
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(G : Type u)",
+          "[Group G]",
+          "(a b : G)"
+        ],
+        "statement_digest": "b2e095495613369dc5bafc7adb846cf99e4f1d4e8d70c5aedc9c0f47fdeb3377"
+      },
+      "category": "group",
+      "beginner_description": "Reduce a product of an element and its inverse, then simplify the unit factor.",
+      "expected_proof_steps": 2,
+      "definitions": [
+        "Group",
+        "Inv.inv",
+        "HMul.hMul",
+        "OfNat.ofNat"
+      ],
+      "premises": [
+        "mul_inv_cancel",
+        "mul_one",
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "group-ordered-inverse",
+        "source": {
+          "schema_version": 1,
+          "kind": "authored-fixture",
+          "source_id": "group-ordered-inverse",
+          "revision": "1",
+          "location": "data/manifests/sources/group-ordered-inverse.txt",
+          "content_digest": "bf5974cd5318b3629e12046e7cc6f1ad2a2a6b41b3578801c5bee029b63aff29",
+          "attribution": "AI4Algebra contributors (original benchmark exercise)",
+          "license_ref": "MIT (repository LICENSE)"
+        },
+        "informal_statement": "Let G be a group and let a, b, and c be arbitrary elements of G. Multiply ab on the right by the product of c with its inverse, then multiply the result on the right by the inverse of b. Show that this gives a.",
+        "family_id": "group-inverse-normalization",
+        "split": "train",
+        "imports": [
+          "Mathlib.Algebra.Group.Defs"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.Tasks.group_ordered_inverse",
+        "lean_statement": "((a * b) * (c * c⁻¹)) * b⁻¹ = a",
+        "mapping_evidence_id": "group-ordered-inverse-v1",
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(G : Type u)",
+          "[Group G]",
+          "(a b c : G)"
+        ],
+        "statement_digest": "8c5428a092ad9e37d4308f458e5cca10fe8abfa709dfc8685056a486a8cc9593"
+      },
+      "category": "group",
+      "beginner_description": "Cancel the inner inverse pair, reassociate, and cancel the remaining inverse pair.",
+      "expected_proof_steps": 5,
+      "definitions": [
+        "Group",
+        "Inv.inv",
+        "HMul.hMul"
+      ],
+      "premises": [
+        "mul_inv_cancel",
+        "mul_one",
+        "mul_assoc"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "ring-distribute-sub",
+        "source": {
+          "schema_version": 1,
+          "kind": "authored-fixture",
+          "source_id": "ring-distribute-sub",
+          "revision": "1",
+          "location": "data/manifests/sources/ring-distribute-sub.txt",
+          "content_digest": "38dd5f5ca1c10fef8ca2dde6e365e04a303aa643d86a39ac59534e76ec31f361",
+          "attribution": "AI4Algebra contributors (original benchmark exercise)",
+          "license_ref": "MIT (repository LICENSE)"
+        },
+        "informal_statement": "Let R be a unital ring, with multiplication not assumed commutative, and let a, b, c, and d be arbitrary elements of R. Show that left multiplication by a sends (b - c) + d to (ab - ac) + ad.",
+        "family_id": "ring-distributive-expansion",
+        "split": "validation",
+        "imports": [
+          "Mathlib.Algebra.Ring.Defs"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.Tasks.ring_distribute_sub",
+        "lean_statement": "a * (b - c + d) = a * b - a * c + a * d",
+        "mapping_evidence_id": "ring-distribute-sub-v1",
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[Ring R]",
+          "(a b c d : R)"
+        ],
+        "statement_digest": "aad42d0927df32c10cac46ae73d3992a3c14105c4f1e1c5c0345311ca1aa8abc"
+      },
+      "category": "ring",
+      "beginner_description": "Distribute the fixed left factor over a sum, then over its difference term.",
+      "expected_proof_steps": 2,
+      "definitions": [
+        "Ring",
+        "HMul.hMul",
+        "HAdd.hAdd",
+        "HSub.hSub"
+      ],
+      "premises": [
+        "mul_add",
+        "mul_sub"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "problem": {
+        "schema_version": 1,
+        "task_id": "ring-add-cancel-pair",
+        "source": {
+          "schema_version": 1,
+          "kind": "authored-fixture",
+          "source_id": "ring-add-cancel-pair",
+          "revision": "1",
+          "location": "data/manifests/sources/ring-add-cancel-pair.txt",
+          "content_digest": "fa4acc4067bfbdc4d10665cf18657568453cc829d859f76568da10b4cce59569",
+          "attribution": "AI4Algebra contributors (original benchmark exercise)",
+          "license_ref": "MIT (repository LICENSE)"
+        },
+        "informal_statement": "Let R be a unital ring, with multiplication not assumed commutative, and let a, b, c, d, e, and f be arbitrary elements of R. Assume a + b = a + c and d + e = f + e. Prove both b = c and d = f.",
+        "family_id": "ring-additive-cancellation",
+        "split": "test",
+        "imports": [
+          "Mathlib.Algebra.Ring.Defs"
+        ],
+        "lean_name": "AI4Algebra.Benchmarks.Tasks.ring_add_cancel_pair",
+        "lean_statement": "b = c ∧ d = f",
+        "mapping_evidence_id": "ring-add-cancel-pair-v1",
+        "universes": [
+          "u"
+        ],
+        "binders": [
+          "(R : Type u)",
+          "[Ring R]",
+          "(a b c d e f : R)",
+          "(hab : a + b = a + c)",
+          "(hde : d + e = f + e)"
+        ],
+        "statement_digest": "85b66d18070273ba3b9e00f01bb0d05cbe630d327d71f94287b987cdbbec5ef9"
+      },
+      "category": "ring",
+      "beginner_description": "Split the conjunction and cancel the common summand in each equality.",
+      "expected_proof_steps": 3,
+      "definitions": [
+        "Ring",
+        "HAdd.hAdd",
+        "And"
+      ],
+      "premises": [
+        "add_left_cancel",
+        "add_right_cancel"
+      ]
+    }
+  ]
+}

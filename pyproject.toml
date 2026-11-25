@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai4algebra-retrieval-ddqn"
+version = "0.1.0"
+description = "Experimental retrieval-guided Double DQN baseline"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24,<3", "pydantic>=2.11,<3", "python-dotenv>=1.1,<2", "typing-extensions>=4.12,<5"]
+
+[tool.uv]
+link-mode = "copy"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "mypy>=1.15,<3", "ruff>=0.11,<1", "uv==0.13.10"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[tool.setuptools.packages.find]
+where = ["src", "."]
+include = ["retrieval_ddqn*", "ai4algebra*"]
+
+[tool.setuptools.package-dir]
+ai4algebra = "src/ai4algebra"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["lean: requires the pinned Lean toolchain"]
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
