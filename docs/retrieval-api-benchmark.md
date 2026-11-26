@@ -3,7 +3,7 @@
 This optional benchmark measures public retrieval services independently of Lean
 proof search. Settings are in the ignored local `.env`; reproducible queries are
 in `configs/retrieval-api-benchmark.json`; reports go in `runs/`.
-No new API keys or paid tactic calls are needed. Offline proof training stays the default.
+No new API keys or paid tactic calls are needed. Offline proof training remains available.
 
 ## Services
 

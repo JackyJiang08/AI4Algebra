@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "limits": {
+    "schema_version": 1,
+    "max_depth": 4,
+    "max_nodes": 4,
+    "max_candidates": 8,
+    "max_steps": 4,
+    "step_timeout_seconds": 120.0,
+    "task_timeout_seconds": 600.0,
+    "max_input_tokens": 4096,
+    "max_output_tokens": 2048
+  },
+  "provider": "openai",
+  "model": "gpt-6.2-astra",
+  "base_url": "https://api.openai.com/v1",
+  "reasoning_effort": "high",
+  "allow_paid_api": true,
+  "api_budget_usd": "0.50"
+}

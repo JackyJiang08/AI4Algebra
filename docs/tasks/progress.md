@@ -3,8 +3,9 @@
 Updated: 2026-11-25. Master: [task assignment plan](../../RETRIEVAL_DDQN_PLAN.md).
 A checked box means delivered/verified, not merely described in the design.
 
-Latest scope: offline proof training is now the default; optional paid smoke D05 is
-deferred. The percentage below describes the original 79 assignments only. The new
+Latest scope: paid Astra/high proposals are authorized under a USD 0.50 per-turn
+cap using one shared run/ledger; D05 passed. The percentage below describes the
+original 79 assignments only. The new
 [retrieval API extension](retrieval-api.md) and larger proof benchmark are separate
 work; see [configuration and benchmark interpretation](../retrieval-api-benchmark.md).
 
@@ -27,11 +28,30 @@ work; see [configuration and benchmark interpretation](../retrieval-api-benchmar
   this addition; prior checkpoints must not be relabeled as current-source runs.
   Broader proof-corpus expansion and learned retrieval gains remain future work.
 
-**Current acceptance: 78/79 assigned tasks (98.7%); 1/79 (1.3%) remains open.**
-All offline implementation, training/evaluation, tests and independent reviews are complete.
-D05 live-provider smoke is blocked by an absent local `OPENAI_API_KEY`; G6 therefore
-remains pending. No paid API request was made. This is checklist completion, not a
-forecast of time or general theorem-proving success.
+**Current acceptance: 79/79 original tasks (100%).** D05 and G6 are accepted.
+This is checklist completion, not general theorem-proving success or completion of
+future corpus expansion. Historical execution entries below retain their original status.
+
+### Live proof and half-dollar cap, 2026-11-25
+
+- Saved the credential only in ignored local `.env`; enabled Astra/high and lowered
+  config/ledger maxima to USD 0.50. One paid run/ledger per assistant turn covers
+  tasks, workers, retries and restarts; development-agent billing is separate.
+- Live training task `group-inverse-identity` verified with one model-proposed
+  `simp_only [mul_inv_cancel, mul_one]` step. The independent offline replay passed.
+  API usage: 2,233 input / 60 output tokens; USD 0.020264 settled, zero outstanding.
+- Archived problem, Lean statement/proof, certificate, both verdicts, trace and
+  sanitized accounting under [the success record](../../records/succeeded/turn-20261125-openai-smoke/group-inverse-identity/attempt-001/outcome.md).
+- Fixed the Windows console encoding error encountered after the original proof was
+  saved. Completion and cost accounting now persist before printing, with escaped
+  output only when a console cannot encode a character. UTF-8 artifacts are preserved.
+- Cap/concurrency/restart and CLI fixes passed independent review. The real offline
+  CLI integration passed with isolated dotenv settings; no extra paid request was needed.
+- Final checks: 371 non-Lean tests passed, strict mypy and Ruff lint/format passed
+  across 88 files. The focused CLI suite passed 10 cases including the real Lean
+  solve/replay; the remaining 21 Lean cases were not rerun for this bounded change.
+- Existing greater-than-USD-0.50 plans are now rejected. Preserve historical runs;
+  use current configurations for new runs instead of rewriting archived identities.
 
 ## Documentation and prior work
 
@@ -61,7 +81,7 @@ The old synthetic baseline is not a completed Lean module.
 - [x] [memory](memory.md) — M01–M06; 6 tasks.
 - [x] [learning](learning.md) — Q01–Q07; 7 tasks.
 - [x] [evaluation](evaluation.md) — B01–B06; 6 tasks.
-- [ ] [delivery](delivery.md) — D01–D07; 7 tasks.
+- [x] [delivery](delivery.md) — D01–D07; 7 tasks.
 
 ## Milestone gates
 
@@ -71,7 +91,7 @@ The old synthetic baseline is not a completed Lean module.
 - [x] G3 — elementary closed proof loop and baseline search.
 - [x] G4 — candidate-aware DDQN, causal memory and frozen evaluation.
 - [x] G5 — curated Stacks pilot with provenance and splits.
-- [ ] G6 — complete checks, reproducible CLI artifacts and independent code review.
+- [x] G6 — complete checks, reproducible CLI artifacts and independent code review.
 
 ## Execution log
 

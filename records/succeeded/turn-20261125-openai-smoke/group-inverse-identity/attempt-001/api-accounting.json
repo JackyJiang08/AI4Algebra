@@ -1,0 +1,12 @@
+{
+  "budget_usd": "0.5",
+  "spent_usd": "0.020264",
+  "outstanding_usd": "0",
+  "requests": 1,
+  "unresolved": 0,
+  "blocked": false,
+  "price_digest": "282e5968995a8b02934c89634cfd7c9f37abf4a894d15eb930667467882fc43c",
+  "input_tokens": 2233,
+  "output_tokens": 60,
+  "cached_tokens": 0
+}

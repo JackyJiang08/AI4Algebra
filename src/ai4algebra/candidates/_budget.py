@@ -93,7 +93,9 @@ class BudgetLedger:
             or not budget_usd.is_finite()
             or not 0 <= budget_usd <= MAX_API_BUDGET_USD
         ):
-            raise BudgetError("API budget must be a decimal amount from USD 0 to USD 1")
+            raise BudgetError(
+                f"API budget must be between USD 0 and USD {MAX_API_BUDGET_USD}"
+            )
         numerator, denominator = budget_usd.as_integer_ratio()
         self._limit = numerator * _NANOS_PER_DOLLAR // denominator
         self._run_id = _RUN_ID.validate_python(run_id, strict=True)

@@ -17,6 +17,7 @@ def test_cli_exports_standalone_proof_and_replays_its_certificate(
     tmp_path: Path,
 ) -> None:
     solve_dir = tmp_path / "solve"
+    dotenv = str(tmp_path / "absent.env")
     assert (
         main(
             [
@@ -24,6 +25,8 @@ def test_cli_exports_standalone_proof_and_replays_its_certificate(
                 "--project-root",
                 str(_ROOT),
                 "--offline",
+                "--dotenv",
+                dotenv,
                 "--task",
                 "group-inverse-identity",
                 "--output",
@@ -52,6 +55,6 @@ def test_cli_exports_standalone_proof_and_replays_its_certificate(
     )
     command = result["replay_command"]
     assert command[:3] == ["python", "-m", "ai4algebra"]
-    assert main(command[3:]) == 0
+    assert main([*command[3:], "--dotenv", dotenv]) == 0
     verdict = Verdict.from_json((solve_dir / "recheck/verdict.json").read_bytes())
     assert verdict.status == "accepted" and verdict.replay_passed

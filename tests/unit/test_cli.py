@@ -4,14 +4,22 @@ import subprocess
 import time
 from collections.abc import Mapping
 from concurrent.futures import ThreadPoolExecutor
+from io import BytesIO, TextIOWrapper
 from pathlib import Path
 from threading import Barrier
 
 import pytest
 
-from ai4algebra.cli import main
+from ai4algebra.cli import _SolveResult, main
 from ai4algebra.config import RunConfig, load_config
-from ai4algebra.contracts import Problem, Record
+from ai4algebra.contracts import (
+    Candidate,
+    Certificate,
+    Problem,
+    Record,
+    Verdict,
+    digest_json,
+)
 from ai4algebra.corpus import Corpus
 from ai4algebra.search import (
     ActionPolicy,
@@ -32,6 +40,7 @@ from ai4algebra.training._runtime import (
     ProofRuntime,
     TaskExecution,
 )
+from ai4algebra.verification import Verifier
 
 _ROOT = Path(__file__).resolve().parents[2]
 _TASK = "group-inverse-identity"
@@ -100,6 +109,8 @@ def test_corpus_check_writes_public_identity(
             [
                 "corpus-check",
                 "--offline",
+                "--dotenv",
+                str(tmp_path / "absent.env"),
                 "--project-root",
                 str(_ROOT),
                 "--output",
@@ -151,12 +162,121 @@ def test_cli_offline_overrides_provider_environment_and_records_bound(
     assert "budget_exhausted" in capsys.readouterr().out
 
 
+@pytest.mark.parametrize(
+    ("encoding", "expected_inverse"),
+    [("cp1252", r"\u207b¹"), ("utf-8", "⁻¹")],
+)
+def test_cli_completes_unicode_solve_before_printing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    encoding: str,
+    expected_inverse: str,
+) -> None:
+    output = tmp_path / "solve"
+    api = ApiAccounting(budget_usd="0.50", settled_usd="0.01", reserved_requests=1)
+
+    class VerifiedRuntime(OfflineRuntime):
+        def search(
+            self,
+            problem: Problem,
+            *,
+            mode: SearchMode,
+            options: SearchOptions,
+            episode_id: str,
+            policy: ActionPolicy | None = None,
+        ) -> TaskExecution:
+            execution = super().search(
+                problem,
+                mode=mode,
+                options=options,
+                episode_id=episode_id,
+                policy=policy,
+            )
+            steps = (
+                Candidate(
+                    operation="simp_only",
+                    goal_id="g0",
+                    simp_lemmas=("mul_inv_cancel", "mul_one"),
+                ),
+            )
+            certificate = Verifier(_ROOT).build_certificate(
+                problem, steps, self.corpus.eligibility_policy(problem)
+            )
+            verdict = Verdict(
+                status="accepted",
+                replay_passed=True,
+                type_passed=True,
+                axioms_passed=True,
+                dependencies_passed=True,
+                lean_version="fixture",
+                mathlib_revision="fixture",
+                certificate_digest=digest_json(certificate.model_dump(mode="json")),
+            )
+            report = SearchReport.model_validate(
+                execution.report.model_dump()
+                | dict(
+                    status="verified",
+                    reason="closed",
+                    budget_reasons=(),
+                    certificate=certificate,
+                    verdict=verdict,
+                )
+            )
+            return TaskExecution(report, LeanCalls(verifier_requests=1))
+
+        def api_accounting(self) -> ApiAccounting:
+            return api
+
+    class SolveOutput(TextIOWrapper):
+        def write(self, text: str, /) -> int:
+            assert (output / "solve.json").is_file()
+            return super().write(text)
+
+    monkeypatch.setattr("ai4algebra.cli.ProofRuntime", VerifiedRuntime)
+    buffer = BytesIO()
+    with SolveOutput(buffer, encoding=encoding, errors="strict") as console:
+        with monkeypatch.context() as patch:
+            patch.setattr("sys.stdout", console)
+            assert (
+                main(
+                    [
+                        "solve",
+                        "--offline",
+                        "--dotenv",
+                        str(tmp_path / "absent.env"),
+                        "--project-root",
+                        str(_ROOT),
+                        "--task",
+                        _TASK,
+                        "--output",
+                        str(output),
+                    ]
+                )
+                == 0
+            )
+        console.flush()
+        lines = buffer.getvalue().decode(encoding).splitlines()
+    assert lines[0] == f"Goal  a * (b * b{expected_inverse}) = a"
+    assert lines[2].startswith("Verified proof at ")
+
+    result = _SolveResult.from_json((output / "solve.json").read_bytes())
+    assert result.status == "verified" and result.lean_calls.verifier_requests == 1
+    assert result.api == api
+    assert result.files is not None and result.files.proof is not None
+    certificate = Certificate.from_json(
+        (output / result.files.proof.certificate.path).read_bytes()
+    )
+    proof = (output / result.files.proof.proof.path).read_bytes()
+    assert "b⁻¹".encode("utf-8") in proof
+    assert proof.decode("utf-8") == certificate.proof
+
+
 def test_cli_live_config_missing_key_fails_before_writing_or_dispatching(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     monkeypatch.setenv("AI4ALGEBRA_LLM_PROVIDER", "openai")
     monkeypatch.setenv("AI4ALGEBRA_ALLOW_PAID_API", "true")
-    monkeypatch.setenv("AI4ALGEBRA_API_BUDGET_USD", "1")
+    monkeypatch.setenv("AI4ALGEBRA_API_BUDGET_USD", "0.50")
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     output = tmp_path / "solve"
     assert (
@@ -190,6 +310,8 @@ def test_cli_rejects_held_out_training_task(
                 "--project-root",
                 str(_ROOT),
                 "--offline",
+                "--dotenv",
+                str(tmp_path / "absent.env"),
                 "--task",
                 "ring-add-cancel-pair",
                 "--output",
@@ -255,7 +377,7 @@ def test_paid_accounting_preflight_does_not_create_a_ledger(tmp_path: Path) -> N
         "preflight",
     )
     stats = runtime.api_accounting()
-    assert stats.budget_usd == "1.00" and stats.reserved_requests == 0
+    assert stats.budget_usd == "0.50" and stats.reserved_requests == 0
     assert not directory.root.exists()
 
 

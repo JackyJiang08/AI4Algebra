@@ -19,10 +19,10 @@ as authorized in those project instructions.
 
 - Elementary group/ring exercises first, then a curated Stacks Project pilot.
 - Curated Lean statements first; automatic translation is later work.
-- Application proof training now defaults to entirely offline deterministic proposals.
-  The optional existing OpenAI Responses provider uses gpt-6.2-astra/high with
-  USD 1.00 maximum for a whole run; it is disabled in `.env`. A key is not required
-  for offline training or the three public retrieval endpoints below.
+- Application tactic generation is now authorized with OpenAI gpt-6.2-astra/high
+  and USD 0.50 maximum per assistant turn. Use one durable paid run/ledger per turn,
+  shared across tasks, retries and workers; see AGENTS.md. The local `.env` enables
+  the provider. Offline commands remain available and require no key.
 - Next phase: expand proof variety and benchmark rigor. Implement optional Stacks
   Project, LeanExplore and Loogle retrieval benchmarks with settings in `.env`,
   following [the retrieval benchmark specification](retrieval-api-benchmark.md).
@@ -77,7 +77,7 @@ as authorized in those project instructions.
 - Evaluation freezes networks, vocabulary, candidate policy and train memory. Isolate caches.
 - Stacks data use pinned source/tag provenance and curated formalization evidence.
   Never equate a typechecked translation with proven source fidelity.
-- Budget accounting is durable, conservative, shared and capped at USD 1.00; reserve before
+- Budget accounting is durable, conservative, shared and capped at USD 0.50; reserve before
   dispatch, include reasoning and retries, retain ambiguous charges, never reset per theorem.
   Missing/unknown pricing or credentials prevents paid requests.
 - Optional paid proposals use only the local OPENAI_API_KEY through the existing loader.
@@ -100,7 +100,7 @@ uv run pytest -q tests/lean tests/integration
 
 Cover any added helper scripts with the same static checks. Run real-Lean bridge and verifier
 tests in required CI; a basic lake build alone is insufficient. Network/API tests are opt-in.
-Paid tactic tests require credentials and the USD 1.00 run ledger. Keyless retrieval
+Paid tactic tests require credentials and the shared USD 0.50 turn/run ledger. Keyless retrieval
 benchmarks use separate request/response limits and do not enable paid proposals.
 Record an unavailable live check as blocked or skipped, never passed. Preserve existing
 synthetic numerical/leakage tests.

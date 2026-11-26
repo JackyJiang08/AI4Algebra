@@ -21,6 +21,7 @@ from ai4algebra.candidates import (
     ProposalRequest,
     TransportError,
 )
+from ai4algebra.candidates._budget import Usage
 from ai4algebra.candidates._http import OpenAIHTTPS
 from ai4algebra.config import Limits, RunConfig, load_config
 from ai4algebra.contracts import Goal
@@ -211,25 +212,38 @@ def test_retry_timeout_keeps_uncertain_reservation_across_restart(
 
 def test_concurrent_workers_share_one_unchanged_ceiling(tmp_path: Path) -> None:
     path = tmp_path / "budget.db"
-    left = BudgetLedger(path, "run", _RESERVED)
-    right = BudgetLedger(path, "run", _RESERVED)
+    ceiling = Decimal("0.50")
+    left = BudgetLedger(path, "run", ceiling)
+    first = left.reserve(12_500, 3_750)
+    assert first is not None
+    left.settle(first, Usage(12_500, 3_750, 0, 0))
+
+    right = BudgetLedger(path, "run", ceiling)
     gate = Barrier(2)
 
     def reserve(ledger: BudgetLedger) -> bool:
         gate.wait(timeout=5)
-        return ledger.reserve(100, 64) is not None
+        return ledger.reserve(12_500, 3_750) is not None
 
     with ThreadPoolExecutor(max_workers=2) as workers:
         assert sorted(workers.map(reserve, (left, right))) == [False, True]
-    assert left.summary() == right.summary()
-    assert left.summary().outstanding_usd == _RESERVED
-    assert left.summary().spent_usd == 0
+    resumed = BudgetLedger(path, "run", ceiling)
+    summary = resumed.summary()
+    assert summary == left.summary() == right.summary()
+    assert summary.spent_usd == summary.outstanding_usd == Decimal("0.25")
+    assert summary.requests == 2 and summary.unresolved == 1
+    assert resumed.reserve(1, 1) is None
     with pytest.raises(BudgetError, match="do not match"):
-        BudgetLedger(path, "run", Decimal("1"))
+        BudgetLedger(path, "run", Decimal("0.49"))
     with pytest.raises(BudgetError, match="do not match"):
-        BudgetLedger(path, "another", _RESERVED)
-    with pytest.raises(BudgetError, match="USD 0 to USD 1"):
-        BudgetLedger(tmp_path / "separate.db", "run", Decimal("1.001"))
+        BudgetLedger(path, "another", ceiling)
+
+
+def test_ledger_rejects_budget_above_ceiling_before_rounding(tmp_path: Path) -> None:
+    path = tmp_path / "budget.db"
+    with pytest.raises(BudgetError, match=r"between USD 0 and USD 0\.50"):
+        BudgetLedger(path, "run", Decimal("0.5000000000000000000000000000000000001"))
+    assert not path.exists()
 
 
 @pytest.mark.parametrize(
@@ -244,12 +258,12 @@ def test_out_of_contract_pricing_keeps_reservation_and_blocks_run(
     tmp_path: Path, response: HttpResponse
 ) -> None:
     path = tmp_path / "budget.db"
-    ledger = BudgetLedger(path, "run", Decimal("1"))
-    config = _config(tmp_path, "1")
+    ledger = BudgetLedger(path, "run", Decimal("0.50"))
+    config = _config(tmp_path, "0.50")
     transport = MockTransport(ledger, [_count(), response])
     result = OpenAIProposer(config, ledger, transport).propose(_VIEW, _LIMITS)
     assert result.status == "pricing_mismatch"
-    restored = BudgetLedger(path, "run", Decimal("1"))
+    restored = BudgetLedger(path, "run", Decimal("0.50"))
     assert (
         restored.summary().blocked and restored.summary().outstanding_usd == _RESERVED
     )
@@ -349,8 +363,8 @@ def test_https_cancellation_interrupts_a_dispatched_request(
 
 def test_provider_refuses_credential_serialization(tmp_path: Path) -> None:
     provider = OpenAIProposer(
-        _config(tmp_path, "1"),
-        BudgetLedger(tmp_path / "budget.db", "run", Decimal("1")),
+        _config(tmp_path, "0.50"),
+        BudgetLedger(tmp_path / "budget.db", "run", Decimal("0.50")),
     )
     with pytest.raises(TypeError, match="cannot be serialized"):
         pickle.dumps(provider)

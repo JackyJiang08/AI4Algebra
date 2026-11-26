@@ -12,6 +12,7 @@ LIVE_SETTINGS = {
     "AI4ALGEBRA_LLM_PROVIDER": "openai",
     "AI4ALGEBRA_ALLOW_PAID_API": "true",
 }
+_OVER_BUDGET = "0.5000000000000000000000000000000000001"
 
 
 def test_defaults_support_offline_runs(tmp_path: Path) -> None:
@@ -20,7 +21,7 @@ def test_defaults_support_offline_runs(tmp_path: Path) -> None:
     assert config.provider == "deterministic"
     assert config.model == "gpt-6.2-astra"
     assert config.reasoning_effort == "high"
-    assert config.api_budget_usd == Decimal("1.00")
+    assert config.api_budget_usd == Decimal("0.50")
     assert config.limits == Limits()
     assert not config.paid_enabled
     assert config.openai_api_key is None
@@ -32,7 +33,7 @@ def test_file_dotenv_environment_precedence_and_sanitized_round_trip(
 ) -> None:
     settings = tmp_path / "run.json"
     settings.write_text(
-        '{"api_budget_usd":0.75,"limits":{"max_depth":6,"max_steps":25}}',
+        '{"api_budget_usd":0.25,"limits":{"max_depth":6,"max_steps":25}}',
         encoding="utf-8",
     )
     dotenv = tmp_path / ".env"
@@ -41,7 +42,7 @@ def test_file_dotenv_environment_precedence_and_sanitized_round_trip(
         f'OPENAI_API_KEY="{sentinel}"\n'
         "AI4ALGEBRA_LLM_PROVIDER=openai\n"
         "AI4ALGEBRA_ALLOW_PAID_API=true\n"
-        "AI4ALGEBRA_API_BUDGET_USD=0.65\n"
+        "AI4ALGEBRA_API_BUDGET_USD=0.35\n"
         "AI4ALGEBRA_MAX_DEPTH=5\n",
         encoding="utf-8",
     )
@@ -117,13 +118,20 @@ def test_disabled_paid_requests_need_no_key(
 
 
 @pytest.mark.parametrize(
-    "budget", ["NaN", "sNaN", "Infinity", "-0.01", "1.0001", "", "hello"]
+    "budget", ["NaN", "sNaN", "Infinity", "-0.01", _OVER_BUDGET, "", "hello"]
 )
 def test_reject_invalid_budget(tmp_path: Path, budget: str) -> None:
     with pytest.raises(ConfigError, match="api_budget_usd"):
         load_config(
             environ={"AI4ALGEBRA_API_BUDGET_USD": budget}, dotenv_path=tmp_path / ".env"
         )
+
+
+def test_json_config_budget_is_compared_without_rounding(tmp_path: Path) -> None:
+    settings = tmp_path / "run.json"
+    settings.write_text(f'{{"api_budget_usd":{_OVER_BUDGET}}}', encoding="utf-8")
+    with pytest.raises(ConfigError, match=r"between USD 0 and USD 0\.50"):
+        load_config(settings, environ={}, dotenv_path=tmp_path / ".env")
 
 
 @pytest.mark.parametrize(
@@ -184,16 +192,17 @@ def test_reject_invalid_direct_limit_and_budget_values() -> None:
         Limits.model_validate({"max_steps": True})
     with pytest.raises(ValidationError):
         RunConfig(api_budget_usd=Decimal("NaN"))
+    with pytest.raises(ValidationError, match="api_budget_usd"):
+        RunConfig(api_budget_usd=Decimal(_OVER_BUDGET))
 
 
 def test_wire_budget_requires_a_decimal_string_without_rounding() -> None:
     wire = RunConfig().to_json()
-    amount = "1.0000000000000000000000000000000000001"
     with pytest.raises(ValidationError, match="decimal string"):
-        RunConfig.from_json(wire.replace('"1.00"', amount))
-    with pytest.raises(ValidationError, match="between USD 0 and USD 1.00"):
-        RunConfig.from_json(wire.replace('"1.00"', f'"{amount}"'))
-    exact = amount.replace("1.", "0.", 1)
+        RunConfig.from_json(wire.replace('"0.50"', _OVER_BUDGET))
+    with pytest.raises(ValidationError, match=r"between USD 0 and USD 0\.50"):
+        RunConfig.from_json(wire.replace('"0.50"', f'"{_OVER_BUDGET}"'))
+    exact = "0.4999999999999999999999999999999999999"
     assert RunConfig.from_json(
-        wire.replace('"1.00"', f'"{exact}"')
+        wire.replace('"0.50"', f'"{exact}"')
     ).api_budget_usd == Decimal(exact)

@@ -37,7 +37,9 @@ The real Lean loop has produced an independently verified two-step proof of
 and [audit result](runs/elementary-search-smoke/verdict.json). All four curated elementary
 reference certificates also pass verification. The real training/evaluation loop and
 curated Stacks pilot are implemented and tested; the separate synthetic DDQN baseline
-stays runnable. Live-provider validation remains blocked by a missing local key.
+stays runnable. A live Astra/high proposal also proved the group identity in one
+Lean-verified step; its [proof and outcome](records/succeeded/turn-20261125-openai-smoke/group-inverse-identity/attempt-001/outcome.md)
+record USD 0.020264 in API usage and an independently accepted offline replay.
 
 Final offline checks passed 348 tests, strict mypy and Ruff. Elementary validation and
 test each proved their one task in all six seed/policy trials. The Stacks training
@@ -48,10 +50,11 @@ Implementation follows [RETRIEVAL_DDQN_PLAN.md](RETRIEVAL_DDQN_PLAN.md):
 elementary group/ring exercises first, then curated Stacks Project statements. See the
 [requirements](docs/proposal.md), [detailed design](docs/detailed-design.md),
 [module progress](docs/tasks/progress.md), and [implementation prompt](docs/prompt.md).
-Proof training defaults to offline deterministic proposals and needs no API key.
-Optional paid tactic generation supports GPT-6.2 Astra with high reasoning and a
-USD 1.00 whole-run limit; its live validation remains pending. No paid API requests
-have been made. `.env.example` documents settings for the ignored local `.env`.
+Offline proof training needs no API key. The local `.env` now enables authorized
+GPT-6.2 Astra/high proposals, limited to USD 0.50 per assistant turn through one
+shared paid run/ledger. `.env.example` keeps safe offline defaults and blank credentials.
+`configs/lean-live-smoke.json` defines a bounded paid smoke configuration. Retrying
+within a turn must retain the same ledger; never start another paid run to reset it.
 
 ### Optional retrieval API benchmark
 
@@ -112,7 +115,10 @@ an informal translation is faithful.
 `--offline` overrides provider settings in `.env` and needs no credentials. For paid
 tactic proposals, enter your own `OPENAI_API_KEY` locally in `.env` and omit `--offline`.
 The selected model is `gpt-6.2-astra` with high reasoning. One durable ledger reserves
-at most USD 1.00 across all tasks and retries in a run, including unresolved requests.
+at most USD 0.50 across all tasks and retries in a run, including unresolved requests.
+Use one paid run per assistant turn. Older archived configurations above USD 0.50
+are rejected by the stricter loader; preserve them as historical evidence and use
+the current configuration files for new work.
 Keep the same output directory and run ID when retrying that run. Local Lean and the
 public Stacks source need no API keys. Live API validation is pending a configured key.
 

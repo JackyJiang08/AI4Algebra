@@ -5,7 +5,7 @@ Requirements: [proposal](../proposal.md). Interfaces: [detailed design](../detai
 Assignment and shared-file policy: [master plan](../../RETRIEVAL_DDQN_PLAN.md).
 
 - Owner role: GPT-6.2 Sol High.
-- Prerequisites: F02, L01/L03, C03, FM04; D2 is settled: OpenAI gpt-6.2-astra, high, USD 1.00/run.
+- Prerequisites: F02, L01/L03, C03, FM04; D2 is settled: OpenAI gpt-6.2-astra, high, USD 0.50/turn using one shared run.
 - Exclusive edit scope: `src/ai4algebra/candidates/`, `tests/unit/test_candidates.py`, `tests/unit/test_provider.py`, `tests/lean/test_applicability.py`.
 - Focused validation: `uv run pytest -q tests/unit/test_candidates.py tests/unit/test_provider.py tests/lean/test_applicability.py`.
 - Also run Ruff and mypy on the owned code/tests. Full gates are in [progress](progress.md).
@@ -21,7 +21,7 @@ and artifact path under the item when completing it. Mocks cannot satisfy a real
 
 - [x] **A04 — Implement the OpenAI Responses provider adapter behind one typed protocol.** Acceptance: gpt-6.2-astra with high reasoning; OPENAI_API_KEY loaded locally; mock response/error tests require no keys.
 
-- [x] **A05 — Enforce request/token/cost limits, redaction, bounded retries and cancellation.** Acceptance: Reserve worst-case cost including reasoning before dispatch; retain uncertain charges after timeout; reconcile usage; one USD 1.00 ledger across every theorem/retry/worker; no hidden paid fallback or budget increase.
+- [x] **A05 — Enforce request/token/cost limits, redaction, bounded retries and cancellation.** Acceptance: Reserve worst-case cost including reasoning before dispatch; retain uncertain charges after timeout; reconcile usage; one USD 0.50 ledger across every theorem/retry/worker; no hidden paid fallback or budget increase.
 
 - [x] **A06 — Validate, deduplicate and deterministically order provider candidates.** Acceptance: Stable IDs bind semantic meaning and generator version; provenance is recorded separately; malformed output or unknown lemmas never bypass the typed grammar.
 

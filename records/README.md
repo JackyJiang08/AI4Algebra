@@ -28,6 +28,8 @@ recorded Lean/Mathlib versions and configuration or links to their run metadata.
 Do not include credentials. Do not overwrite earlier attempts or count incomplete
 proofs as successes. These records are an archive, not an additional training corpus.
 
-The folders are prepared for future use; no past attempt has been reclassified or
-copied by this instruction-only change. Future agents are responsible for archiving
-their attempts; an automatic application-level archive exporter is not installed.
+The first archived live-provider proof is under
+`succeeded/turn-20261125-openai-smoke/group-inverse-identity/attempt-001/`.
+Its outcome records both successful Lean verification and the console error that
+followed it. Agents are responsible for archiving their attempts; an automatic
+application-level archive exporter is not installed.

@@ -2,6 +2,20 @@
 
 These instructions apply to all future work in this repository.
 
+## Paid application API budget
+
+The user authorizes OpenAI tactic generation with a maximum of USD 0.50 per assistant
+turn. This supersedes the older USD 1.00 limit and the earlier offline-only preference.
+The limit covers application API requests, not Codex/development-agent billing.
+
+Use at most one paid run and one durable budget ledger per assistant turn. Share it
+across tasks, retries and workers, and reuse it on restart; never create another ledger
+to obtain a fresh allowance in the same turn. Count settled charges plus outstanding
+reservations against USD 0.50 and report both. If the ledger cannot support the next
+request, continue offline or stop paid work. Keep keys exclusively in the ignored
+local `.env`; never include them in records, logs, messages, commits or worker tasks.
+Offline checks must use isolated settings and must not make live provider requests.
+
 ## Commits and pushes
 
 The user authorizes committing and pushing important completed changes as part of

@@ -5,7 +5,7 @@ import os
 import sqlite3
 import sys
 from pathlib import Path
-from typing import Literal
+from typing import Literal, TextIO
 
 from ai4algebra.candidates import BudgetError
 from ai4algebra.config import RunConfig, load_config
@@ -59,6 +59,17 @@ class _VerifyResult(Record):
     verdict: Verdict
     verdict_file: ArtifactRef
     lean_calls: LeanCalls
+
+
+def _console_print(message: str, *, file: TextIO | None = None) -> None:
+    stream = sys.stdout if file is None else file
+    try:
+        print(message, file=stream)
+    except UnicodeEncodeError:
+        encoding = stream.encoding or "ascii"
+        print(
+            message.encode(encoding, "backslashreplace").decode(encoding), file=stream
+        )
 
 
 def _task_args(parser: argparse.ArgumentParser) -> None:
@@ -224,16 +235,16 @@ def _run(args: argparse.Namespace) -> int:
             destination = RunDirectory(args.output)
             with destination.writer():
                 destination.put("corpus.json", catalog)
-        print(
+        _console_print(
             f"{catalog.corpus_id} has {len(catalog.tasks)} assigned tasks and {len(corpus.problems())} validated statements."
         )
         subclaims = sum(task.source_scope == "subclaim" for task in catalog.tasks)
         if subclaims:
-            print(
+            _console_print(
                 f"{subclaims} mapped task(s) cover a stated subclaim of their source tag."
             )
         for excluded_task, reason in corpus.exclusions():
-            print(f"{excluded_task} is excluded. {reason}")
+            _console_print(f"{excluded_task} is excluded. {reason}")
         return 0
 
     directory = RunDirectory(args.output)
@@ -282,7 +293,9 @@ def _run_output(
                 lean_calls=calls,
             ),
         )
-        print(f"Lean audit {verdict.status}. Verdict at {directory.path(file.path)}")
+        _console_print(
+            f"Lean audit {verdict.status}. Verdict at {directory.path(file.path)}"
+        )
         return {"accepted": 0, "rejected": 1, "indeterminate": 3}[verdict.status]
 
     options = SearchOptions(
@@ -307,7 +320,7 @@ def _run_output(
                     reason=task.exclusion_reason,
                 ),
             )
-            print(
+            _console_print(
                 f"No validated Lean statement is available for {task.task_id}. {task.exclusion_reason}"
             )
             return 1
@@ -321,9 +334,6 @@ def _run_output(
         report = execution.report
         files = directory.archive_search("result", report)
         replay: tuple[str, ...] = ()
-        print(f"Goal  {problem.lean_statement}")
-        if problem.binders:
-            print(f"Assumptions  {' '.join(problem.binders)}")
         if files.proof is not None:
             replay = (
                 "python",
@@ -342,12 +352,6 @@ def _run_output(
                 "--output",
                 str(directory.path("recheck")),
             )
-            print(f"Verified proof at {directory.path(files.proof.proof.path)}")
-            print(
-                f"Replayable certificate at {directory.path(files.proof.certificate.path)}"
-            )
-        else:
-            print(f"Search ended with {report.status} ({report.reason}).")
         directory.put(
             "solve.json",
             _SolveResult(
@@ -361,6 +365,18 @@ def _run_output(
                 replay_command=replay,
             ),
         )
+        _console_print(f"Goal  {problem.lean_statement}")
+        if problem.binders:
+            _console_print(f"Assumptions  {' '.join(problem.binders)}")
+        if files.proof is not None:
+            _console_print(
+                f"Verified proof at {directory.path(files.proof.proof.path)}"
+            )
+            _console_print(
+                f"Replayable certificate at {directory.path(files.proof.certificate.path)}"
+            )
+        else:
+            _console_print(f"Search ended with {report.status} ({report.reason}).")
         return (
             0
             if report.status == "verified"
@@ -389,15 +405,15 @@ def _run_output(
             )
         runtime = ProofRuntime(corpus, project, config, directory, identity.run_id)
         trained = train(corpus, training_plan, directory, runtime)
-        print(
+        _console_print(
             f"Collected {trained.collected_transitions} transitions and ran {len(trained.updates)} optimizer updates."
         )
         if trained.evaluation_inputs is None:
-            print(
+            _console_print(
                 f"Warmup produced no verified training trajectory. Report at {directory.path('training.json')}"
             )
             return 1
-        print(
+        _console_print(
             f"Frozen evaluation checkpoint at {directory.path(trained.evaluation_inputs.checkpoint.path)}"
         )
         return 0
@@ -431,10 +447,10 @@ def _run_output(
     runtime = ProofRuntime(corpus, project, config, directory, identity.run_id)
     result = evaluate(corpus, evaluation_plan, frozen, directory, runtime)
     for count in result.per_seed:
-        print(
+        _console_print(
             f"Seed {count.seed} {count.mode} verified {count.verified}/{count.assigned} assigned and {count.verified}/{count.validated} validated tasks."
         )
-    print(f"Evaluation report at {directory.path('evaluation.json')}")
+    _console_print(f"Evaluation report at {directory.path('evaluation.json')}")
     return 0
 
 
@@ -444,16 +460,16 @@ def main(argv: list[str] | None = None) -> int:
     try:
         return _run(args)
     except StopIteration:
-        print(
+        _console_print(
             "The requested task is absent or lacks a validated statement.",
             file=sys.stderr,
         )
         return 2
     except (OSError, ValueError, KeyError, BudgetError, sqlite3.Error) as exc:
-        print(str(exc), file=sys.stderr)
+        _console_print(str(exc), file=sys.stderr)
         return 2
     except BridgeError as exc:
-        print(str(exc), file=sys.stderr)
+        _console_print(str(exc), file=sys.stderr)
         return 3
     except KeyboardInterrupt:
         return 130

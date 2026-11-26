@@ -13,9 +13,10 @@ reports, examples, and error messages must explain their mathematical terms.
 
 - **D1 confirmed:** elementary group and ring exercises first; Stacks Project afterward.
 - **D3 confirmed:** curated Lean statements first; automatic translation later.
-- **D2 updated:** offline deterministic proof training is the default. Optional paid
-  tactic generation retains OpenAI `gpt-6.2-astra`, reasoning effort `high`, with a
-  maximum **USD 1.00 for the entire run**; no key is required for offline use.
+- **D2 updated:** paid tactic generation is authorized using OpenAI `gpt-6.2-astra`,
+  reasoning effort `high`, with a maximum **USD 0.50 per assistant turn**. Use one
+  durable run/ledger per turn, shared across tasks, workers and retries. Offline
+  commands remain available without a key; development-agent billing is separate.
 - **D4 extension:** configure Stacks Project, LeanExplore and Loogle retrieval APIs in
   `.env` and add reproducible, opt-in benchmarks. Current endpoints are keyless.
   Store results separately, measure availability/ranking independently of proof success,
@@ -37,7 +38,7 @@ reports, examples, and error messages must explain their mathematical terms.
 | ID | Question asked | Effect of the answer | Current state |
 |---|---|---|---|
 | D1 | Which algebra scope comes first? | Corpus and milestone ordering | Answered: elementary group and ring exercises, then Stacks |
-| D2 | Which API provider/model ID, reasoning level and maximum USD per run for paid tactics? | Provider adapter, credentials, calls and cost limits | OpenAI gpt-6.2-astra, high reasoning, USD 1.00 maximum per run; OPENAI_API_KEY stays blank for local entry |
+| D2 | Which API provider/model ID, reasoning level and maximum USD per run for paid tactics? | Provider adapter, credentials, calls and cost limits | OpenAI gpt-6.2-astra, high reasoning, USD 0.50 maximum per assistant turn using one shared run/ledger; key stays in ignored local .env |
 | D3 | Curated Lean statements first, or automatic informal-to-Lean translation in the first milestone? | Formalization module scope | Answered: curated statements first, automatic translation later |
 
 All questions asked during requirements discovery are answered. The design's implementation
@@ -46,8 +47,9 @@ product ambiguity emerges, ask rather than invent an answer. Routine technical c
 delegated to agents. Offline/deterministic providers remain usable without keys. Do not ask
 the user to paste credentials into the conversation.
 
-The USD 1.00 cap covers all paid tactic-generation requests in one solve/train/evaluate
-invocation, across every theorem, retry and worker. Restarts of the same run keep the same
+The USD 0.50 cap covers all paid tactic-generation requests in one assistant turn.
+Use at most one paid solve/train/evaluate run and one shared ledger per turn, across
+every theorem, retry and worker. Restarts of the same run keep the same
 ledger; budget exhaustion stops paid calls. It does not describe ChatGPT/Codex development
 agent billing. Enforce conservative pre-call reservations and reconcile provider usage;
 fail closed if pricing or maximum billable token bounds are unknown. No automatic budget

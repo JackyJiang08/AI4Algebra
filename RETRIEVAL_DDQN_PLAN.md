@@ -1,11 +1,11 @@
 # AI4Algebra: Lean proof-search task assignment plan
 
 Updated: 2026-11-25. Scope: requirements, design and executable implementation assignments
-for the missing Lean proof-search loop. **78 of 79 assignments are accepted.** All offline
-implementation and validation are complete. D05, the live paid-provider smoke test,
-remains unvalidated. This is the original milestone's historical checklist, not a
-completion percentage for the new benchmark expansion. The latest user preference
-is offline proof training; the optional paid smoke test is deferred.
+for the missing Lean proof-search loop. **79 of 79 assignments are accepted.** D05 now has a live Astra proposal,
+a verified proof and separate offline replay. This is the original milestone's checklist, not a
+completion percentage for the new benchmark expansion. The latest user request
+authorizes paid proposals with a USD 0.50 per-turn cap and one shared run/ledger.
+Live smoke evidence is recorded in the delivery checklist and progress log.
 
 New phase: [external retrieval benchmarks](docs/retrieval-api-benchmark.md) for
 Stacks Project, LeanExplore and Loogle, followed by a larger and more varied offline
@@ -32,9 +32,9 @@ Do not interpret the archived statement “all assignments complete” as comple
 1. Begin with elementary **group and ring exercises**.
 2. Use **curated Lean statements** first; automatic informal-to-Lean translation is later work.
 3. Add Stacks Project theorem training/testing **after the elementary loop works**.
-4. Offline deterministic tactic generation is now the default. Optional paid generation
-   remains OpenAI **gpt-6.2-astra**, reasoning **high**, maximum **USD 1.00 per entire
-   run**, across tasks, retries and workers. Retrieval APIs do not require that key.
+4. Paid generation is authorized using OpenAI **gpt-6.2-astra**, reasoning **high**,
+   maximum **USD 0.50 per assistant turn**, across tasks, retries and workers sharing
+   one durable run/ledger. Offline operation remains available without a key.
 5. Development roles: **GPT-6.2 Astra High** for documentation and difficult debugging;
    **GPT-6.2 Astra Medium/Low** for coordination; **GPT-6.2 Sol High/Medium**
    for implementation/testing.
@@ -44,7 +44,7 @@ Do not interpret the archived statement “all assignments complete” as comple
 
 These choices were explicitly answered by the user. The model's OpenAI API identifier is
 documented [here](https://developers.openai.com/api/docs/models/gpt-6.2-astra).
-The USD 1.00 limit concerns application tactic-generation API usage, not development-agent billing.
+The USD 0.50 limit concerns application tactic-generation API usage, not development-agent billing.
 
 ## 3. Starting state and preservation
 
@@ -76,16 +76,16 @@ the old retrieval_ddqn package remains runnable. No new runtime code is claimed 
 | Encode proof state | Structural state/candidate features implemented and reviewed | E01–E05 |
 | Retrieve accessible lemmas and instantiate tactics | Elementary and Stacks typed premises/probes implemented and reviewed | C/FM metadata, A01–A03/A07 |
 | Score state-action pairs | Variable-candidate DDQN trained on verified trajectories; frozen evaluation complete | Q01–Q05 variable candidate scorer |
-| Choose one tactic | Deterministic, DDQN and return-aware modes validated offline; live API check blocked | S02/S03, A04–A06 |
+| Choose one tactic | Deterministic, DDQN and return-aware modes validated offline; live API smoke accepted | S02/S03, A04–A06 |
 | Execute tactic in Lean | Implemented; timeout/recovery and branch tests pass | L01–L07 |
 | Valid with goals remaining | Two-step autonomous group proof demonstrated | L04/L05, S03/S06 |
 | All goals closed | Provisional closure followed by independent audit implemented | S05, V01–V06 |
 | Replay proof and check axioms | Fresh replay, exact type, axiom and dependency checks pass | V01–V06 |
 | Store transition and reward | Exact chronological samples, verified rewards and causal training memory validated | S04/S06, M01–M06 |
 | Replay minibatch and DDQN update | Real elementary/Stacks rollout training, optimizer updates and frozen reload passed | Q02–Q07 |
-| Real train/test workflow | CLI and both corpus workflows complete; honest held-out outcomes archived; live API smoke blocked | C03, FM, B01–B06, D01–D07 |
+| Real train/test workflow | CLI and both corpus workflows complete; honest held-out outcomes archived; live API smoke accepted | C03, FM, B01–B06, D01–D07 |
 
-Current checklist acceptance: **78/79 (98.7%)**, with **1/79 (1.3%) open** for D05.
+Current checklist acceptance: **79/79 (100%)**; D05 live-provider evidence is archived.
 This counts assignments, not elapsed time or general theorem-proving capability. The
 elementary held-out splits each verified 1/1 task in every seed/policy condition. The
 Stacks training subclaim was verified; both full held-out Stacks tasks remained unsolved
@@ -118,7 +118,7 @@ The autonomous elementary proof and its independent audit are archived in
 - Held-out proofs/equivalents must not leak through prompts, imports, simp/automation,
   retrieval, replay, shared caches or later theorem dependencies. Test this adversarially.
 - Paid provider calls require a valid key and a pre-call conservative cost reservation.
-  One durable USD 1.00 budget spans the entire run; uncertain charges retain reservations.
+  One durable USD 0.50 budget spans the entire run; uncertain charges retain reservations.
   No automatic budget increases or model substitutions.
 
 ## 6. Roles and ownership
@@ -325,7 +325,7 @@ these new commands are not available today. Preserve the existing
 
 Independent review covers: original-statement fidelity, all-goal accounting, invalid
 branch rollback, axiom policy, dynamic action/mask targets, truncation, causal memory,
-alias/transitive leakage, frozen evaluation, the USD 1 cap, secret handling and reproducibility.
+alias/transitive leakage, frozen evaluation, the USD 0.50 cap, secret handling and reproducibility.
 Return prioritized findings with files/lines, repros, exact checks and limitations.
 Main resolves confirmed findings and repeats affected validation before marking completion.
 

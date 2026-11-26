@@ -21,7 +21,7 @@ from pydantic import (
 from ai4algebra.contracts import Record, _unique_fields
 
 DEFAULT_BASE_URL: Final = "https://api.openai.com/v1"
-MAX_API_BUDGET_USD = Decimal("1.00")
+MAX_API_BUDGET_USD: Final = Decimal("0.50")
 
 _PROVIDER_KEYS = {
     "provider": "AI4ALGEBRA_LLM_PROVIDER",
@@ -119,7 +119,7 @@ def _decimal(value: object, label: str) -> Decimal:
     except InvalidOperation:
         raise ConfigError(f"{label} must be a finite decimal amount") from None
     if not amount.is_finite() or not Decimal("0") <= amount <= MAX_API_BUDGET_USD:
-        raise ConfigError(f"{label} must be between USD 0 and USD 1.00")
+        raise ConfigError(f"{label} must be between USD 0 and USD {MAX_API_BUDGET_USD}")
     return amount
 
 

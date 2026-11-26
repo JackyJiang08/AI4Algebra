@@ -1,0 +1,3 @@
+# Preserve archived proof and certificate bytes across Windows checkouts.
+*.lean -text
+*.json -text

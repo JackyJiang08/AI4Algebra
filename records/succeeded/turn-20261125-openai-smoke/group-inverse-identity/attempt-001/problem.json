@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task_id": "group-inverse-identity",
+  "source": {
+    "schema_version": 1,
+    "kind": "authored-fixture",
+    "source_id": "group-inverse-identity",
+    "revision": "1",
+    "location": "data/manifests/sources/group-inverse-identity.txt",
+    "content_digest": "db68f60aad19d142d0e80d2bbb0a0213d862aee68ccae763dca9d360c710c4a0",
+    "attribution": "AI4Algebra contributors (original benchmark exercise)",
+    "license_ref": "MIT (repository LICENSE)"
+  },
+  "informal_statement": "Let G be a group and let a and b be arbitrary elements of G. Show that multiplying a on the right by the product of b with its inverse gives a.",
+  "family_id": "group-inverse-normalization",
+  "split": "train",
+  "imports": [
+    "Mathlib.Algebra.Group.Defs"
+  ],
+  "lean_name": "AI4Algebra.Benchmarks.Tasks.group_inverse_identity",
+  "lean_statement": "a * (b * b⁻¹) = a",
+  "mapping_evidence_id": "group-inverse-identity-v1",
+  "universes": [
+    "u"
+  ],
+  "binders": [
+    "(G : Type u)",
+    "[Group G]",
+    "(a b : G)"
+  ],
+  "statement_digest": "b2e095495613369dc5bafc7adb846cf99e4f1d4e8d70c5aedc9c0f47fdeb3377"
+}
