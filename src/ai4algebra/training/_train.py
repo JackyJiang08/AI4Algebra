@@ -85,7 +85,7 @@ class TrainingPlan(Record):
             search=search,
             encoder=encoder.config,
             encoder_digest=encoder.encoder_digest,
-            ddqn=DDQNConfig(seed=initial, target_update_interval=2),
+            ddqn=DDQNConfig(seed=initial, target_update_interval=2, huber_delta=1.0),
             action_seed=action,
             replay_seed=replay,
             task_ids=task_ids,

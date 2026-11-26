@@ -6,6 +6,7 @@ from ._records import (
     BudgetReason,
     CandidateScore,
     GenerationTrace,
+    NodeCutoff,
     ProbeTrace,
     ProofNode,
     SearchMode,
@@ -15,6 +16,7 @@ from ._records import (
     Work,
 )
 from ._solve import Generator, ProofVerifier, solve
+from ._stuck import attempted_steps, stuck_report
 
 __all__ = [
     "ActionPolicy",
@@ -27,6 +29,7 @@ __all__ = [
     "DeterministicPolicy",
     "GenerationTrace",
     "Generator",
+    "NodeCutoff",
     "ProbeTrace",
     "ProofNode",
     "ProofVerifier",
@@ -35,5 +38,7 @@ __all__ = [
     "SearchReport",
     "SearchStatus",
     "Work",
+    "attempted_steps",
     "solve",
+    "stuck_report",
 ]

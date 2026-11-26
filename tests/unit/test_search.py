@@ -1,3 +1,4 @@
+import json
 import sys
 import time
 from collections.abc import Callable
@@ -41,11 +42,13 @@ from ai4algebra.search import (
     Choice,
     DDQNPolicy,
     Decision,
+    DeterministicPolicy,
     Generator,
     SearchMode,
     SearchOptions,
     solve,
 )
+from ai4algebra.training._artifacts import RunDirectory
 from ai4algebra.verification import EligibilityPolicy, Verifier
 
 _ENV = digest_json("test environment")
@@ -330,6 +333,157 @@ def test_best_first_orders_by_depth_residual_goals_and_insertion() -> None:
         "n2",
     )
     assert report.certificate.steps[0].operation == "constructor"
+
+
+@pytest.mark.parametrize("mode", ("best_first", "rollout"))
+def test_stuck_artifact_preserves_cutoff_goals_and_attempts(
+    tmp_path: Path, mode: SearchMode
+) -> None:
+    bridge = TreeBridge(
+        {
+            (): (
+                Edge("intro", ("left", "right")),
+                Edge("constructor", ("alternate",)),
+                Edge("reflexivity", status="rejected"),
+                Edge("decide", ("not probed",)),
+            ),
+        }
+    )
+    report = solve(
+        _PROBLEM,
+        _POLICY,
+        bridge,
+        TreeGenerator(bridge),
+        Audit(),
+        Limits(max_depth=1),
+        mode=mode,
+        options=SearchOptions(probes_per_node=3),
+    )
+    directory = RunDirectory(tmp_path)
+    files = directory.archive_search("result", report)
+    assert files.stuck is not None and files.stuck.path == "result/stuck.json"
+    assert files.proof is None
+    payload = directory.read(files.stuck)
+    assert b'\n  "status": "budget_exhausted"' in payload
+    stuck = json.loads(payload)
+
+    assert stuck["reason"] == "probe_limit"
+    assert set(stuck["budget"]["reasons"]) == {"depth", "probe_limit"}
+    assert stuck["budget"]["step_calls"] == 3
+    assert stuck["budget"]["limits"]["max_depth"] == 1
+    assert stuck["frontier"] == []
+    branches = stuck["cutoffs"]
+    assert [branch["reason"] for branch in branches] == ["depth"] * len(branches)
+    paths = [
+        [tactic["operation"] for tactic in branch["state"]["path_tactics"]]
+        for branch in branches
+    ]
+    assert paths == (
+        [["constructor"], ["intro"]] if mode == "best_first" else [["intro"]]
+    )
+    last = stuck["last_visited"]
+    assert last == branches[-1]["state"]
+    assert [goal["target"] for goal in last["unresolved_goals"]] == ["left", "right"]
+    probes = stuck["attempted_candidates"]["applicability_probes"]
+    assert [
+        (probe["candidate"]["operation"], probe["outcome"]) for probe in probes
+    ] == [
+        ("intro", "advanced"),
+        ("constructor", "advanced"),
+        ("reflexivity", "rejected"),
+    ]
+    assert len(stuck["attempted_candidates"]["selected_actions"]) == (
+        2 if mode == "best_first" else 1
+    )
+
+
+def test_stuck_artifact_retains_frontier_on_cancellation(tmp_path: Path) -> None:
+    cancelled = Event()
+
+    class CancellingPolicy(DeterministicPolicy):
+        def choose(self, decision: Decision) -> Choice:
+            if decision.collection_step == 2:
+                cancelled.set()
+            return super().choose(decision)
+
+    bridge = TreeBridge(
+        {
+            (): (
+                Edge("intro", ("cut off",)),
+                Edge("constructor", ("queued",)),
+                Edge("reflexivity", ("other",)),
+            )
+        }
+    )
+    report = solve(
+        _PROBLEM,
+        _POLICY,
+        bridge,
+        TreeGenerator(bridge),
+        Audit(),
+        Limits(),
+        policy=CancellingPolicy(),
+        cancelled=cancelled,
+    )
+    directory = RunDirectory(tmp_path)
+    files = directory.archive_search("result", report)
+    assert files.stuck is not None
+    stuck = json.loads(directory.read(files.stuck))
+    assert stuck["reason"] == "cancelled"
+    assert stuck["last_visited"]["node_id"] == "n1"
+    (queued,) = stuck["frontier"]
+    assert queued["node_id"] == "n2"
+    assert queued["unresolved_goals"][0]["target"] == "queued"
+    assert queued["path_tactics"][0]["operation"] == "constructor"
+
+
+def test_stuck_artifact_keeps_open_state_when_audit_rejects_closure(
+    tmp_path: Path,
+) -> None:
+    bridge = TreeBridge({(): (Edge("constructor", status="closed"),)})
+    report = solve(
+        _PROBLEM,
+        _POLICY,
+        bridge,
+        TreeGenerator(bridge),
+        Audit(deny=frozenset({"constructor"})),
+        Limits(),
+    )
+    directory = RunDirectory(tmp_path)
+    files = directory.archive_search("result", report)
+    assert files.stuck is not None
+    stuck = json.loads(directory.read(files.stuck))
+    assert stuck["reason"] == "audit_rejected"
+    assert stuck["last_observation"]["unresolved_goals"] == []
+    assert stuck["last_visited"]["unresolved_goals"][0]["target"] == "root"
+    (action,) = stuck["attempted_candidates"]["selected_actions"]
+    assert action["step_status"] == "closed"
+    assert action["outcome"] == "verification_rejected"
+
+
+def test_stuck_artifact_preserves_missing_observation(tmp_path: Path) -> None:
+    cancelled = Event()
+    cancelled.set()
+    bridge = TreeBridge({})
+    report = solve(
+        _PROBLEM,
+        _POLICY,
+        bridge,
+        TreeGenerator(bridge),
+        Audit(),
+        Limits(),
+        cancelled=cancelled,
+    )
+    directory = RunDirectory(tmp_path)
+    files = directory.archive_search("result", report)
+    assert files.stuck is not None
+    stuck = json.loads(directory.read(files.stuck))
+    assert stuck["last_observation"] is None and stuck["last_visited"] is None
+    assert stuck["frontier"] == [] and stuck["cutoffs"] == []
+    assert stuck["attempted_candidates"] == {
+        "selected_actions": [],
+        "applicability_probes": [],
+    }
 
 
 def test_rollout_masks_rejection_and_publishes_only_the_chronological_verified_branch() -> (

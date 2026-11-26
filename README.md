@@ -122,6 +122,10 @@ curated statement and passed the configured axiom/dependency checks. The source-
 mapping has separate curation evidence; a successful proof alone does not establish that
 an informal translation is faithful.
 
+An unsuccessful search writes `stuck.json` beside `search.json`. It shows the reason,
+last active state, saved frontier states, open goals and local hypotheses, and the
+tactics and probes already tried. A failure before Lean observes a goal has no saved state.
+
 `--offline` overrides provider settings in `.env` and needs no credentials. For paid
 tactic proposals, enter your own `OPENAI_API_KEY` locally in `.env` and omit `--offline`.
 The selected model is `gpt-6.2-astra` with high reasoning. One durable ledger reserves
@@ -147,7 +151,10 @@ uv run python -m ai4algebra evaluate --offline --config configs/lean-elementary.
 ```
 
 Training saves the exact collected transitions/features, optimizer records, checkpoint
-and frozen return memory. Evaluation compares deterministic, DDQN and DDQN-with-return
+and frozen return memory. New plans use Huber loss to limit the influence of large
+temporal-difference errors. The learner scores successor candidates in batches, and
+the runtime reuses Lake's environment setup across fresh Lean processes.
+Evaluation compares deterministic, DDQN and DDQN-with-return
 retrieval under the same limits. Results include proof outcomes, actual Lean requests,
 known token charges, unresolved reservations and descriptive differences across seeds.
 This tiny benchmark cannot establish general performance or a retrieval advantage.
@@ -156,6 +163,19 @@ Use a fresh directory for a new training experiment. Checkpoints are evaluation 
 partial training is not resumable. Concurrent writers to one output directory are rejected.
 The Stacks pilot uses the same loop with pinned sources and curated mappings. It does not
 automatically translate arbitrary Stacks pages into Lean.
+
+### Export local training tactics
+
+```powershell
+uv run python -m ai4algebra export-tactics --include-selected --output runs/training-lean-solutions
+uv run python -m ai4algebra export-tactics --manifest data/manifests/stacks-pilot.json --output runs/training-lean-solutions
+```
+
+These offline commands save the reviewed Lean proof bodies with their declaration,
+source hash and line number. The elementary and Stacks files contain validated training
+tasks. The optional selected development file includes the ten exercise proofs and their
+local helper theorems. Search, premise retrieval and training have no reader for these
+inspection files. The proof bodies preserve Lean tactic blocks, nested tactics and term proofs.
 
 ### Curated Stacks pilot
 

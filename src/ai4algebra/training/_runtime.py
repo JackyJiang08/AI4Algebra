@@ -15,7 +15,7 @@ from ai4algebra.config import RunConfig
 from ai4algebra.contracts import Certificate, Problem, Record, Verdict
 from ai4algebra.corpus import Corpus
 from ai4algebra.lean_bridge import LeanBridge
-from ai4algebra.lean_bridge.protocol import ProjectWorker
+from ai4algebra.lean_bridge.protocol import ProjectRuntimeEnvironment, ProjectWorker
 from ai4algebra.representation import FeatureEncoder
 from ai4algebra.search import (
     ActionPolicy,
@@ -74,8 +74,13 @@ class SearchRuntime(Protocol):
 
 
 class _CountedWorker(ProjectWorker):
-    def __init__(self, root: Path, kind: Literal["observer", "verifier"]) -> None:
-        super().__init__(root, kind)
+    def __init__(
+        self,
+        root: Path,
+        kind: Literal["observer", "verifier"],
+        runtime: ProjectRuntimeEnvironment,
+    ) -> None:
+        super().__init__(root, kind, runtime=runtime)
         self.calls = 0
 
     def exchange(self, frame: bytes, timeout_seconds: float, cancelled: Event) -> bytes:
@@ -96,6 +101,7 @@ class ProofRuntime:
     ) -> None:
         self._corpus = corpus
         self._root = root
+        self._lean_runtime = ProjectRuntimeEnvironment(root)
         self._config = config
         self._directory = directory
         self._run_id = run_id
@@ -145,8 +151,8 @@ class ProofRuntime:
     ) -> TaskExecution:
         self._enable_provider()
         api_before = self.api_accounting()
-        observer = _CountedWorker(self._root, "observer")
-        auditor = _CountedWorker(self._root, "verifier")
+        observer = _CountedWorker(self._root, "observer", self._lean_runtime)
+        auditor = _CountedWorker(self._root, "verifier", self._lean_runtime)
         bridge = LeanBridge(self._root, worker=observer)
         verifier = Verifier(
             self._root,
@@ -186,7 +192,7 @@ class ProofRuntime:
     def verify(
         self, problem: Problem, certificate: Certificate
     ) -> tuple[Verdict, LeanCalls]:
-        auditor = _CountedWorker(self._root, "verifier")
+        auditor = _CountedWorker(self._root, "verifier", self._lean_runtime)
         verdict = Verifier(
             self._root,
             timeout_seconds=self._config.limits.task_timeout_seconds,

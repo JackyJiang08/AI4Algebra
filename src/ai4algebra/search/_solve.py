@@ -32,6 +32,7 @@ from ._records import (
     Attempt,
     BudgetReason,
     GenerationTrace,
+    NodeCutoff,
     ProbeTrace,
     ProofNode,
     SearchMode,
@@ -143,6 +144,8 @@ class _Run:
         self.budgets: dict[BudgetReason, None] = {}
         self.nodes: dict[str, ProofNode] = {}
         self.frontier: list[tuple[tuple[int, int, int], _Entry]] = []
+        self.last_visited_node_id: str | None = None
+        self.cutoffs: list[NodeCutoff] = []
         self.generations: list[GenerationTrace] = []
         self.attempts: list[Attempt] = []
         self.samples: list[CollectedSample] = []
@@ -772,9 +775,13 @@ class _Run:
             self._push(self._new_node(observation, None, None))
             while self.frontier and self.accepted is None:
                 entry = self._pop()
+                self.last_visited_node_id = entry.node.node_id
                 cutoff = self._cutoff(entry)
                 if cutoff is not None:
                     self.budgets[cutoff] = None
+                    self.cutoffs.append(
+                        NodeCutoff(node_id=entry.node.node_id, reason=cutoff)
+                    )
                     if self.pending is not None and cutoff != "cancelled":
                         if entry.generated is None:
                             self._generate(entry, continuation=True)
@@ -824,6 +831,11 @@ class _Run:
             status, reason = "verification_rejected", "audit_rejected"
         else:
             status, reason = "candidate_exhausted", "frontier_exhausted"
+        frontier = (
+            sorted(self.frontier, key=lambda item: item[0])
+            if self.mode == "best_first"
+            else reversed(self.frontier)
+        )
         return SearchReport(
             problem=self.problem,
             policy_digest=self.eligibility.policy_digest,
@@ -855,6 +867,9 @@ class _Run:
             transitions=tuple(sample.trace.transition for sample in self.samples),
             samples=tuple(self.samples),
             diagnostics=tuple(self.diagnostics),
+            last_visited_node_id=self.last_visited_node_id,
+            frontier_node_ids=tuple(entry.node.node_id for _, entry in frontier),
+            cutoffs=tuple(self.cutoffs),
         )
 
 

@@ -58,14 +58,26 @@ class ScalarQ:
         return self._forward(pairs)[1]
 
     def train(
-        self, pairs: FloatArray, targets: FloatArray, learning_rate: float
+        self,
+        pairs: FloatArray,
+        targets: FloatArray,
+        learning_rate: float,
+        *,
+        huber_delta: float | None = None,
     ) -> float:
         """Update only the supplied chosen pairs, with precomputed targets."""
         hidden, scores = self._forward(pairs)
         with np.errstate(over="raise", invalid="raise"):
             errors = scores - targets
-            loss = float(np.mean(errors**2))
-            grad_q = (2.0 / len(pairs)) * errors
+            if huber_delta is None:
+                loss = float(np.mean(errors**2))
+                grad_q = (2.0 / len(pairs)) * errors
+            else:
+                absolute_errors = np.abs(errors)
+                grad_q = np.clip(errors, -huber_delta, huber_delta)
+                quadratic = np.abs(grad_q)
+                loss = float(np.mean(quadratic * (absolute_errors - 0.5 * quadratic)))
+                grad_q /= len(pairs)
             grad_hidden = grad_q[:, None] * self.readout * (hidden > 0.0)
             weights = self.weights - learning_rate * (pairs.T @ grad_hidden)
             bias = self.bias - learning_rate * grad_hidden.sum(axis=0)

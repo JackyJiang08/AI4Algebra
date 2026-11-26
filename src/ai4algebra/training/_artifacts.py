@@ -1,6 +1,7 @@
 """Run identities and atomic, content-checked experiment artifacts."""
 
 import hashlib
+import json
 import os
 import sqlite3
 import subprocess
@@ -34,7 +35,7 @@ from ai4algebra.corpus import Corpus
 from ai4algebra.formalization.stacks_premises import stacks_premise_index
 from ai4algebra.lean_bridge import environment_digest
 from ai4algebra.lean_bridge.protocol import LEAN_VERSION, MATHLIB_REVISION
-from ai4algebra.search import SearchReport
+from ai4algebra.search import SearchReport, stuck_report
 
 
 def _sha256(data: bytes) -> str:
@@ -244,6 +245,7 @@ class ProofFiles(Record):
 class SearchFiles(Record):
     trace: ArtifactRef
     proof: ProofFiles | None
+    stuck: ArtifactRef | None = None
 
 
 @dataclass(frozen=True)
@@ -323,6 +325,7 @@ class RunDirectory:
     def archive_search(self, prefix: str, report: SearchReport) -> SearchFiles:
         trace = self.put(f"{prefix}/search.json", report)
         proof = None
+        stuck = None
         if report.certificate is not None and report.verdict is not None:
             source = self.put(f"{prefix}/proof.lean", report.certificate.proof)
             proof = ProofFiles(
@@ -337,4 +340,12 @@ class RunDirectory:
                     str(self.path(source.path)),
                 ),
             )
-        return SearchFiles(trace=trace, proof=proof)
+        else:
+            stuck = self.put(
+                f"{prefix}/stuck.json",
+                json.dumps(
+                    stuck_report(report.problem, report), indent=2, ensure_ascii=False
+                )
+                + "\n",
+            )
+        return SearchFiles(trace=trace, proof=proof, stuck=stuck)

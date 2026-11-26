@@ -159,10 +159,10 @@ For each sampled transition, evaluate the chosen state/candidate pair. For a ver
 ```text
 a* = argmax over stored eligible next candidates of Q_online(s_next, candidate)
 y  = reward + gamma * Q_target(s_next, a*)
-loss = mean((Q_online(s, chosen_candidate) - y)^2)
+error = Q_online(s, chosen_candidate) - y
 ```
 
-An eligible truncation uses this second equation. Tie-break by stable ID. Exclude nonterminal samples without an eligible successor or final observation and report counts. Keep targets detached. Initialize the target network from the online network and synchronize after a fixed number of optimizer updates. The behavior policy may blend matched verified returns with network scores using a configured weight, then explore among legal actions. Targets always use the two unblended networks. A missing memory match falls back to raw Q. Reuse typed NumPy numerical routines from the baseline only where these semantics hold.
+An eligible truncation uses this second equation. Tie-break by stable ID. Exclude nonterminal samples without an eligible successor or final observation and report counts. Keep targets detached. Fresh CLI training plans minimize mean Huber loss at delta 1.0. Legacy configurations use mean squared error. Initialize the target network from the online network and synchronize after a fixed number of optimizer updates. The behavior policy may blend matched verified returns with network scores using a configured weight, then explore among legal actions. Targets always use the two unblended networks. A missing memory match falls back to raw Q. Reuse typed NumPy numerical routines from the baseline only where these semantics hold.
 
 Store model parameters, target parameters, update counter, encoder/policy versions, immutable memory snapshot/cutoff and run metadata in an evaluation checkpoint. Distinguish this format from a resumable training checkpoint, which would also need replay, RNG states, counters, configuration, pending episodes and reservations if implemented.
 

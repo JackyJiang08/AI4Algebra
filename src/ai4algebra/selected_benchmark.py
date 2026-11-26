@@ -32,7 +32,13 @@ from ai4algebra.lean_bridge.protocol import (
     LEAN_VERSION,
     MATHLIB_REVISION,
 )
-from ai4algebra.search import SearchOptions, SearchReport, solve
+from ai4algebra.search import (
+    SearchOptions,
+    SearchReport,
+    attempted_steps,
+    solve,
+    stuck_report,
+)
 from ai4algebra.verification import EligibilityPolicy, Verifier
 
 _SOURCE = Path("data/training_questions.md")
@@ -229,33 +235,6 @@ def _diagnostics(report: SearchReport | None, error: str | None) -> tuple[str, .
     return (error,) if error else ()
 
 
-def _attempt_steps(report: SearchReport) -> dict[str, object]:
-    return {
-        "selected_actions": [
-            {
-                "parent_node": attempt.node_id,
-                "candidate": attempt.candidate.model_dump(mode="json"),
-                "outcome": attempt.outcome,
-                "child_node": attempt.child_id,
-            }
-            for attempt in report.attempts
-        ],
-        "applicability_probes": [
-            {
-                "parent_node": generation.node_id,
-                "candidate": candidate.model_dump(mode="json"),
-                "outcome": probe.status,
-            }
-            for generation in report.generations
-            for candidate, probe in zip(
-                generation.candidate_set.candidates, generation.probes, strict=True
-            )
-            if not probe.reused
-            and probe.status not in {"not_probed", "already_attempted"}
-        ],
-    }
-
-
 def _archive(
     directory: Path,
     original: Path,
@@ -268,6 +247,7 @@ def _archive(
     error: str | None,
     source_section: str,
     *,
+    limits: Limits,
     interrupted: bool = False,
 ) -> dict[str, object]:
     status = report.status if report is not None else "infrastructure_error"
@@ -355,10 +335,16 @@ def _archive(
             evidence["certificate.json"] = report.certificate.to_json()
             evidence["verdict.json"] = report.verdict.to_json()
         else:
-            evidence["attempted-steps.json"] = _json(_attempt_steps(report))
+            evidence["attempted-steps.json"] = _json(attempted_steps(report))
     else:
         evidence["attempted-steps.json"] = _json(
             {"error": error, "selected_actions": None, "applicability_probes": None}
+        )
+    if status != "verified":
+        evidence["stuck.json"] = _json(
+            stuck_report(
+                problem, report, reason=reason, diagnostics=diagnostics, limits=limits
+            )
         )
 
     for destination in (original, directory):
@@ -575,6 +561,7 @@ def run_selected(
             report,
             error,
             source_sections[case.exercise],
+            limits=limits,
             interrupted=interrupted,
         )
         results.append(result)

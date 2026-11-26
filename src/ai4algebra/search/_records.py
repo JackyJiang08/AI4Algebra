@@ -71,6 +71,11 @@ class CandidateScore(Record):
     score: float
 
 
+class NodeCutoff(Record):
+    node_id: Identifier
+    reason: BudgetReason
+
+
 class ProbeTrace(Record):
     candidate_id: Digest
     status: Identifier
@@ -155,6 +160,9 @@ class SearchReport(Record):
     transitions: tuple[Transition, ...] = ()
     samples: tuple[CollectedSample, ...] = ()
     diagnostics: tuple[str, ...] = ()
+    last_visited_node_id: Identifier | None = None
+    frontier_node_ids: tuple[Identifier, ...] | None = None
+    cutoffs: tuple[NodeCutoff, ...] = ()
 
     @model_validator(mode="after")
     def _validate_result(self) -> Self:

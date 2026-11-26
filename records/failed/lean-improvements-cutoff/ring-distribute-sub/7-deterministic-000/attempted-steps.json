@@ -1,0 +1,51 @@
+{
+  "selected_actions": [
+    {
+      "parent_node": "n0",
+      "candidate": {
+        "schema_version": 1,
+        "operation": "simp_only",
+        "goal_id": "g0",
+        "lemma": null,
+        "local_id": null,
+        "arguments": [],
+        "direction": "forward",
+        "location": null,
+        "simp_lemmas": [
+          "mul_add"
+        ],
+        "provenance": "deterministic",
+        "generator_version": "typed-v2",
+        "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+      },
+      "outcome": "advanced",
+      "child_node": "n1",
+      "step_status": "advanced",
+      "reused_probe": true,
+      "diagnostics": []
+    }
+  ],
+  "applicability_probes": [
+    {
+      "parent_node": "n0",
+      "candidate": {
+        "schema_version": 1,
+        "operation": "simp_only",
+        "goal_id": "g0",
+        "lemma": null,
+        "local_id": null,
+        "arguments": [],
+        "direction": "forward",
+        "location": null,
+        "simp_lemmas": [
+          "mul_add"
+        ],
+        "provenance": "deterministic",
+        "generator_version": "typed-v2",
+        "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+      },
+      "outcome": "advanced",
+      "diagnostics": []
+    }
+  ]
+}

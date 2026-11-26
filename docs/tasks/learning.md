@@ -43,3 +43,11 @@ Main reproduced `python -m pytest -q -p no:cacheprovider tests/unit/test_proof_d
 Final current-source runs: `runs/elementary-release-7` and `runs/elementary-release-11`. Each completed two independently verified train episodes, collected four transitions, retained four verified returns at cutoff 6, and performed four optimizer updates. Main loaded both through `load_training` against a fresh current catalog and code digest. Checkpoint hashes: seed 7 `3dafb70883f1f6c6fe54d2a5d33808996ef3b242e6ea27bbe29a7d6756dc76f8`; seed 11 `9c005f5d974df26c08fe8146e9739240897c75a53f5c63acf7f210927835f41a`. Earlier `elementary-experiment-*` and other run directories are historical development evidence, not the final source-frozen comparison.
 
 Both validation and test evaluations verified all six seed/policy trials on their respective one-task split; no learned or retrieval advantage is established. See evaluation.md for denominators, immutable-input checks and artifacts.
+
+## Runtime and loss follow-up
+
+- [x] Batch eligible successor scores into one online and one target prediction per
+  optimizer batch. Preserve selection masks, deterministic ties and exact targets.
+- [x] Use Huber loss in fresh CLI training plans and the selected full-system run.
+  A large temporal-difference error contributes a bounded loss gradient. Legacy
+  loss settings and checkpoint serialization remain readable.

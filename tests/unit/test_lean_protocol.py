@@ -13,6 +13,7 @@ from ai4algebra.config import Limits
 from ai4algebra.contracts import Candidate, Goal, Problem, SourceRef, digest_json
 from ai4algebra.lean_bridge import BridgeError, BridgeTimeout, LeanBridge, StepUsage
 from ai4algebra.lean_bridge.protocol import (
+    ProjectRuntimeEnvironment,
     ProjectWorker,
     SubprocessWorker,
     WorkerRequest,
@@ -247,6 +248,74 @@ def test_project_worker_prefers_fresh_native_and_falls_back_after_source_change(
             ),
             {},
         ),
+    ]
+
+
+def test_project_runtime_reuses_paths_without_reusing_lean_processes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    for name in (
+        "lean-toolchain",
+        "lakefile.toml",
+        "lake-manifest.json",
+        "AI4Algebra/Bridge/Main.lean",
+        "AI4Algebra/Verification/Main.lean",
+        "AI4Algebra/Verification/Audit.lean",
+        "AI4Algebra/Verification/Replay.lean",
+    ):
+        source = tmp_path / name
+        source.parent.mkdir(parents=True, exist_ok=True)
+        source.touch()
+    newer = time.time_ns() + 3_000_000_000
+    suffix = ".exe" if os.name == "nt" else ""
+    for name in (
+        "lib/lean/AI4Algebra/Bridge/Main.olean",
+        "lib/lean/AI4Algebra/Verification/Audit.olean",
+        "lib/lean/AI4Algebra/Verification/Replay.olean",
+        f"bin/ai4algebra-observer{suffix}",
+        f"bin/ai4algebra-verifier{suffix}",
+    ):
+        target = tmp_path / ".lake/build" / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.touch()
+        os.utime(target, ns=(newer, newer))
+
+    discoveries = 0
+    frames: list[tuple[str, bytes, str]] = []
+
+    def exchange(
+        worker: SubprocessWorker, frame: bytes, timeout_seconds: float, cancelled: Event
+    ) -> bytes:
+        nonlocal discoveries
+        assert timeout_seconds > 0 and not cancelled.is_set()
+        if worker._argv == ("lake", "env"):
+            discoveries += 1
+            return (
+                f"LEAN_PATH=libs-{discoveries}\nLEAN_SYSROOT=lean\nPATH=bin\n".encode()
+            )
+        frames.append(
+            (Path(worker._argv[0]).stem, frame, worker._environment["LEAN_PATH"])
+        )
+        return b"response"
+
+    monkeypatch.setattr(SubprocessWorker, "exchange", exchange)
+    runtime = ProjectRuntimeEnvironment(tmp_path)
+    ProjectWorker(tmp_path, "observer", runtime=runtime).exchange(b"open", 5.0, Event())
+    verifier = ProjectWorker(tmp_path, "verifier", runtime=runtime)
+    verifier.exchange(b"audit", 5.0, Event())
+    manifest = tmp_path / "lake-manifest.json"
+    changed = newer - 1_000_000_000
+    os.utime(manifest, ns=(changed, changed))
+    ProjectWorker(tmp_path, "observer", runtime=runtime).exchange(b"step", 5.0, Event())
+    monkeypatch.setenv("ELAN_HOME", "new-home")
+    verifier.exchange(b"new toolchain search path", 5.0, Event())
+
+    assert discoveries == 3
+    assert frames == [
+        ("ai4algebra-observer", b"open", "libs-1"),
+        ("ai4algebra-verifier", b"audit", "libs-1"),
+        ("ai4algebra-observer", b"step", "libs-2"),
+        ("ai4algebra-verifier", b"new toolchain search path", "libs-3"),
     ]
 
 

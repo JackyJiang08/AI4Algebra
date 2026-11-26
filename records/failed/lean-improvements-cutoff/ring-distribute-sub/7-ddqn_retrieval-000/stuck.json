@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "task_id": "ring-distribute-sub",
+  "lean_name": "AI4Algebra.Benchmarks.Tasks.ring_distribute_sub",
+  "statement_digest": "aad42d0927df32c10cac46ae73d3992a3c14105c4f1e1c5c0345311ca1aa8abc",
+  "episode_id": "run-24a87ebe1d627549-seed-7-ddqn_retrieval-000",
+  "mode": "best_first",
+  "policy_name": "ddqn_retrieval",
+  "status": "budget_exhausted",
+  "reason": "steps",
+  "diagnostics": [],
+  "budget": {
+    "limits": {
+      "schema_version": 1,
+      "max_depth": 8,
+      "max_nodes": 32,
+      "max_candidates": 8,
+      "max_steps": 1,
+      "step_timeout_seconds": 120.0,
+      "task_timeout_seconds": 600.0,
+      "max_input_tokens": 4096,
+      "max_output_tokens": 1024
+    },
+    "reasons": [
+      "steps"
+    ],
+    "work": {
+      "schema_version": 1,
+      "opens": 1,
+      "nodes_expanded": 1,
+      "generation_calls": 1,
+      "continuation_generations": 0,
+      "probe_calls": 1,
+      "action_calls": 0,
+      "recovery_calls": 0,
+      "reused_probes": 1,
+      "selected_actions": 1,
+      "verifier_calls": 0,
+      "provider_requests": 0,
+      "token_count_requests": 0,
+      "elapsed_seconds": 13.108196099987254
+    },
+    "step_calls": 1,
+    "remaining_step_calls": 0
+  },
+  "last_observation": {
+    "node_id": "n1",
+    "depth": 1,
+    "state_digest": "3e3f7e33a9c5d3b9524b33fef78a726d007afa1c09ff2397bfba6f093bf7e3e4",
+    "prefix_digest": "0bbae1a8bce8f0c43576b403326c6809675a2227c2f8698a7d6afb7556167664",
+    "path_tactics": [
+      {
+        "schema_version": 1,
+        "operation": "simp_only",
+        "goal_id": "g0",
+        "lemma": null,
+        "local_id": null,
+        "arguments": [],
+        "direction": "forward",
+        "location": null,
+        "simp_lemmas": [
+          "mul_add"
+        ],
+        "provenance": "deterministic",
+        "generator_version": "typed-v2",
+        "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+      }
+    ],
+    "unresolved_goals": [
+      {
+        "goal_id": "g0",
+        "target": "a * (b - c) + a * d = a * b - a * c + a * d",
+        "hypotheses": [
+          {
+            "local_id": "l0",
+            "binder_kind": "explicit",
+            "name": "R",
+            "type_text": "Type u"
+          },
+          {
+            "local_id": "l1",
+            "binder_kind": "instance",
+            "name": "inst",
+            "type_text": "Ring R"
+          },
+          {
+            "local_id": "l2",
+            "binder_kind": "explicit",
+            "name": "a",
+            "type_text": "R"
+          },
+          {
+            "local_id": "l3",
+            "binder_kind": "explicit",
+            "name": "b",
+            "type_text": "R"
+          },
+          {
+            "local_id": "l4",
+            "binder_kind": "explicit",
+            "name": "c",
+            "type_text": "R"
+          },
+          {
+            "local_id": "l5",
+            "binder_kind": "explicit",
+            "name": "d",
+            "type_text": "R"
+          }
+        ]
+      }
+    ]
+  },
+  "last_visited": {
+    "node_id": "n1",
+    "depth": 1,
+    "state_digest": "3e3f7e33a9c5d3b9524b33fef78a726d007afa1c09ff2397bfba6f093bf7e3e4",
+    "prefix_digest": "0bbae1a8bce8f0c43576b403326c6809675a2227c2f8698a7d6afb7556167664",
+    "path_tactics": [
+      {
+        "schema_version": 1,
+        "operation": "simp_only",
+        "goal_id": "g0",
+        "lemma": null,
+        "local_id": null,
+        "arguments": [],
+        "direction": "forward",
+        "location": null,
+        "simp_lemmas": [
+          "mul_add"
+        ],
+        "provenance": "deterministic",
+        "generator_version": "typed-v2",
+        "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+      }
+    ],
+    "unresolved_goals": [
+      {
+        "goal_id": "g0",
+        "target": "a * (b - c) + a * d = a * b - a * c + a * d",
+        "hypotheses": [
+          {
+            "local_id": "l0",
+            "binder_kind": "explicit",
+            "name": "R",
+            "type_text": "Type u"
+          },
+          {
+            "local_id": "l1",
+            "binder_kind": "instance",
+            "name": "inst",
+            "type_text": "Ring R"
+          },
+          {
+            "local_id": "l2",
+            "binder_kind": "explicit",
+            "name": "a",
+            "type_text": "R"
+          },
+          {
+            "local_id": "l3",
+            "binder_kind": "explicit",
+            "name": "b",
+            "type_text": "R"
+          },
+          {
+            "local_id": "l4",
+            "binder_kind": "explicit",
+            "name": "c",
+            "type_text": "R"
+          },
+          {
+            "local_id": "l5",
+            "binder_kind": "explicit",
+            "name": "d",
+            "type_text": "R"
+          }
+        ]
+      }
+    ]
+  },
+  "frontier": [],
+  "cutoffs": [
+    {
+      "reason": "steps",
+      "state": {
+        "node_id": "n1",
+        "depth": 1,
+        "state_digest": "3e3f7e33a9c5d3b9524b33fef78a726d007afa1c09ff2397bfba6f093bf7e3e4",
+        "prefix_digest": "0bbae1a8bce8f0c43576b403326c6809675a2227c2f8698a7d6afb7556167664",
+        "path_tactics": [
+          {
+            "schema_version": 1,
+            "operation": "simp_only",
+            "goal_id": "g0",
+            "lemma": null,
+            "local_id": null,
+            "arguments": [],
+            "direction": "forward",
+            "location": null,
+            "simp_lemmas": [
+              "mul_add"
+            ],
+            "provenance": "deterministic",
+            "generator_version": "typed-v2",
+            "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+          }
+        ],
+        "unresolved_goals": [
+          {
+            "goal_id": "g0",
+            "target": "a * (b - c) + a * d = a * b - a * c + a * d",
+            "hypotheses": [
+              {
+                "local_id": "l0",
+                "binder_kind": "explicit",
+                "name": "R",
+                "type_text": "Type u"
+              },
+              {
+                "local_id": "l1",
+                "binder_kind": "instance",
+                "name": "inst",
+                "type_text": "Ring R"
+              },
+              {
+                "local_id": "l2",
+                "binder_kind": "explicit",
+                "name": "a",
+                "type_text": "R"
+              },
+              {
+                "local_id": "l3",
+                "binder_kind": "explicit",
+                "name": "b",
+                "type_text": "R"
+              },
+              {
+                "local_id": "l4",
+                "binder_kind": "explicit",
+                "name": "c",
+                "type_text": "R"
+              },
+              {
+                "local_id": "l5",
+                "binder_kind": "explicit",
+                "name": "d",
+                "type_text": "R"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "attempted_candidates": {
+    "selected_actions": [
+      {
+        "parent_node": "n0",
+        "candidate": {
+          "schema_version": 1,
+          "operation": "simp_only",
+          "goal_id": "g0",
+          "lemma": null,
+          "local_id": null,
+          "arguments": [],
+          "direction": "forward",
+          "location": null,
+          "simp_lemmas": [
+            "mul_add"
+          ],
+          "provenance": "deterministic",
+          "generator_version": "typed-v2",
+          "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+        },
+        "outcome": "advanced",
+        "child_node": "n1",
+        "step_status": "advanced",
+        "reused_probe": true,
+        "diagnostics": []
+      }
+    ],
+    "applicability_probes": [
+      {
+        "parent_node": "n0",
+        "candidate": {
+          "schema_version": 1,
+          "operation": "simp_only",
+          "goal_id": "g0",
+          "lemma": null,
+          "local_id": null,
+          "arguments": [],
+          "direction": "forward",
+          "location": null,
+          "simp_lemmas": [
+            "mul_add"
+          ],
+          "provenance": "deterministic",
+          "generator_version": "typed-v2",
+          "candidate_id": "d3778fad57620d1c331e837b42c55e2c79647f45809e4b56a536e0fb9ecfd41b"
+        },
+        "outcome": "advanced",
+        "diagnostics": []
+      }
+    ]
+  }
+}

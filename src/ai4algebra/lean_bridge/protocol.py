@@ -374,14 +374,70 @@ _RUNTIME_KEYS = {
     "DYLD_LIBRARY_PATH",
     "LD_LIBRARY_PATH",
 }
+_PROJECT_INPUTS = (
+    Path("lean-toolchain"),
+    Path("lakefile.toml"),
+    Path("lake-manifest.json"),
+)
+
+
+class ProjectRuntimeEnvironment:
+    """Share Lake's runtime paths within one run of a pinned project."""
+
+    def __init__(self, project_root: Path) -> None:
+        self.root = project_root.resolve()
+        self._cached: tuple[tuple[int, ...], dict[str, str], dict[str, str]] | None = (
+            None
+        )
+
+    def resolve(
+        self, project_times: tuple[int, ...], deadline: float, cancelled: Event
+    ) -> Mapping[str, str]:
+        parent = _worker_environment()
+        cached = self._cached
+        if cached is not None:
+            prior_times, prior_parent, environment = cached
+            if (project_times, parent) == (prior_times, prior_parent):
+                return environment
+
+        runtime = SubprocessWorker(("lake", "env"), self.root)
+        data = runtime.exchange(b"", deadline - time.monotonic(), cancelled)
+        environment = self._decode(data)
+        self._cached = (project_times, parent, environment)
+        return environment
+
+    @staticmethod
+    def _decode(data: bytes) -> dict[str, str]:
+        try:
+            lines = data.decode("utf-8", errors="strict").splitlines()
+        except UnicodeDecodeError as exc:
+            raise BridgeError("Lake returned an invalid runtime environment") from exc
+        environment = {}
+        for line in lines:
+            key, separator, value = line.partition("=")
+            if separator and key in _RUNTIME_KEYS:
+                environment[key] = value
+        if any(
+            not environment.get(key) for key in ("LEAN_SYSROOT", "LEAN_PATH", "PATH")
+        ):
+            raise BridgeError("Lake did not supply the Lean runtime directories")
+        return environment
 
 
 class ProjectWorker(SubprocessWorker):
     """Use a fresh native worker, with the validated interpreted path as a fallback."""
 
     def __init__(
-        self, project_root: Path, kind: Literal["observer", "verifier"]
+        self,
+        project_root: Path,
+        kind: Literal["observer", "verifier"],
+        *,
+        runtime: ProjectRuntimeEnvironment | None = None,
     ) -> None:
+        project_root = project_root.resolve()
+        if runtime is not None and runtime.root != project_root:
+            raise ValueError("Lean runtime environment belongs to another project")
+        self._runtime = runtime or ProjectRuntimeEnvironment(project_root)
         source = _OBSERVER_SOURCE if kind == "observer" else _VERIFIER_SOURCE
         super().__init__(
             ("lake", "env", "lean", "--threads=1", "--run", source.as_posix()),
@@ -393,27 +449,18 @@ class ProjectWorker(SubprocessWorker):
         )
         self._compiled_modules = _VERIFIER_MODULES if kind == "verifier" else ()
         self._sources = (source, *self._compiled_modules)
-        self._native: tuple[tuple[int, ...], SubprocessWorker] | None = None
 
     def exchange(self, frame: bytes, timeout_seconds: float, cancelled: Event) -> bytes:
         deadline = time.monotonic() + timeout_seconds
         self._check_compiled_modules()
-        fingerprint = self._native_fingerprint()
-        if fingerprint is None:
+        project_times = self._native_project_times()
+        if project_times is None:
             return super().exchange(frame, deadline - time.monotonic(), cancelled)
-        native = self._native
-        if native is None or native[0] != fingerprint:
-            runtime = SubprocessWorker(("lake", "env"), self._cwd)
-            data = runtime.exchange(b"", deadline - time.monotonic(), cancelled)
-            environment = self._decode_runtime(data)
-            native = (
-                fingerprint,
-                SubprocessWorker(
-                    (str(self._binary),), self._cwd, environment=environment
-                ),
-            )
-            self._native = native
-        return native[1].exchange(frame, deadline - time.monotonic(), cancelled)
+        environment = self._runtime.resolve(project_times, deadline, cancelled)
+        native = SubprocessWorker(
+            (str(self._binary),), self._cwd, environment=environment
+        )
+        return native.exchange(frame, deadline - time.monotonic(), cancelled)
 
     def _check_compiled_modules(self) -> None:
         library = self._cwd / ".lake/build/lib/lean"
@@ -432,35 +479,17 @@ class ProjectWorker(SubprocessWorker):
                 "Lean verifier modules are missing. Run lake build."
             ) from exc
 
-    def _native_fingerprint(self) -> tuple[int, ...] | None:
+    def _native_project_times(self) -> tuple[int, ...] | None:
         try:
             binary_time = self._binary.stat().st_mtime_ns
-            inputs = (
-                *self._sources,
-                Path("lean-toolchain"),
-                Path("lakefile.toml"),
-                Path("lake-manifest.json"),
+            source_times = tuple(
+                (self._cwd / source).stat().st_mtime_ns for source in self._sources
             )
-            times = tuple((self._cwd / source).stat().st_mtime_ns for source in inputs)
+            project_times = tuple(
+                (self._cwd / source).stat().st_mtime_ns for source in _PROJECT_INPUTS
+            )
         except OSError:
             return None
-        if binary_time < max(times):
+        if binary_time < max(source_times + project_times):
             return None
-        return binary_time, *times
-
-    @staticmethod
-    def _decode_runtime(data: bytes) -> dict[str, str]:
-        try:
-            lines = data.decode("utf-8", errors="strict").splitlines()
-        except UnicodeDecodeError as exc:
-            raise BridgeError("Lake returned an invalid runtime environment") from exc
-        environment = {}
-        for line in lines:
-            key, separator, value = line.partition("=")
-            if separator and key in _RUNTIME_KEYS:
-                environment[key] = value
-        if any(
-            not environment.get(key) for key in ("LEAN_SYSROOT", "LEAN_PATH", "PATH")
-        ):
-            raise BridgeError("Lake did not supply the Lean runtime directories")
-        return environment
+        return project_times

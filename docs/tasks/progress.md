@@ -273,3 +273,36 @@ Final code digest: `9cc5ec6a623602388c07250c0f4b207616f2006c92c8c86833b4a3c99e33
 - All confirmed independent review findings were corrected and rechecked. D07 records this final evidence and the remaining external blocker. No commits or pushes were made; user source/assets/Papers changes were preserved.
 
 D05 remains open after a final presence-only credential check found no key. Fill `OPENAI_API_KEY` locally in the ignored `.env` to permit the already-authorized gpt-6.2-astra/high live smoke under the shared USD 1.00 run cap. No secret value was printed or copied to agents.
+
+## Runtime, learner and local tactics follow-up
+
+Verified both local tactic exports in `runs/training-lean-solutions/`. They contain
+two validated elementary training proofs, one validated Stacks training proof, and
+an optional selected-development file with ten exercise proofs and their local
+helpers. The exporter has no runtime reader and never initializes the provider.
+
+In a local startup measurement, three independent native observer opens took
+33.700 seconds with separate Lake environment discovery and 22.083 seconds with a
+shared discovery. Each open used the same elementary statement and a fresh Lean
+process. Batched DDQN selected identical actions and targets to the old code on
+the synthetic regression fixtures. These checks do not measure end-to-end throughput.
+
+Offline seed 7 training in `runs/lean-improvements-train` verified two episodes,
+ran four optimizer updates with Huber loss, and published four causal returns.
+The checkpoint content digest is
+`9457ac6d456c62a05674a506a5248c5f9932d9a87ac15c1ab03f2a0f3e18904c`.
+In `runs/lean-improvements-validation`, all three policies verified the one held-out
+ring task. The retrieval policy made three lookup decisions and had zero matches.
+All three trials in `runs/lean-improvements-cutoff` exhausted the one-step limit.
+Each saved the actual remaining goals and preceding tactic in `stuck.json`.
+The corresponding eight attempts are archived under `records/` with reproduction
+commands, complete search traces, and audit evidence when available. These runs
+do not establish a change in proof success rates. Settled and outstanding API
+charges were both USD 0.
+
+Final checks used the local locked uv environment and the pinned Stacks checkout.
+`uv sync --locked --group dev --extra test --link-mode copy` and `lake build`
+passed. Pytest passed both partitions: `pytest -q -p no:cacheprovider
+--ignore=tests/lean --ignore=tests/integration` ran 399 tests, and
+`pytest -q -p no:cacheprovider tests/lean tests/integration` ran 25 tests.
+Strict mypy, Ruff lint and Ruff format checks passed across all 98 Python files.

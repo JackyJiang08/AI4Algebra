@@ -23,6 +23,7 @@ from ai4algebra.training._artifacts import (
     SearchFiles,
 )
 from ai4algebra.training._runtime import ApiAccounting, LeanCalls, ProofRuntime
+from ai4algebra.training._solutions import export_solutions
 
 _DEFAULT_MANIFEST = Path("data/manifests/elementary.json")
 
@@ -133,6 +134,17 @@ def _parser() -> argparse.ArgumentParser:
     )
     _task_args(check)
     _output_args(check, required=False)
+    solutions = group.add_parser(
+        "export-tactics", help="save reviewed training Lean solution bodies locally"
+    )
+    solutions.add_argument("--manifest", type=Path, default=_DEFAULT_MANIFEST)
+    solutions.add_argument("--project-root", type=Path)
+    solutions.add_argument("--output", type=Path, required=True)
+    solutions.add_argument(
+        "--include-selected",
+        action="store_true",
+        help="also archive the selected exercise solutions in a separate file",
+    )
     solve = group.add_parser(
         "solve", help="search for a verified proof of one corpus task"
     )
@@ -226,6 +238,15 @@ def _paths(args: argparse.Namespace) -> tuple[Path, Path]:
 
 
 def _run(args: argparse.Namespace) -> int:
+    if args.command == "export-tactics":
+        manifest, project = _paths(args)
+        corpus = Corpus.open(manifest, source_root=project)
+        directory = RunDirectory(args.output)
+        for filename in export_solutions(
+            project, corpus, directory, include_selected=args.include_selected
+        ):
+            _console_print(f"Saved {directory.path(filename)}")
+        return 0
     config = _config(args)
     manifest, project = _paths(args)
     corpus = Corpus.open(manifest, source_root=project)

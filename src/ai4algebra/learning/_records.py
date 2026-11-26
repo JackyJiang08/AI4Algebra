@@ -2,9 +2,14 @@
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Annotated
+from typing import Annotated, cast
 
-from pydantic import Field, model_validator
+from pydantic import (
+    Field,
+    SerializerFunctionWrapHandler,
+    model_serializer,
+    model_validator,
+)
 from typing_extensions import Self
 
 from ai4algebra.contracts import (
@@ -33,6 +38,15 @@ class DDQNConfig(Record):
     learning_rate: Annotated[float, Field(gt=0)] = 0.01
     target_update_interval: Annotated[int, Field(gt=0)] = 20
     seed: NonnegativeInt = 0
+    huber_delta: Annotated[float, Field(gt=0)] | None = None
+
+    @model_serializer(mode="wrap")
+    def _serialize(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:
+        data = cast(dict[str, object], handler(self))
+        if self.huber_delta is None:
+            # Preserve the serialized configuration and digest of MSE checkpoints.
+            data.pop("huber_delta", None)
+        return data
 
 
 class CheckpointMetadata(Record):

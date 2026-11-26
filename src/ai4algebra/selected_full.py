@@ -25,7 +25,11 @@ from ai4algebra.candidates import (
 from ai4algebra.config import Limits, RunConfig, load_config
 from ai4algebra.contracts import Problem, SourceRef, digest_json
 from ai4algebra.lean_bridge import LeanBridge, environment_digest
-from ai4algebra.lean_bridge.protocol import _worker_environment
+from ai4algebra.lean_bridge.protocol import (
+    ProjectRuntimeEnvironment,
+    ProjectWorker,
+    _worker_environment,
+)
 from ai4algebra.learning import CandidateDDQN, CheckpointMetadata, DDQNConfig
 from ai4algebra.memory import ReturnMemory
 from ai4algebra.representation import FeatureEncoder
@@ -321,6 +325,7 @@ def _run_owned(
     config = config.model_copy(update={"limits": LIMITS})
     budget_directory = output if budget_run is None else budget_run
     bootstrap_options = OPTIONS.model_copy(update={"stop_on_closure": True})
+    ddqn = DDQNConfig(seed=7, target_update_interval=2, huber_delta=1.0)
     tasks, policies = problems_and_policies(root)
     warmup, target = tasks
     directory.put(
@@ -333,6 +338,7 @@ def _run_owned(
                 "limits": LIMITS.model_dump(mode="json"),
                 "options": OPTIONS.model_dump(mode="json"),
                 "bootstrap_options": bootstrap_options.model_dump(mode="json"),
+                "ddqn": ddqn.model_dump(mode="json"),
                 "budget_run_id": budget_directory.name if config.paid_enabled else None,
                 "budget_ledger": str(budget_directory / "provider-budget.sqlite")
                 if config.paid_enabled
@@ -351,9 +357,7 @@ def _run_owned(
         if {rule.name, *rule.dependencies} & set(policies[0].forbidden_declarations):
             raise ValueError("retrieved premise depends on an excluded answer")
     encoder = FeatureEncoder()
-    learner = CandidateDDQN(
-        encoder, policies[0].policy_digest, DDQNConfig(seed=7, target_update_interval=2)
-    )
+    learner = CandidateDDQN(encoder, policies[0].policy_digest, ddqn)
     catalog = {p.task_id: p for p in tasks}
     memory = ReturnMemory(
         128,
@@ -376,6 +380,7 @@ def _run_owned(
         else None
     )
     proposer = OpenAIProposer(config, ledger) if ledger is not None else None
+    lean_runtime = ProjectRuntimeEnvironment(root)
 
     def search(
         problem: Problem,
@@ -387,7 +392,9 @@ def _run_owned(
     ) -> SearchReport:
         print(f"Searching {problem.task_id}: {phase}, policy={policy.name}", flush=True)
         directory.put("phase.json", json.dumps({"phase": phase}))
-        bridge = LeanBridge(root)
+        bridge = LeanBridge(
+            root, worker=ProjectWorker(root, "observer", runtime=lean_runtime)
+        )
         report = solve(
             problem,
             eligibility,
@@ -400,7 +407,11 @@ def _run_owned(
                 proposer=None if training else proposer,
                 computational=True,
             ),
-            Verifier(root, timeout_seconds=120.0),
+            Verifier(
+                root,
+                timeout_seconds=120.0,
+                transport=ProjectWorker(root, "verifier", runtime=lean_runtime),
+            ),
             LIMITS,
             mode="rollout" if training else "best_first",
             options=bootstrap_options if training else OPTIONS,

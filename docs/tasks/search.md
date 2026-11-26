@@ -39,3 +39,7 @@ modules complete. The coordinator integrates shared config changes and updates p
 Main and the independent reviewer each reproduced the combined provider/candidates/search/bridge/verifier unit suite: **99 passed** (Main: 4.64s). The implementer reran both pinned real Lean search tests after all fixes: **2 passed in 48.97s**. Main separately ran the actual CLI on the validation ring identity and obtained a verified two-step proof in 35.59s, then re-audited its exported certificate with the separate verify command. Artifacts: `runs/elementary-ring-smoke/result` and `runs/elementary-ring-replay`.
 
 Recovery worker requests count against the search cap, distinct advanced prefixes with equal exposed goals remain eligible, and cancellation interrupts concrete workers and suppresses late success rewards. Provider objects refuse credential serialization; slow connection cancellation cannot dispatch later; prompt premises omit unvalidated display text. All corresponding regressions passed independent review. No paid API calls were made.
+
+- [x] Write `stuck.json` for an unsuccessful search. Preserve available goals,
+  local hypotheses, path tactics, queued branches and cutoff reasons. The complete
+  `search.json` records generation activity for explored branches.

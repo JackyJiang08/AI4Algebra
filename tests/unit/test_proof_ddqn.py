@@ -26,6 +26,7 @@ from ai4algebra.learning import (
     LearningSample,
     encode_decision,
 )
+from ai4algebra.learning._network import FloatArray
 from ai4algebra.memory import ReturnMemory
 from ai4algebra.representation import (
     DecisionContext,
@@ -101,12 +102,16 @@ def _sample(
     )
 
 
-def _fixed_learner() -> CandidateDDQN:
+def _fixed_learner(huber_delta: float | None = None) -> CandidateDDQN:
     learner = CandidateDDQN(
         ENCODER,
         POLICY,
         DDQNConfig(
-            hidden_size=1, gamma=0.5, learning_rate=0.01, target_update_interval=2
+            hidden_size=1,
+            gamma=0.5,
+            learning_rate=0.01,
+            target_update_interval=2,
+            huber_delta=huber_delta,
         ),
     )
     action_start = ENCODER.state_size
@@ -222,6 +227,52 @@ def test_double_dqn_uses_stored_legal_successor_for_observed_truncation() -> Non
     assert bootstrap.values == (0.0, 0.0)
     assert bootstrap.selected_candidate_ids == (reflexivity, reflexivity)
     assert bootstrap.bootstrapped_truncations == 1
+
+
+def test_targets_batch_legal_successors_and_evaluate_only_selected_rows(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    learner = _fixed_learner()
+    root = _decision(_observation("root"), ("assumption",), (True,))
+    final = _observation("final")
+    multiple = _decision(
+        final, ("assumption", "intro", "reflexivity"), (True, False, True)
+    )
+    single = _decision(final, ("assumption",), (True,), depth=3)
+    stopped = _decision(final, ("intro",), (False,))
+    terminal = _sample(root, None, reward=0.75, terminated=True)
+    samples = (
+        _sample(root, multiple),
+        terminal,
+        _sample(root, None, truncated=True),
+        _sample(root, single, truncated=True),
+        _sample(root, stopped, truncated=True),
+    )
+    online_predict, target_predict = learner._online.predict, learner._target.predict
+    calls: list[tuple[str, int]] = []
+
+    def score_online(rows: FloatArray) -> FloatArray:
+        calls.append(("online", len(rows)))
+        return online_predict(rows)
+
+    def score_target(rows: FloatArray) -> FloatArray:
+        calls.append(("target", len(rows)))
+        return target_predict(rows)
+
+    monkeypatch.setattr(learner._online, "predict", score_online)
+    monkeypatch.setattr(learner._target, "predict", score_target)
+    targets = learner.targets(samples)
+    assert calls == [("online", 3), ("target", 2)]
+    assert targets.values == (0.0, 0.75, None, 6.5, None)
+    assert targets.selected_candidate_ids == (
+        multiple.eligible_actions[1].candidate_id,
+        None,
+        None,
+        single.eligible_actions[0].candidate_id,
+        None,
+    )
+    assert targets.missing_next_observations == targets.no_eligible_next_actions == 1
+    assert targets.bootstrapped_truncations == 1
 
 
 def test_copied_samples_and_decisions_are_revalidated_before_use() -> None:
@@ -462,6 +513,20 @@ def test_hard_target_sync_counts_optimizer_updates_only() -> None:
     assert not np.shares_memory(learner._online.weights, learner._target.weights)
 
 
+@pytest.mark.parametrize(
+    ("reward", "loss", "gradient"),
+    [(0.75, 0.03125, 0.25), (101.0, 99.5, -1.0), (-1e155, 1e155, 1.0)],
+)
+def test_huber_loss_clips_selected_pair_gradients(
+    reward: float, loss: float, gradient: float
+) -> None:
+    learner = _fixed_learner(huber_delta=1.0)
+    decision = _decision(_observation("root"), ("assumption",), (True,))
+    update = learner.update((_sample(decision, None, reward=reward, terminated=True),))
+    assert update.loss == loss
+    assert learner._online.offset == -learner.config.learning_rate * gradient
+
+
 def test_retrieval_blends_concrete_ids_for_behavior_before_epsilon() -> None:
     learner = _fixed_learner()
     original = _decision(
@@ -557,8 +622,11 @@ def test_retrieval_blends_concrete_ids_for_behavior_before_epsilon() -> None:
     assert calls == 4
 
 
-def test_evaluation_checkpoint_round_trip_and_compatibility(tmp_path: Path) -> None:
-    learner = _fixed_learner()
+@pytest.mark.parametrize("huber_delta", [None, 1.0])
+def test_evaluation_checkpoint_round_trip_and_compatibility(
+    tmp_path: Path, huber_delta: float | None
+) -> None:
+    learner = _fixed_learner(huber_delta)
     decision = _decision(_observation("root"), ("assumption",), (True,))
     successor = _decision(
         _observation("final"), ("assumption", "reflexivity"), (True, True)
@@ -585,10 +653,10 @@ def test_evaluation_checkpoint_round_trip_and_compatibility(tmp_path: Path) -> N
     )
     checkpoint = tmp_path / "evaluation.json"
     original = learner.save(checkpoint, metadata)
-    assert (
-        json.loads(checkpoint.read_text(encoding="utf-8"))["artifact_digest"]
-        == original
-    )
+    payload = json.loads(checkpoint.read_text(encoding="utf-8"))
+    assert payload["artifact_digest"] == original
+    assert payload["config"].get("huber_delta") == huber_delta
+    assert ("huber_delta" in payload["config"]) == (huber_delta is not None)
     restored = CandidateDDQN.load(
         checkpoint,
         encoder=ENCODER,
@@ -596,6 +664,7 @@ def test_evaluation_checkpoint_round_trip_and_compatibility(tmp_path: Path) -> N
         expected_artifact_digest=original,
     )
     assert restored.frozen and restored.update_steps == 1
+    assert restored.config == learner.config
     assert restored.scores(successor) == learner.scores(successor)
     assert restored.targets((sample,)) == learner.targets((sample,))
     assert restored.scores(successor) == restored.behavior_scores(

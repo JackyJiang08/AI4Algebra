@@ -35,3 +35,8 @@ modules complete. The coordinator integrates shared config changes and updates p
 ## Accepted review evidence
 
 Independent Sol High re-review confirmed the representation/memory fixes and passed focused tests, strict mypy and Ruff. Historical cutoff queries now reject unreconstructable history after eviction; publication retries preserve original timestamps; feature provenance and certificate identity are checked. Full search integration remains a later gate.
+
+- [x] Export the reviewed training Lean solution bodies with source provenance.
+  Manifest exports select validated training tasks. The selected development
+  solutions have a separate opt-in archive. The exporter does not publish
+  return memory or provide search inputs.

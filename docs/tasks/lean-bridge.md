@@ -39,3 +39,8 @@ modules complete. The coordinator integrates shared config changes and updates p
 24 protocol tests passed, including controlled subprocess timeout/output-limit cleanup, replay divergence and pin mismatch. Real pinned Mathlib open/reject/close and nonfirst-goal branching passed; aggregate pre-reader-hardening run passed 25 cases, final reader change passed 24 unit cases plus fresh real smoke. Default lake build passed 5 jobs. Root imports the observer, and required CI now runs pytest (including real Lean tests), mypy and Ruff. No remote CI run is claimed. Cold Windows replay is slow; default step limit calibrated to 60 seconds. Recovery after forced failure of a real Lean process has not been separately exercised; controlled workers cover the recovery logic.
 
 Real recovery follow-up: `tests/lean/test_bridge.py::test_real_worker_timeout_recovers_parent` forced a real worker timeout, re-observed the unchanged parent in a fresh process, and completed a retry. This supersedes the earlier recovery limitation above. Native observer/verifier build now contains 13 jobs; direct native startup reduced measured replay overhead. Main also reproduced 29 protocol tests after adding raw-frame size and finite-timeout guards.
+
+- [x] Share the native Lake environment across observers and verifiers within a run.
+  Keep a fresh Lean process for each frame and recheck project input timestamps and
+  the relevant parent environment before using cached paths. The focused protocol
+  and CLI suite passed 42 tests.

@@ -214,41 +214,51 @@ class CandidateDDQN:
             return self._targets(samples)
 
     def _targets(self, samples: Sequence[LearningSample]) -> TargetBatch:
-        values: list[float | None] = []
-        selected: list[str | None] = []
+        values: list[float | None] = [None] * len(samples)
+        selected: list[str | None] = [None] * len(samples)
+        next_actions: list[tuple[int, tuple[ActionFeatures, ...]]] = []
+        next_pairs: list[tuple[float, ...]] = []
         missing = unavailable = truncations = 0
-        for sample in samples:
+        for sample_index, sample in enumerate(samples):
             self._validate_decision(sample.decision)
             successor = sample.next_decision
             actions = () if successor is None else self._validate_decision(successor)
             if sample.terminated:
-                values.append(sample.reward)
-                selected.append(None)
-                continue
-            if successor is None:
+                values[sample_index] = sample.reward
+            elif successor is None:
                 missing += 1
-                values.append(None)
-                selected.append(None)
-                continue
-            if not actions:
+            elif not actions:
                 unavailable += 1
-                values.append(None)
-                selected.append(None)
-                continue
-            scores = self._online.predict(self._rows(successor.state, actions))
-            action, _ = min(
-                zip(actions, scores, strict=True),
-                key=lambda pair: (-pair[1], pair[0].candidate_id),
-            )
-            next_q = float(
-                self._target.predict(self._rows(successor.state, (action,)))[0]
-            )
-            value = sample.reward + self.config.gamma * next_q
-            if not isfinite(value):
-                raise FloatingPointError("Bellman target must remain finite")
-            values.append(value)
-            selected.append(action.candidate_id)
-            truncations += int(sample.truncated)
+            else:
+                next_actions.append((sample_index, actions))
+                next_pairs.extend(
+                    successor.state.values + action.values for action in actions
+                )
+                truncations += int(sample.truncated)
+
+        if next_actions:
+            rows = np.array(next_pairs, np.float64)
+            scores = self._online.predict(rows)
+            selected_rows: list[int] = []
+            start = 0
+            for sample_index, actions in next_actions:
+                best = min(
+                    range(len(actions)),
+                    key=lambda index: (
+                        -scores[start + index],
+                        actions[index].candidate_id,
+                    ),
+                )
+                selected[sample_index] = actions[best].candidate_id
+                selected_rows.append(start + best)
+                start += len(actions)
+
+            next_q = self._target.predict(rows[selected_rows])
+            for (sample_index, _), q in zip(next_actions, next_q, strict=True):
+                value = samples[sample_index].reward + self.config.gamma * float(q)
+                if not isfinite(value):
+                    raise FloatingPointError("Bellman target must remain finite")
+                values[sample_index] = value
         return TargetBatch(
             tuple(values), tuple(selected), missing, unavailable, truncations
         )
@@ -277,6 +287,7 @@ class CandidateDDQN:
                     np.array(rows, np.float64),
                     np.array(values, np.float64),
                     self.config.learning_rate,
+                    huber_delta=self.config.huber_delta,
                 )
                 self._update_steps += 1
                 synced = self.update_steps % self.config.target_update_interval == 0

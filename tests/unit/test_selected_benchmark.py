@@ -217,6 +217,11 @@ def test_offline_run_archives_each_result_and_preserves_existing_attempts(
     failed = records / "failed/fixture-1/exercise-16/attempt-001"
     assert (closed / "proof.lean").is_file() == audit_passes
     assert (closed / "certificate.json").is_file() == audit_passes
+    assert (closed / "stuck.json").is_file() != audit_passes
+    if not audit_passes:
+        stuck = json.loads((closed / "stuck.json").read_bytes())
+        assert stuck["reason"] == "audit_rejected"
+        assert stuck["last_visited"]["unresolved_goals"]
     trace = SearchReport.from_json((closed / "search.json").read_bytes())
     audit = trace.attempts[0].verdict
     assert audit is not None
@@ -230,6 +235,9 @@ def test_offline_run_archives_each_result_and_preserves_existing_attempts(
         encoding="utf-8"
     )
     assert (failed / "attempted-steps.json").is_file()
+    stuck = json.loads((failed / "stuck.json").read_bytes())
+    assert stuck["last_observation"] is None and stuck["last_visited"] is None
+    assert stuck["diagnostics"] == ["fixture initial elaboration error"]
     assert not (failed / "proof.lean").exists()
     assert "sorry" not in (failed / "statement.lean").read_text(encoding="utf-8")
     with pytest.raises(FileExistsError, match="attempts already exist"):
@@ -302,6 +310,10 @@ def test_missing_trace_preserves_unknown_observation_status(
     steps = json.loads((archived / "attempted-steps.json").read_bytes())
     assert steps["selected_actions"] is None
     assert steps["applicability_probes"] is None
+    stuck = json.loads((archived / "stuck.json").read_bytes())
+    assert stuck["reason"] == reason
+    assert stuck["last_observation"] is None and stuck["last_visited"] is None
+    assert stuck["frontier"] is None and stuck["attempted_candidates"] is None
     assert "Initial Lean goal observed: unknown." in (
         archived / "outcome.md"
     ).read_text(encoding="utf-8")
