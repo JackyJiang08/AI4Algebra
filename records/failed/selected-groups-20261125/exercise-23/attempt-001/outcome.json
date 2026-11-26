@@ -1,0 +1,32 @@
+{
+  "task_id": "exercise-23",
+  "exercise": 23,
+  "title": "Orders of powers",
+  "split": "train",
+  "status": "candidate_exhausted",
+  "reason": "frontier_exhausted",
+  "initial_goal_observed": true,
+  "failure_phase": "search_or_audit",
+  "diagnostics": [],
+  "budget_reasons": [],
+  "statement_digest": "fb98bbdc46a1f3c5e15c7b54d646179e1516d37b57459d9c9e4f644771726684",
+  "environment_digest": "2c5efab8d798a52ab4ae967a08f87c0aaceeea3337b22ba1252e410af8f45f61",
+  "search_work": {
+    "schema_version": 1,
+    "opens": 1,
+    "nodes_expanded": 1,
+    "generation_calls": 1,
+    "continuation_generations": 0,
+    "probe_calls": 2,
+    "action_calls": 0,
+    "recovery_calls": 0,
+    "reused_probes": 0,
+    "selected_actions": 0,
+    "verifier_calls": 0,
+    "provider_requests": 0,
+    "token_count_requests": 0,
+    "elapsed_seconds": 37.61314550001407
+  },
+  "run_artifacts": "runs/selected-groups-20261125/tasks/exercise-23/attempt-001",
+  "archive": "records/failed/selected-groups-20261125/exercise-23/attempt-001"
+}

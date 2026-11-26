@@ -1,0 +1,8 @@
+import AI4Algebra.Benchmarks.Gold.SelectedGroups
+
+set_option autoImplicit false
+
+-- Reference-only check: this deliberately imports the protected reference proof.
+theorem AI4Algebra.Benchmarks.SelectedReferenceRecord.exercise26.{u} :
+    ? (G : Type u) [Group G] (H : Set G) (hne : H.Nonempty) (hmul : ∀ a ∈ H, ∀ b ∈ H, a * b ∈ H) (hinv : ∀ a ∈ H, a⁻¹ ∈ H), ∃ K : Subgroup G, (K : Set G) = H :=
+  @AI4Algebra.Benchmarks.Gold.Selected.exercise26

@@ -1,0 +1,36 @@
+{
+  "task_id": "exercise-9",
+  "exercise": 9,
+  "title": "Groups built from √2",
+  "split": "train",
+  "status": "budget_exhausted",
+  "reason": "step_timeout",
+  "initial_goal_observed": true,
+  "failure_phase": "search_or_audit",
+  "diagnostics": [],
+  "budget_reasons": [
+    "step_timeout",
+    "steps",
+    "time"
+  ],
+  "statement_digest": "76ff5e4e4c6c9898b23b4dce97e49b627f2b5144ecc5bd18991ea5d177723aa5",
+  "environment_digest": "897e74baa8d1c1bbbd03ea0fe9cf84e3e162ef82ad7568eb8361ab77a79ba572",
+  "search_work": {
+    "schema_version": 1,
+    "opens": 1,
+    "nodes_expanded": 2,
+    "generation_calls": 2,
+    "continuation_generations": 0,
+    "probe_calls": 4,
+    "action_calls": 0,
+    "recovery_calls": 0,
+    "reused_probes": 1,
+    "selected_actions": 1,
+    "verifier_calls": 0,
+    "provider_requests": 0,
+    "token_count_requests": 0,
+    "elapsed_seconds": 90.10961060001864
+  },
+  "run_artifacts": "runs/selected-groups-20261125/tasks/exercise-9/attempt-001",
+  "archive": "records/failed/selected-groups-20261125/exercise-9/attempt-001"
+}

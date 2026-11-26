@@ -1,0 +1,54 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 31,
+  "case": {
+    "id": "exercise-31",
+    "exercise": 31,
+    "title": "An element of order two must exist",
+    "imports": [
+      "Mathlib.GroupTheory.OrderOfElement"
+    ],
+    "universes": [
+      "u"
+    ],
+    "binders": [
+      "(G : Type u)",
+      "[Group G]",
+      "[Fintype G]",
+      "(hEven : Even (Fintype.card G))"
+    ],
+    "conclusion": "∃ a : G, orderOf a = 2",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise31",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedGroups.lean",
+    "reference_imports": [
+      "Mathlib.GroupTheory.OrderOfElement"
+    ],
+    "mapping_note": "Fintype.card G is the finite group order, and the witness must have exact order two.",
+    "forbidden_declarations": [
+      "exists_prime_orderOf_dvd_card",
+      "exists_prime_orderOf_dvd_card'"
+    ],
+    "basic_premises": [
+      "Finset.strongInductionOn",
+      "Finset.mem_erase",
+      "Finset.card_erase_add_one",
+      "Finset.card_univ",
+      "inv_inv",
+      "inv_mul_cancel",
+      "pow_two",
+      "orderOf_eq_prime",
+      "Nat.prime_two"
+    ]
+  },
+  "reference_source_sha256": "d346ea46809fcdc02cfb144aab9c312e4fa77dcab3073af3d9d32c6ebca7152d",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

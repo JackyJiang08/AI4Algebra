@@ -1,0 +1,32 @@
+{
+  "task_id": "exercise-27",
+  "exercise": 27,
+  "title": "Constructing a cyclic subgroup",
+  "split": "train",
+  "status": "candidate_exhausted",
+  "reason": "frontier_exhausted",
+  "initial_goal_observed": true,
+  "failure_phase": "search_or_audit",
+  "diagnostics": [],
+  "budget_reasons": [],
+  "statement_digest": "0047226f5ee44b47b093d91d648747cf10117200493a37b1629eb0b8459cc5fc",
+  "environment_digest": "05154e97b4f72c6a5f9c98262f891fe35d9e1a454edfae2107b8b223386db538",
+  "search_work": {
+    "schema_version": 1,
+    "opens": 1,
+    "nodes_expanded": 1,
+    "generation_calls": 1,
+    "continuation_generations": 0,
+    "probe_calls": 2,
+    "action_calls": 0,
+    "recovery_calls": 0,
+    "reused_probes": 0,
+    "selected_actions": 0,
+    "verifier_calls": 0,
+    "provider_requests": 0,
+    "token_count_requests": 0,
+    "elapsed_seconds": 32.574133299989626
+  },
+  "run_artifacts": "runs/selected-groups-20261125-ex27-retry/tasks/exercise-27/attempt-001",
+  "archive": "records/failed/selected-groups-20261125-ex27-retry/exercise-27/attempt-001"
+}

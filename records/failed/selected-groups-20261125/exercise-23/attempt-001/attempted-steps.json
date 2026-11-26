@@ -1,0 +1,41 @@
+{
+  "selected_actions": [],
+  "applicability_probes": [
+    {
+      "parent_node": "n0",
+      "candidate": {
+        "schema_version": 1,
+        "operation": "assumption",
+        "goal_id": "g0",
+        "lemma": null,
+        "local_id": null,
+        "arguments": [],
+        "direction": "forward",
+        "location": null,
+        "simp_lemmas": [],
+        "provenance": "deterministic",
+        "generator_version": "typed-v1",
+        "candidate_id": "3dd90201b30a59f05a61ab34b1c94313da494fddac2639ebf1dd48c223d0c038"
+      },
+      "outcome": "rejected"
+    },
+    {
+      "parent_node": "n0",
+      "candidate": {
+        "schema_version": 1,
+        "operation": "reflexivity",
+        "goal_id": "g0",
+        "lemma": null,
+        "local_id": null,
+        "arguments": [],
+        "direction": "forward",
+        "location": null,
+        "simp_lemmas": [],
+        "provenance": "deterministic",
+        "generator_version": "typed-v1",
+        "candidate_id": "f2ab87790ab7af6df240c5e088c556d1f9fb56033d794e94ae398e1125591fe7"
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

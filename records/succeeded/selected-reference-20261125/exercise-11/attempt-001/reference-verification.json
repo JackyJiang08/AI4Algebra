@@ -1,0 +1,47 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 11,
+  "case": {
+    "id": "exercise-11",
+    "exercise": 11,
+    "title": "Computing element orders",
+    "imports": [
+      "Mathlib.Data.ZMod.Basic"
+    ],
+    "universes": [],
+    "binders": [],
+    "conclusion": "addOrderOf (0 : ZMod 12) = 1 ∧ addOrderOf (1 : ZMod 12) = 12 ∧ addOrderOf (2 : ZMod 12) = 6 ∧ addOrderOf (3 : ZMod 12) = 4 ∧ addOrderOf (4 : ZMod 12) = 3 ∧ addOrderOf (5 : ZMod 12) = 12 ∧ addOrderOf (6 : ZMod 12) = 2 ∧ addOrderOf (7 : ZMod 12) = 12 ∧ addOrderOf (8 : ZMod 12) = 3 ∧ addOrderOf (9 : ZMod 12) = 4 ∧ addOrderOf (10 : ZMod 12) = 6 ∧ addOrderOf (11 : ZMod 12) = 12",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise11",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedGroups.lean",
+    "reference_imports": [
+      "Mathlib.Data.ZMod.Basic"
+    ],
+    "mapping_note": "The answer table assigns the additive order to each of the twelve distinct standard residue representatives.",
+    "forbidden_declarations": [
+      "ZMod.addOrderOf_coe",
+      "ZMod.addOrderOf_coe'",
+      "ZMod.addOrderOf_one",
+      "addOrderOf_nsmul",
+      "addOrderOf_nsmul'",
+      "IsOfFinAddOrder.addOrderOf_nsmul"
+    ],
+    "basic_premises": [
+      "addOrderOf_eq_iff",
+      "addOrderOf_dvd_iff_nsmul_eq_zero",
+      "ZMod.natCast_eq_zero_iff",
+      "nsmul_eq_mul",
+      "addOrderOf_zero"
+    ]
+  },
+  "reference_source_sha256": "d346ea46809fcdc02cfb144aab9c312e4fa77dcab3073af3d9d32c6ebca7152d",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

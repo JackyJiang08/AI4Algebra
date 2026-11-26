@@ -1,0 +1,8 @@
+import AI4Algebra.Benchmarks.Gold.SelectedGroups
+
+set_option autoImplicit false
+
+-- Reference-only check: this deliberately imports the protected reference proof.
+theorem AI4Algebra.Benchmarks.SelectedReferenceRecord.exercise25.{u} :
+    ? (G : Type u) [Group G] (h : ∀ x : G, x ^ 2 = 1), ∀ a b : G, a * b = b * a :=
+  @AI4Algebra.Benchmarks.Gold.Selected.exercise25

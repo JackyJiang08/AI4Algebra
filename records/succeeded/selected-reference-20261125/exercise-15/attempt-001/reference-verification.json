@@ -1,0 +1,59 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 15,
+  "case": {
+    "id": "exercise-15",
+    "exercise": 15,
+    "title": "Inverting a product",
+    "imports": [
+      "Mathlib.Algebra.BigOperators.Group.List.Defs",
+      "Mathlib.Algebra.Group.Basic"
+    ],
+    "universes": [
+      "u"
+    ],
+    "binders": [
+      "(G : Type u)",
+      "[Group G]",
+      "(xs : List G)"
+    ],
+    "conclusion": "xs.prod⁻¹ = (xs.reverse.map (fun x : G => x⁻¹)).prod",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise15",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedGroups.lean",
+    "reference_imports": [
+      "Mathlib.Algebra.BigOperators.Group.List.Defs",
+      "Mathlib.Algebra.Group.Basic"
+    ],
+    "mapping_note": "List.prod is ordered and works for a noncommutative group. The empty list has product one.",
+    "forbidden_declarations": [
+      "List.prod_inv_reverse",
+      "List.prod_reverse_noncomm",
+      "MulOpposite.op_list_prod",
+      "MulOpposite.unop_list_prod",
+      "unop_map_list_prod"
+    ],
+    "basic_premises": [
+      "List.prod_nil",
+      "List.prod_cons",
+      "List.prod_append",
+      "List.reverse_cons",
+      "List.map_append",
+      "List.map_cons",
+      "List.map_nil",
+      "mul_inv_rev",
+      "inv_one",
+      "mul_one"
+    ]
+  },
+  "reference_source_sha256": "d346ea46809fcdc02cfb144aab9c312e4fa77dcab3073af3d9d32c6ebca7152d",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

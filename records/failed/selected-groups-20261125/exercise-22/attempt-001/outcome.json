@@ -1,0 +1,34 @@
+{
+  "task_id": "exercise-22",
+  "exercise": 22,
+  "title": "Conjugation preserves order",
+  "split": "train",
+  "status": "budget_exhausted",
+  "reason": "steps",
+  "initial_goal_observed": true,
+  "failure_phase": "search_or_audit",
+  "diagnostics": [],
+  "budget_reasons": [
+    "steps"
+  ],
+  "statement_digest": "0f381f7a0f05462ae4c448ebd287b202bf4b3072c95221f591244becb6a017d4",
+  "environment_digest": "2c5efab8d798a52ab4ae967a08f87c0aaceeea3337b22ba1252e410af8f45f61",
+  "search_work": {
+    "schema_version": 1,
+    "opens": 1,
+    "nodes_expanded": 2,
+    "generation_calls": 2,
+    "continuation_generations": 0,
+    "probe_calls": 4,
+    "action_calls": 0,
+    "recovery_calls": 0,
+    "reused_probes": 2,
+    "selected_actions": 2,
+    "verifier_calls": 0,
+    "provider_requests": 0,
+    "token_count_requests": 0,
+    "elapsed_seconds": 61.69637099999818
+  },
+  "run_artifacts": "runs/selected-groups-20261125/tasks/exercise-22/attempt-001",
+  "archive": "records/failed/selected-groups-20261125/exercise-22/attempt-001"
+}

@@ -1,0 +1,7 @@
+-- import AI4Algebra.Benchmarks.Gold.SelectedGroups
+--
+-- set_option autoImplicit false
+--
+-- -- Reference-only check: this deliberately imports the protected reference proof.
+-- theorem AI4Algebra.Benchmarks.SelectedReferenceRecord.exercise16.{u} :
+--     ? (G : Type u) [Group G] (x : G), x ^ 2 = 1 ↔ orderOf x = 1 ∨ orderOf x = 2

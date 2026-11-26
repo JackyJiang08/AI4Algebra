@@ -1,0 +1,31 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 9,
+  "case": {
+    "id": "exercise-9",
+    "exercise": 9,
+    "title": "Groups built from √2",
+    "imports": [
+      "AI4Algebra.Benchmarks.SelectedDefinitions"
+    ],
+    "universes": [],
+    "binders": [],
+    "conclusion": "(∃ A : AddSubgroup ℝ, (A : Set ℝ) = AI4Algebra.Benchmarks.Selected.quadraticSet) ∧ (∃ M : Subgroup ℝˣ, (M : Set ℝˣ) = {x : ℝˣ | (x : ℝ) ∈ AI4Algebra.Benchmarks.Selected.quadraticSet})",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise9",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedQuadratic.lean",
+    "mapping_note": "The additive subgroup's carrier is exactly the specified real set. Real units correspond to nonzero real numbers via coercion and Units.mk0. The multiplicative subgroup's carrier therefore represents exactly the nonzero elements of the set, with multiplication inherited from the reals.",
+    "forbidden_declarations": [],
+    "basic_premises": []
+  },
+  "reference_source_sha256": "0c762c47ec877641c40da242cbe5159b9dae1380f7361bae8b4d8bd19f6d0bf3",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

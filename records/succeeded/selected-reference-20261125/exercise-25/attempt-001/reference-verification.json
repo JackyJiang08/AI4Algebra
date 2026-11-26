@@ -1,0 +1,51 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 25,
+  "case": {
+    "id": "exercise-25",
+    "exercise": 25,
+    "title": "A condition forcing commutativity",
+    "imports": [
+      "Mathlib.Algebra.Group.Basic"
+    ],
+    "universes": [
+      "u"
+    ],
+    "binders": [
+      "(G : Type u)",
+      "[Group G]",
+      "(h : ∀ x : G, x ^ 2 = 1)"
+    ],
+    "conclusion": "∀ a b : G, a * b = b * a",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise25",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedGroups.lean",
+    "reference_imports": [
+      "Mathlib.Algebra.Group.Basic"
+    ],
+    "mapping_note": "The conclusion expresses commutativity for every pair in the given group. The hypothesis applies to every element, including the identity.",
+    "forbidden_declarations": [
+      "Commute.of_orderOf_dvd_two",
+      "mul_comm_of_exponent_two",
+      "commMonoidOfExponentTwo"
+    ],
+    "basic_premises": [
+      "pow_two",
+      "inv_eq_of_mul_eq_one_right",
+      "mul_inv_rev",
+      "mul_assoc",
+      "mul_inv_cancel",
+      "inv_mul_cancel"
+    ]
+  },
+  "reference_source_sha256": "d346ea46809fcdc02cfb144aab9c312e4fa77dcab3073af3d9d32c6ebca7152d",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

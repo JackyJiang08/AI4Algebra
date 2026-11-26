@@ -1,0 +1,51 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 26,
+  "case": {
+    "id": "exercise-26",
+    "exercise": 26,
+    "title": "The subgroup criterion",
+    "imports": [
+      "Mathlib.Algebra.Group.Subgroup.Defs"
+    ],
+    "universes": [
+      "u"
+    ],
+    "binders": [
+      "(G : Type u)",
+      "[Group G]",
+      "(H : Set G)",
+      "(hne : H.Nonempty)",
+      "(hmul : ∀ a ∈ H, ∀ b ∈ H, a * b ∈ H)",
+      "(hinv : ∀ a ∈ H, a⁻¹ ∈ H)"
+    ],
+    "conclusion": "∃ K : Subgroup G, (K : Set G) = H",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise26",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedGroups.lean",
+    "reference_imports": [
+      "Mathlib.Algebra.Group.Subgroup.Defs"
+    ],
+    "mapping_note": "A subgroup with carrier H supplies the group structure inherited from G. Nonemptiness and both closure assumptions are explicit.",
+    "forbidden_declarations": [
+      "Subgroup.ofDiv"
+    ],
+    "basic_premises": [
+      "Subgroup.mk",
+      "Submonoid.mk",
+      "Subsemigroup.mk",
+      "mul_inv_cancel",
+      "inv_mul_cancel"
+    ]
+  },
+  "reference_source_sha256": "d346ea46809fcdc02cfb144aab9c312e4fa77dcab3073af3d9d32c6ebca7152d",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

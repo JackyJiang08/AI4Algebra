@@ -33,3 +33,11 @@ The first archived live-provider proof is under
 Its outcome records both successful Lean verification and the console error that
 followed it. Agents are responsible for archiving their attempts; an automatic
 application-level archive exporter is not installed.
+
+The [selected group benchmark](../docs/selected-group-benchmark.md) has three
+distinct record sets: verified references in `succeeded/selected-reference-20261125/`,
+reference-development errors in `failed/selected-reference-development-20261125/`,
+and autonomous structural-search outcomes under the `selected-groups-20261125` run ID.
+Reference successes deliberately import protected proofs and are never counted as
+autonomous discoveries. The selected-exercise runner automatically archives its own
+attempts; the general solve/train/evaluate commands still require agent-managed copies.

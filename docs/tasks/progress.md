@@ -9,6 +9,25 @@ original 79 assignments only. The new
 [retrieval API extension](retrieval-api.md) and larger proof benchmark are separate
 work; see [configuration and benchmark interpretation](../retrieval-api-benchmark.md).
 
+### Selected group exercise tests accepted, 2026-11-25
+
+Saved the user's ten reference solutions and formalized every full selected statement.
+All ten reference proofs passed Lean type alignment and an allowlisted axiom check.
+The separate structural-only autonomous baseline proved **0/10**: four candidate
+frontiers exhausted, four probe limits, one tactic timeout and one initial-goal
+timeout. A diagnostic retry of Exercise 27 observed the goal but exhausted its
+candidates. These runs used no premise retrieval, trained policy or model proposer;
+they are not a score for the complete proof-search system or new training results.
+
+The [benchmark report](../selected-group-benchmark.md) links the preserved manual,
+public cases, exact input snapshots and all success/failure records. Both runs used
+zero provider requests, USD 0 settled and USD 0 outstanding. Independent review
+accepted the formalizations and reconciled all traces and archives. Final checks:
+380 non-Lean tests and the new real-Lean reference integration test passed; strict
+mypy and Ruff lint/format passed all 91 Python files. The original 79-task completion
+count is unchanged; richer action support and reviewed corpus admission remain work
+for the expanded proof benchmark.
+
 ### Retrieval API extension accepted, 2026-11-25
 
 - Added a separate opt-in `python -m ai4algebra.api_benchmark` command, nine

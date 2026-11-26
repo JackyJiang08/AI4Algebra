@@ -1,0 +1,51 @@
+{
+  "verification_kind": "reference_type_and_axiom_check",
+  "status": "verified_reference",
+  "exercise": 22,
+  "case": {
+    "id": "exercise-22",
+    "exercise": 22,
+    "title": "Conjugation preserves order",
+    "imports": [
+      "Mathlib.GroupTheory.OrderOfElement"
+    ],
+    "universes": [
+      "u"
+    ],
+    "binders": [
+      "(G : Type u)",
+      "[Group G]"
+    ],
+    "conclusion": "(∀ x g : G, orderOf x = orderOf (g⁻¹ * x * g)) ∧ (∀ a b : G, orderOf (a * b) = orderOf (b * a))",
+    "reference_declaration": "AI4Algebra.Benchmarks.Gold.Selected.exercise22",
+    "reference_file": "AI4Algebra/Benchmarks/Gold/SelectedGroups.lean",
+    "reference_imports": [
+      "Mathlib.GroupTheory.OrderOfElement"
+    ],
+    "mapping_note": "The conjunction retains both requested equalities. Lean's orderOf equals zero for elements of infinite order, so the same equality covers those elements.",
+    "forbidden_declarations": [
+      "SemiconjBy.orderOf_eq",
+      "MulEquiv.orderOf_eq",
+      "orderOf_injective"
+    ],
+    "basic_premises": [
+      "orderOf_eq_orderOf_iff",
+      "SemiconjBy.pow_right",
+      "SemiconjBy.eq_one_iff",
+      "mul_assoc",
+      "mul_inv_cancel",
+      "inv_mul_cancel_left",
+      "mul_one"
+    ]
+  },
+  "reference_source_sha256": "d346ea46809fcdc02cfb144aab9c312e4fa77dcab3073af3d9d32c6ebca7152d",
+  "question_source_sha256": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+  "verification_log_sha256": "01917febbc0f5730fa992cff54c1b8024138035713b80018e2893b83549475af",
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "autonomous_search_success": false,
+  "paid_api_usd": "0"
+}

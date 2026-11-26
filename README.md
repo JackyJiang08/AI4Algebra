@@ -56,6 +56,13 @@ shared paid run/ledger. `.env.example` keeps safe offline defaults and blank cre
 `configs/lean-live-smoke.json` defines a bounded paid smoke configuration. Retrying
 within a turn must retain the same ledger; never start another paid run to reset it.
 
+### Selected group theory benchmark
+
+The ten newly selected group theory exercises have a separate
+[reference-check and structural-search benchmark](docs/selected-group-benchmark.md).
+It preserves the supplied solution manual and distinguishes checked reference proofs
+from autonomous search outcomes; it does not claim new DDQN training results.
+
 ### Optional retrieval API benchmark
 
 Stacks Project tag lookup, LeanExplore semantic search, and Loogle declaration search

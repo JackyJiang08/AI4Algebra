@@ -1,0 +1,7 @@
+﻿AI4Algebra/Benchmarks/Gold/SelectedQuadratic.lean:62:63: error: unsolved goals
+x : ℝˣ
+a b : ℚ
+hx : ↑x = ↑a + ↑b * √2
+hx₀ : ↑a + ↑b * √2 ≠ 0
+d : ℚ := a ^ 2 - 2 * b ^ 2
+⊢ ↑a ^ 2 - 2 * ↑b ^ 2 = ↑a ^ 2 - 2 * ↑b ^ 2
