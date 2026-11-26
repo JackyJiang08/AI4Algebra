@@ -78,7 +78,7 @@ private partial def encodeLevel : Level → Json
   | .param name => toJson #["param", name.toString]
   | .mvar id => toJson #["mvar", id.name.toString]
 
-private partial def encodeExpr (ids : FVarIdMap Nat) : Expr → Json
+partial def encodeExpr (ids : FVarIdMap Nat) : Expr → Json
   | .bvar index => Json.arr #[toJson "bvar", toJson index]
   | .fvar id => match ids.get? id with
     | some index => Json.arr #[toJson "local", toJson index]
@@ -159,6 +159,7 @@ private def operand (action : Action) : TacticM Term := do
 
 private def actionSyntax (action : Action) : TacticM (TSyntax `tactic) := do
   match action.operation with
+  | "decide" => `(tactic| set_option synthInstance.maxSize 4096 in decide)
   | "assumption" => `(tactic| assumption)
   | "reflexivity" => `(tactic| rfl)
   | "intro" => `(tactic| intro)
@@ -183,7 +184,16 @@ private def actionSyntax (action : Action) : TacticM (TSyntax `tactic) := do
     if action.simp_lemmas.isEmpty then throwError "simp_only requires lemmas"
     let lemmas ← action.simp_lemmas.mapM fun name => do
       let lemma ← lemmaTerm name
-      `(Parser.Tactic.simpLemma| $lemma:term)
+      -- Treat propositions as proof expressions. Global simp preprocessing may
+      -- otherwise emit auxiliary declarations, violating standalone replay's
+      -- single-declaration contract. Keep definition unfolding unchanged.
+      let info ← getConstInfo name.toName
+      if ← isProp info.type then
+        let identifier ← resolveLemma name
+        let proof ← `(term| @$identifier:ident)
+        `(Parser.Tactic.simpLemma| (_root_.id $proof:term))
+      else
+        `(Parser.Tactic.simpLemma| $lemma:term)
     `(tactic| simp only [$lemmas,*])
   | _ => throwError "unknown action"
 

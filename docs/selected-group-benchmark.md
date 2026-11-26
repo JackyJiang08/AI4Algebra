@@ -1,5 +1,10 @@
 # Selected group theory benchmark
 
+The structural run below is historical. The user's subsequent requirement makes
+the full system mandatory for requested problem tests. See the separate
+[Exercise 11 retrieval/DDQN experiment](exercise11-full-system.md); its results
+do not overwrite this baseline.
+
 The ten [user-selected questions](../data/training_questions.md) now have explicit
 Lean statements. The [user-provided solution manual](../AI4Algebra/Benchmarks/Gold/selected_group_solutions.md)
 is stored with protected reference proofs. All exercises are selected for future

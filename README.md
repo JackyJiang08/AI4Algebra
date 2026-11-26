@@ -62,6 +62,9 @@ The ten newly selected group theory exercises have a separate
 [reference-check and structural-search benchmark](docs/selected-group-benchmark.md).
 It preserves the supplied solution manual and distinguishes checked reference proofs
 from autonomous search outcomes; it does not claim new DDQN training results.
+Exercise 11 also has a [full retrieval/DDQN procedure](docs/exercise11-full-system.md),
+with a separate bootstrap exercise, trained checkpoint and independently audited
+target search. Future requested tests use the full system under `AGENTS.md`.
 
 ### Optional retrieval API benchmark
 

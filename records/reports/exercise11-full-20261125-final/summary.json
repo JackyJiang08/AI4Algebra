@@ -1,0 +1,36 @@
+{
+  "run_id": "exercise11-full-20261125-final",
+  "status": "verified",
+  "bootstrap_status": "verified",
+  "optimizer_updates": 32,
+  "collected_transitions": 2,
+  "published_returns": 2,
+  "checkpoint_digest": "17094cdd6d2fe66688010d2f0b0da3b3b4fb74cdb0b7e91566b921b70cbd3819",
+  "memory_digest": "8561473e2dcd8c46a3124048a6ca7cb3748f787fb7b814cf8314aa4351e392e2",
+  "memory_cutoff": 3,
+  "reason": "audit_accepted",
+  "policy": "ddqn_retrieval",
+  "q_decisions": 6,
+  "return_hit_decisions": 0,
+  "work": {
+    "schema_version": 1,
+    "opens": 1,
+    "nodes_expanded": 2,
+    "generation_calls": 2,
+    "continuation_generations": 0,
+    "probe_calls": 15,
+    "action_calls": 0,
+    "recovery_calls": 0,
+    "reused_probes": 6,
+    "selected_actions": 6,
+    "verifier_calls": 1,
+    "provider_requests": 2,
+    "token_count_requests": 2,
+    "elapsed_seconds": 257.48467779997736
+  },
+  "api": {
+    "settled_usd": "0.222936",
+    "outstanding_usd": "0",
+    "reserved_requests": 8
+  }
+}

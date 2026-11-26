@@ -87,7 +87,9 @@ def _usd(nanos: int) -> Decimal:
 class BudgetLedger:
     """One SQLite file shared by every worker and restart of a single run."""
 
-    def __init__(self, path: str | Path, run_id: str, budget_usd: Decimal) -> None:
+    def __init__(
+        self, path: str | Path, run_id: str, budget_usd: Decimal, *, create: bool = True
+    ) -> None:
         if (
             not isinstance(budget_usd, Decimal)
             or not budget_usd.is_finite()
@@ -100,9 +102,12 @@ class BudgetLedger:
         self._limit = numerator * _NANOS_PER_DOLLAR // denominator
         self._run_id = _RUN_ID.validate_python(run_id, strict=True)
         self._path = Path(path).resolve()
-        with closing(self._connect()) as db, db:
-            db.execute("BEGIN IMMEDIATE")
-            db.execute("""
+        identity = (1, self._run_id, ASTRA_STANDARD.digest, self._limit)
+        try:
+            with closing(self._connect(create=create)) as db, db:
+                db.execute("BEGIN IMMEDIATE" if create else "BEGIN")
+                if create:
+                    db.execute("""
                 CREATE TABLE IF NOT EXISTS run (
                     singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
                     version INTEGER NOT NULL, run_id TEXT NOT NULL,
@@ -110,7 +115,7 @@ class BudgetLedger:
                     blocked INTEGER NOT NULL DEFAULT 0 CHECK (blocked IN (0, 1))
                 )
                 """)
-            db.execute("""
+                    db.execute("""
                 CREATE TABLE IF NOT EXISTS reservations (
                     id TEXT PRIMARY KEY, input_bound INTEGER NOT NULL,
                     output_bound INTEGER NOT NULL, reserved INTEGER NOT NULL,
@@ -118,22 +123,36 @@ class BudgetLedger:
                     cached_used INTEGER
                 )
                 """)
-            identity = (1, self._run_id, ASTRA_STANDARD.digest, self._limit)
-            db.execute("INSERT OR IGNORE INTO run VALUES (1, ?, ?, ?, ?, 0)", identity)
-            installed = db.execute(
-                "SELECT version, run_id, price_digest, budget FROM run WHERE singleton = 1"
-            ).fetchone()
-            if installed != identity:
-                raise BudgetError(
-                    "budget ledger version, run, prices or budget do not match"
+                    db.execute(
+                        "INSERT OR IGNORE INTO run VALUES (1, ?, ?, ?, ?, 0)", identity
+                    )
+                installed = db.execute(
+                    "SELECT version, run_id, price_digest, budget FROM run WHERE singleton = 1"
+                ).fetchone()
+                if installed != identity:
+                    raise BudgetError(
+                        "budget ledger version, run, prices or budget do not match"
+                    )
+                db.execute(
+                    "SELECT id, input_bound, output_bound, reserved, actual, input_used, output_used, cached_used FROM reservations LIMIT 0"
                 )
+        except sqlite3.Error:
+            raise BudgetError("budget ledger is unavailable or malformed") from None
 
     @property
     def budget_usd(self) -> Decimal:
         return _usd(self._limit)
 
-    def _connect(self) -> sqlite3.Connection:
-        return sqlite3.connect(self._path, timeout=2.0)
+    def _connect(self, *, create: bool = False) -> sqlite3.Connection:
+        # Only explicit initialization may create a file. A lost retry ledger
+        # must never silently reset charges or outstanding reservations.
+        mode = "rwc" if create else "rw"
+        try:
+            return sqlite3.connect(
+                f"{self._path.as_uri()}?mode={mode}", uri=True, timeout=2.0
+            )
+        except sqlite3.Error:
+            raise BudgetError("budget ledger is unavailable") from None
 
     def reserve(self, input_tokens: int, max_output_tokens: int) -> Reservation | None:
         if (

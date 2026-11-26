@@ -75,6 +75,7 @@ class GenerationResult:
     token_count_requests: int
     stopped_after_closure: bool = False
     recovery_calls: int = 0
+    retrieved_premises: tuple[str, ...] = ()
 
 
 def _check_candidate(
@@ -118,6 +119,7 @@ class CandidateGenerator:
         *,
         premise_index: PremiseIndex | None = None,
         proposer: TacticProposer | None = None,
+        computational: bool = False,
     ) -> None:
         self._problem = Problem.from_json(problem.to_json())
         self._policy = EligibilityPolicy.from_json(eligibility.to_json())
@@ -129,7 +131,7 @@ class CandidateGenerator:
             else PremiseIndex.from_json(premise_index.to_json())
         )
         self._proposer = proposer
-        self._deterministic = DeterministicProposer()
+        self._deterministic = DeterministicProposer(computational=computational)
         self._probes: dict[tuple[Snapshot, str, str, str], CandidateProbe] = {}
 
     def generate(
@@ -237,6 +239,7 @@ class CandidateGenerator:
             token_count_requests=provider.token_count_requests,
             stopped_after_closure=len(probes) < len(candidates),
             recovery_calls=recoveries,
+            retrieved_premises=tuple(rule.name for rule in rules),
         )
 
     def _candidates(

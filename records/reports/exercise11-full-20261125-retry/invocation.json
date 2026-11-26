@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "python",
+    "-m",
+    "ai4algebra.selected_full",
+    "--output",
+    "runs/exercise11-full-20261125-retry",
+    "--budget-run",
+    "runs/exercise11-full-20261125"
+  ],
+  "note": "One logical paid run and shared ledger across attempts. Do not omit --budget-run for a same-turn retry."
+}

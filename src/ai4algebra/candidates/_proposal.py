@@ -93,6 +93,9 @@ class TacticProposer(Protocol):
 
 
 class DeterministicProposer:
+    def __init__(self, *, computational: bool = False) -> None:
+        self._computational = computational
+
     def propose(
         self,
         request: ProposalRequest,
@@ -104,7 +107,7 @@ class DeterministicProposer:
         if cancelled is not None and cancelled.is_set():
             return ProposalResult("cancelled")
         by_goal = [
-            self._for_goal(goal, request.premises)
+            self._for_goal(goal, request.premises, computational=self._computational)
             for goal in request.goals[: limits.max_candidates]
         ]
         # Interleave focus positions while preserving each goal's template priority.
@@ -117,7 +120,9 @@ class DeterministicProposer:
         return ProposalResult("ok", candidates[: limits.max_candidates])
 
     @staticmethod
-    def _for_goal(goal: Goal, rules: tuple[LemmaRule, ...]) -> tuple[Candidate, ...]:
+    def _for_goal(
+        goal: Goal, rules: tuple[LemmaRule, ...], *, computational: bool = False
+    ) -> tuple[Candidate, ...]:
         flags: _CandidateFlags = {
             "goal_id": goal.goal_id,
             "generator_version": GENERATOR_VERSION,
@@ -188,11 +193,30 @@ class DeterministicProposer:
             Candidate(operation="assumption", **flags),
             Candidate(operation="reflexivity", **flags),
         )
+        # Conditional rewrites can need another retrieved lemma to discharge their
+        # premises. Keep the complete bounded bundle as a separate, probed action.
+        bundle = (
+            (
+                Candidate(
+                    operation="simp_only",
+                    simp_lemmas=tuple(rule.name for rule in rules[:MAX_OPERANDS]),
+                    **flags,
+                ),
+            )
+            if rules and computational
+            else ()
+        )
         return tuple(
             # Keep reverse rewrites available after forward transformations so
             # a rollout does not immediately undo a useful forward rewrite.
             dict.fromkeys(
                 (
+                    *(
+                        (Candidate(operation="decide", **flags),)
+                        if computational
+                        else ()
+                    ),
+                    *bundle,
                     *direct,
                     *exact,
                     *simplifiers,

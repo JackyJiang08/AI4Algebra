@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "python",
+    "-m",
+    "ai4algebra.selected_full",
+    "--output",
+    "runs/exercise11-full-20261125-final",
+    "--budget-run",
+    "runs/exercise11-full-20261125"
+  ],
+  "note": "One logical paid run and shared ledger across all attempts. An offline run is a distinct condition."
+}

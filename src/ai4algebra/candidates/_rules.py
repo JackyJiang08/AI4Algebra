@@ -25,7 +25,7 @@ from ai4algebra.representation import DeclarationSignature
 from ai4algebra.representation._expression import Normalizer
 from ai4algebra.verification import EligibilityPolicy
 
-GENERATOR_VERSION = "typed-v1"
+GENERATOR_VERSION = "typed-v2"
 MAX_OPERANDS = 8
 Shape: TypeAlias = tuple[str, int | str, tuple["Shape", ...]]
 _EXPLICIT_OPERANDS = {
@@ -128,7 +128,9 @@ class LemmaRule(Record):
     expression: NonBlank
     module: LeanName
     required_imports: tuple[LeanName, ...] = ()
-    dependencies: tuple[LeanName, ...] = ()
+    # Kernel-generated private names include numeric components. These are audit
+    # evidence only, never parsed as tactic operands (which retain LeanName).
+    dependencies: tuple[NonBlank, ...] = ()
     type_digest: Digest = Field(
         default="", validate_default=False, description=_COMPUTED_DIGEST
     )

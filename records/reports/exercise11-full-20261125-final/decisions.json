@@ -1,0 +1,104 @@
+[
+  {
+    "episode_id": "exercise11-full-20261125-final-ddqn-retrieval",
+    "cutoff": 3,
+    "state_digest": "286b69850e0c3a02bca1fc4ef1aec0abafcdfad39faaec96a95bc5e7aff8e463",
+    "eligible_count": 4,
+    "q_values": {
+      "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9": 0.599442216794003,
+      "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb": 0.5476652880578453,
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5468158494659856,
+      "f6381ac3d0e8b0a4162045a23983a5b56ce61f35428f73b01d38d608e45ba562": 0.5575580599539758
+    },
+    "return_matches": {},
+    "blended_scores": {
+      "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9": 0.599442216794003,
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5468158494659856,
+      "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb": 0.5476652880578453,
+      "f6381ac3d0e8b0a4162045a23983a5b56ce61f35428f73b01d38d608e45ba562": 0.5575580599539758
+    },
+    "chosen_candidate_id": "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9"
+  },
+  {
+    "episode_id": "exercise11-full-20261125-final-ddqn-retrieval",
+    "cutoff": 3,
+    "state_digest": "286b69850e0c3a02bca1fc4ef1aec0abafcdfad39faaec96a95bc5e7aff8e463",
+    "eligible_count": 3,
+    "q_values": {
+      "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb": 0.5479471064411903,
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5470828474702926,
+      "f6381ac3d0e8b0a4162045a23983a5b56ce61f35428f73b01d38d608e45ba562": 0.5577597034321977
+    },
+    "return_matches": {},
+    "blended_scores": {
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5470828474702926,
+      "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb": 0.5479471064411903,
+      "f6381ac3d0e8b0a4162045a23983a5b56ce61f35428f73b01d38d608e45ba562": 0.5577597034321977
+    },
+    "chosen_candidate_id": "f6381ac3d0e8b0a4162045a23983a5b56ce61f35428f73b01d38d608e45ba562"
+  },
+  {
+    "episode_id": "exercise11-full-20261125-final-ddqn-retrieval",
+    "cutoff": 3,
+    "state_digest": "286b69850e0c3a02bca1fc4ef1aec0abafcdfad39faaec96a95bc5e7aff8e463",
+    "eligible_count": 2,
+    "q_values": {
+      "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb": 0.5481635453611391,
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5472992863902415
+    },
+    "return_matches": {},
+    "blended_scores": {
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5472992863902415,
+      "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb": 0.5481635453611391
+    },
+    "chosen_candidate_id": "b13f650a25584d90e566fe32dbd2e2e841813345e1c3150cd1ef2b957fb2e0cb"
+  },
+  {
+    "episode_id": "exercise11-full-20261125-final-ddqn-retrieval",
+    "cutoff": 3,
+    "state_digest": "286b69850e0c3a02bca1fc4ef1aec0abafcdfad39faaec96a95bc5e7aff8e463",
+    "eligible_count": 1,
+    "q_values": {
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5467903597999325
+    },
+    "return_matches": {},
+    "blended_scores": {
+      "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e": 0.5467903597999325
+    },
+    "chosen_candidate_id": "9d5702121b07b3df290eb095eb14bf52149f014a8c517cac097328499ba27d3e"
+  },
+  {
+    "episode_id": "exercise11-full-20261125-final-ddqn-retrieval",
+    "cutoff": 3,
+    "state_digest": "5bc5eddb8054ef3378f093920c3ede8512a5c3ffbfebf061abbe7b77db029e13",
+    "eligible_count": 3,
+    "q_values": {
+      "b0a1545275a929605b4d60a083d2bc9b922aaf1598b5992b65026c94486728aa": 0.611670183990042,
+      "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9": 0.5984327256102729,
+      "5dc3649e0e6fef294d50d9a572615c38625eafd349b6df55d336282a83650e71": 0.6171800040863031
+    },
+    "return_matches": {},
+    "blended_scores": {
+      "5dc3649e0e6fef294d50d9a572615c38625eafd349b6df55d336282a83650e71": 0.6171800040863031,
+      "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9": 0.5984327256102729,
+      "b0a1545275a929605b4d60a083d2bc9b922aaf1598b5992b65026c94486728aa": 0.611670183990042
+    },
+    "chosen_candidate_id": "5dc3649e0e6fef294d50d9a572615c38625eafd349b6df55d336282a83650e71"
+  },
+  {
+    "episode_id": "exercise11-full-20261125-final-ddqn-retrieval",
+    "cutoff": 3,
+    "state_digest": "5bc5eddb8054ef3378f093920c3ede8512a5c3ffbfebf061abbe7b77db029e13",
+    "eligible_count": 2,
+    "q_values": {
+      "b0a1545275a929605b4d60a083d2bc9b922aaf1598b5992b65026c94486728aa": 0.6108230460470908,
+      "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9": 0.5988026662092594
+    },
+    "return_matches": {},
+    "blended_scores": {
+      "98bf596d17f4d3975a3d6d7fd8854f9454101049e8982effa3a33ba95eae7fd9": 0.5988026662092594,
+      "b0a1545275a929605b4d60a083d2bc9b922aaf1598b5992b65026c94486728aa": 0.6108230460470908
+    },
+    "chosen_candidate_id": "b0a1545275a929605b4d60a083d2bc9b922aaf1598b5992b65026c94486728aa"
+  }
+]

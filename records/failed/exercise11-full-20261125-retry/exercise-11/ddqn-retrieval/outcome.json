@@ -1,0 +1,14 @@
+{
+  "run_id": "exercise11-full-20261125-retry",
+  "status": "interrupted_by_operator",
+  "phase": "ddqn-retrieval",
+  "reason": "Stopped after an independent diagnostic identified insufficient instance-synthesis size for the full target; no completed target trace was flushed.",
+  "bootstrap_status": "verified",
+  "optimizer_updates": 32,
+  "target_trace_available": false,
+  "api": {
+    "reserved_requests": 6,
+    "settled_usd": "0.1762",
+    "outstanding_usd": "0.0"
+  }
+}

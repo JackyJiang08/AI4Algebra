@@ -325,6 +325,7 @@ class _Run:
         entry.generated = generated
         self.generations.append(
             GenerationTrace(
+                retrieved_premises=generated.retrieved_premises,
                 node_id=entry.node.node_id,
                 candidate_set=candidate_set,
                 probes=tuple(

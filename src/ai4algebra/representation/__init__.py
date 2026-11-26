@@ -30,6 +30,7 @@ _OPERATIONS: tuple[Operation, ...] = (
     "apply",
     "rewrite",
     "simp_only",
+    "decide",
 )
 _STATE_SCALARS = 8
 _ACTION_SCALARS = len(_OPERATIONS) + 8
@@ -39,7 +40,7 @@ _Count = Annotated[int, Field(ge=0)]
 class EncoderConfig(Record):
     """Frozen feature widths, token budget and deterministic hash seed."""
 
-    version: Literal["hashed-lean-v1"] = "hashed-lean-v1"
+    version: Literal["hashed-lean-v2"] = "hashed-lean-v2"
     expression_version: Literal["lean-expr-v1"] = "lean-expr-v1"
     state_buckets: Annotated[int, Field(gt=0, le=65536)] = 128
     action_buckets: Annotated[int, Field(gt=0, le=65536)] = 64

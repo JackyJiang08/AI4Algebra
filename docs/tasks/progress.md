@@ -9,6 +9,31 @@ original 79 assignments only. The new
 [retrieval API extension](retrieval-api.md) and larger proof benchmark are separate
 work; see [configuration and benchmark interpretation](../retrieval-api-benchmark.md).
 
+### Exercise 11 full retrieval/DDQN proof accepted, 2026-11-25
+
+The complete twelve-entry `ZMod 12` order statement is now independently verified
+through the [full procedure](../exercise11-full-system.md). A separate `ZMod 3`
+bootstrap produced two verified transitions and two causal return entries; 32
+Double DQN updates and 16 target synchronizations produced a frozen checkpoint.
+The target search made six reproducible Q decisions over 15 real Lean probes and
+accepted a two-action API-proposed proof. Both reviewed premises were retrieved.
+Return memory found zero matching neighbors, so no return-blending benefit is claimed.
+Replay, original type, allowed axioms and all 3,477 actual dependencies passed.
+
+All initial failures, the explicitly interrupted under-resourced attempt, manual
+capability diagnostics and final proof are archived separately. The single shared
+turn ledger settled USD 0.222936 across eight generation requests, with zero
+outstanding; the successful final attempt added USD 0.046736. No reference proof
+was loaded into search or replay memory. Final checks: 391 non-Lean tests, the
+two-case real Lean action/replay test, strict mypy and Ruff passed; independent
+review reproduced the Q choices and reconciled the records. This is a small
+development-family demonstration, not a held-out benchmark or learned advantage.
+The other nine selected exercises remain unevaluated by the full system.
+
+Future requested tests must use the complete retrieval/trained-DDQN/verification
+pipeline under AGENTS.md. Basic deterministic search remains only an explicit
+ablation. The original 79-task implementation count is unchanged.
+
 ### Selected group exercise tests accepted, 2026-11-25
 
 Saved the user's ten reference solutions and formalized every full selected statement.

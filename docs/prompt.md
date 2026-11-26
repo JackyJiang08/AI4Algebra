@@ -19,6 +19,10 @@ as authorized in those project instructions.
 
 - Elementary group/ring exercises first, then a curated Stacks Project pilot.
 - Curated Lean statements first; automatic translation is later work.
+- Requested problem tests must exercise the full retrieval and trained Double DQN
+  system, including causal return lookup and independent Lean verification.
+  Basic deterministic search is only a labeled ablation, never a substitute.
+  External theorem/lemma APIs may be used under the existing shared paid cap.
 - Application tactic generation is now authorized with OpenAI gpt-6.2-astra/high
   and USD 0.50 maximum per assistant turn. Use one durable paid run/ledger per turn,
   shared across tasks, retries and workers; see AGENTS.md. The local `.env` enables

@@ -1,0 +1,39 @@
+{
+  "non_lean": {
+    "command": "python -m pytest -q -p no:cacheprovider -m \"not lean\"",
+    "passed": 391,
+    "deselected_lean": 25,
+    "elapsed_seconds": 15.59,
+    "provider": "deterministic",
+    "paid_api": false
+  },
+  "final_computational_replay": {
+    "command": "python -m pytest -q -p no:cacheprovider tests/lean/test_computational_actions.py",
+    "passed": 2,
+    "elapsed_seconds": 151.82,
+    "cases": [
+      "zmod3-order-warmup",
+      "exercise-11"
+    ],
+    "checks": [
+      "real observer actions",
+      "independent replay",
+      "original type",
+      "axiom allowlist",
+      "forbidden dependency audit"
+    ]
+  },
+  "earlier_action_audit_regression": {
+    "command": "python -m pytest -q -p no:cacheprovider tests/lean/test_computational_actions.py tests/lean/test_proof_audit.py tests/lean/test_applicability.py",
+    "passed": 14,
+    "elapsed_seconds": 312.17,
+    "note": "Before increasing only decide synthesis maxSize to4096; the final two-case integration check above rechecks that operation."
+  },
+  "static": {
+    "strict_mypy": "passed",
+    "python_files": 95,
+    "ruff_lint": "passed",
+    "ruff_format": "passed"
+  },
+  "scope": "Not a claim that all25 Lean tests were rerun. No paid calls by validation commands."
+}

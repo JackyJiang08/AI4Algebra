@@ -79,6 +79,7 @@ class ProbeTrace(Record):
 
 
 class GenerationTrace(Record):
+    retrieved_premises: tuple[str, ...] = ()
     node_id: Identifier
     candidate_set: CandidateSet
     probes: tuple[ProbeTrace, ...]

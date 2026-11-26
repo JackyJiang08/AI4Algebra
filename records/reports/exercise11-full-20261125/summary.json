@@ -1,0 +1,10 @@
+{
+  "run_id": "exercise11-full-20261125",
+  "status": "bootstrap_failed",
+  "bootstrap_status": "candidate_exhausted",
+  "api": {
+    "settled_usd": "0",
+    "outstanding_usd": "0",
+    "reserved_requests": 0
+  }
+}

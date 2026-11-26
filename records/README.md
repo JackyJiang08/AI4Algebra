@@ -41,3 +41,9 @@ and autonomous structural-search outcomes under the `selected-groups-20261125` r
 Reference successes deliberately import protected proofs and are never counted as
 autonomous discoveries. The selected-exercise runner automatically archives its own
 attempts; the general solve/train/evaluate commands still require agent-managed copies.
+
+The full Exercise 11 runner (`ai4algebra.selected_full`) archives the separately
+authored bootstrap and the trained DDQN target search under their own task IDs
+and phase directories. The [procedure report](../docs/exercise11-full-system.md)
+links the checkpoint, updates, actual Q decisions and causal retrieval evidence.
+Development capability checks and verifier failures are labeled separately.

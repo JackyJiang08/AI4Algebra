@@ -329,7 +329,7 @@ def test_features_are_finite_frozen_versioned_and_have_stable_widths() -> None:
         Candidate(operation="reflexivity", goal_id="g0"), observation
     )
     assert len(first.values) == encoder.state_size == 45
-    assert len(second.values) == encoder.action_size == 35
+    assert len(second.values) == encoder.action_size == 36
     assert all(math.isfinite(value) for value in (*first.values, *second.values))
     assert StateFeatures.from_json(first.to_json()) == first
     assert ActionFeatures.from_json(second.to_json()) == second

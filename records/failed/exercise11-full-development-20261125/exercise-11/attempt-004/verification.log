@@ -1,0 +1,16 @@
+C:\Users\tonyz\OneDrive\UIUC_Senior\AI4Algebra\runs\exercise11-ddqn-development\target-capability.lean:5:2: error: failed to synthesize
+  Decidable
+    ((1 • 0 = 0 ∧ ∀ m < 1, 0 < m → m • 0 ≠ 0) ∧
+      (12 • 1 = 0 ∧ ∀ m < 12, 0 < m → m • 1 ≠ 0) ∧
+        (6 • 2 = 0 ∧ ∀ m < 6, 0 < m → m • 2 ≠ 0) ∧
+          (4 • 3 = 0 ∧ ∀ m < 4, 0 < m → m • 3 ≠ 0) ∧
+            (3 • 4 = 0 ∧ ∀ m < 3, 0 < m → m • 4 ≠ 0) ∧
+              (12 • 5 = 0 ∧ ∀ m < 12, 0 < m → m • 5 ≠ 0) ∧
+                (2 • 6 = 0 ∧ ∀ m < 2, 0 < m → m • 6 ≠ 0) ∧
+                  (12 • 7 = 0 ∧ ∀ m < 12, 0 < m → m • 7 ≠ 0) ∧
+                    (3 • 8 = 0 ∧ ∀ m < 3, 0 < m → m • 8 ≠ 0) ∧
+                      (4 • 9 = 0 ∧ ∀ m < 4, 0 < m → m • 9 ≠ 0) ∧
+                        (6 • 10 = 0 ∧ ∀ m < 6, 0 < m → m • 10 ≠ 0) ∧ 12 • 11 = 0 ∧ ∀ m < 12, 0 < m → m • 11 ≠ 0)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'diagnostic_target' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

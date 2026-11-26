@@ -246,6 +246,7 @@ class Argument(Record):
 
 
 Operation = Literal[
+    "decide",
     "assumption",
     "reflexivity",
     "intro",

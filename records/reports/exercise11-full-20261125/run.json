@@ -1,0 +1,222 @@
+{
+  "run_id": "exercise11-full-20261125",
+  "scope": "development train-family pipeline demonstration, not held-out evaluation",
+  "config": {
+    "schema_version": 1,
+    "limits": {
+      "schema_version": 1,
+      "max_depth": 64,
+      "max_nodes": 128,
+      "max_candidates": 8,
+      "max_steps": 256,
+      "step_timeout_seconds": 120.0,
+      "task_timeout_seconds": 2400.0,
+      "max_input_tokens": 8192,
+      "max_output_tokens": 1536
+    },
+    "provider": "openai",
+    "model": "gpt-6.2-astra",
+    "base_url": "https://api.openai.com/v1",
+    "reasoning_effort": "high",
+    "allow_paid_api": true,
+    "api_budget_usd": "0.50"
+  },
+  "limits": {
+    "schema_version": 1,
+    "max_depth": 64,
+    "max_nodes": 128,
+    "max_candidates": 8,
+    "max_steps": 256,
+    "step_timeout_seconds": 120.0,
+    "task_timeout_seconds": 2400.0,
+    "max_input_tokens": 8192,
+    "max_output_tokens": 1536
+  },
+  "options": {
+    "schema_version": 1,
+    "probes_per_node": null,
+    "stop_on_closure": false,
+    "verification_reserve_seconds": null,
+    "continuation_reserve_seconds": null,
+    "continuation_probes": 0,
+    "reward_version": "action-cost-v1",
+    "action_cost": 0.01,
+    "verified_reward": 1.0
+  },
+  "runtime_files": {
+    "src/ai4algebra/__init__.py": "1b2c176d8afea1891fc72c837b8edaa0dc9bda541a0f893799c227d96f9132f8",
+    "src/ai4algebra/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "src/ai4algebra/api_benchmark/__init__.py": "e68f56730fb2e17f9195abb67c682fae089ceee0f5618ba3a042bd70500294dd",
+    "src/ai4algebra/api_benchmark/__main__.py": "e9e9d40be3bc9b7b8692d45444bc60b609871087c38cf031110f3c58a7d646be",
+    "src/ai4algebra/api_benchmark/_http.py": "799738281dbaa3476f2697c413a795938dd1afbad7454c95d4c5eff122f84544",
+    "src/ai4algebra/api_benchmark/_queries.py": "31db6411c00920aa999f352b9a854a56531ccc96c251ebb06445cc13b8ab473c",
+    "src/ai4algebra/api_benchmark/_services.py": "b65b66a8b9a62e3085611daa02d7e7fe4bc9a56a34188fbc0bbc14435760cf29",
+    "src/ai4algebra/api_benchmark/_settings.py": "4f84e8ddd18bec4529a4b74a377f74282707190467a74b97ea8a815ce80696a0",
+    "src/ai4algebra/candidates/__init__.py": "29e06a63697b5fd656a740930a4f45562c9900e04eaa4e3b44418687048f76c4",
+    "src/ai4algebra/candidates/_budget.py": "1b7b1eaa09529fea2d63a9e86523348067fbaa3edcfbc3407bdb5b4ef0128b37",
+    "src/ai4algebra/candidates/_elementary.py": "1cb8611b543ceaa5c31d5c2ae88482ce0188e8ec3dc130a11146b935ec8ca87e",
+    "src/ai4algebra/candidates/_elementary_signatures.py": "da8ceaa3bfac41b281bcd3654394b76c0c16c02684b0d56bba522362142c0ae8",
+    "src/ai4algebra/candidates/_generator.py": "be000c7283fc3832796a30039a7d8930926b65eab5be6c51bae2ed5952edb0a3",
+    "src/ai4algebra/candidates/_http.py": "d797c060e52b24825e84dfa42076878f2261cd22daba898326c28643c3b58b5b",
+    "src/ai4algebra/candidates/_openai.py": "2ca9d00db90958ec7569fde4a389058153cc78b03b9555b3a34812307c0bf592",
+    "src/ai4algebra/candidates/_proposal.py": "fe5eeb9aa9f918cd54a0a744dcd5d95901e7878bb7ef3c44a63be04f3988cfeb",
+    "src/ai4algebra/candidates/_rules.py": "7d80d5a8f13742dc1db01587ae20d433878d0bfff1878aadfa8b46e2d62a4ae4",
+    "src/ai4algebra/cli.py": "c50c8c49bfa6096ce4b70443a8fd5e1388260f2ea02ae2bbfb8a7f332f5158f9",
+    "src/ai4algebra/config.py": "7c61b784809f2a204ae22f0f5d96bd0e91f0354e21488e301248e80cce72f58b",
+    "src/ai4algebra/contracts.py": "c013aa37fc13ecda53a9361e4f2358b4b9a3532cf93640d02deca9e1824aa1e1",
+    "src/ai4algebra/corpus/__init__.py": "2e27de32afbbd394d3049c45afcb4cba0f9da76cc6e0a7a020a2faa568957f2e",
+    "src/ai4algebra/corpus/stacks.py": "2b7aa51b45beb199f36e4a4f8e560806bcb9db8c406eeecacad24badd0c10b18",
+    "src/ai4algebra/evaluation/__init__.py": "12588512da297e5a0857b4f0f3bf2d527816edffbba640d6902c575454033e40",
+    "src/ai4algebra/formalization/__init__.py": "3848b0f7884c58702ce0ebb9e8e5e00a5574d79cf953bbc55d876cf0a30cae9b",
+    "src/ai4algebra/formalization/stacks_premises.py": "df039d22e5c02162dd36de26d1f2cb148021da02680c8c8c6bc002fb34dfe959",
+    "src/ai4algebra/lean_bridge/__init__.py": "bef69e023a7fd0ac33d628ce21e7d07af9f2c2aa9337def3ba1a5cfd700bdd12",
+    "src/ai4algebra/lean_bridge/bridge.py": "d3453bd465a93d12e55c7461be9f87efdb2cb656cf11645ca3dbc7cf0e32bc67",
+    "src/ai4algebra/lean_bridge/protocol.py": "aca0b45464a26c1e94c983ca667e67ce362202e08d74cd27f34c2d01b4dcac1f",
+    "src/ai4algebra/learning/__init__.py": "63637c10cc2f7bae71918e26b967d736a5f944412f98c079f2a349c073b5fc88",
+    "src/ai4algebra/learning/_checkpoint.py": "61c3c0bbc274bd02b441400c244df82ac4b8de608816c6d28796e84992211e2a",
+    "src/ai4algebra/learning/_collection.py": "47eda27fe1eabcd07448ba97dd81fc26576071c3e4623b5bb03c4c786eb812b9",
+    "src/ai4algebra/learning/_learner.py": "e5deb53df194f0fc50acda7bcec21177784bbdea07e76635bcf1696125c798e5",
+    "src/ai4algebra/learning/_network.py": "f0e43763670bdefdc1a419e070478cabd9a5d6c9f162864c2435a18d9b9039ef",
+    "src/ai4algebra/learning/_records.py": "d6bf415eb04fbea401a57176036adb482b3196e0d193620bfca707ab7ff921b9",
+    "src/ai4algebra/memory/__init__.py": "39aa42f942d01bf2184c919e4429de94866faccc1ed149f03fab5f7bfc65ea48",
+    "src/ai4algebra/memory/_records.py": "cd405d628327833fbe94bb43241b3f0f18dbd3d13cc44bdf32291cc80f1a9b9c",
+    "src/ai4algebra/memory/replay.py": "cde595b85384aa113401cdd88f156223753bcba36841dfa8ef6c989fd2a74ba7",
+    "src/ai4algebra/memory/returns.py": "b2be631fd60bdc84b273f94c197851e03e2f88e42f8566bc0f0c570d3bb1e013",
+    "src/ai4algebra/representation/__init__.py": "558c1b7582b405e66aaef663bf90140035c83184251d56c1c563eadee2b7915e",
+    "src/ai4algebra/representation/_expression.py": "b8d2edc3344fc3cfd8f983c950c28f3a9032dca74e1a3eab8a571fb1ae935cc2",
+    "src/ai4algebra/search/__init__.py": "e50aaf3acae31a2b4237858da6ebd437a9f5567e61922dea04e8cb27694a8632",
+    "src/ai4algebra/search/_policy.py": "22bdd92afb4d527fdd9104cfbd1cec70ef01d5e2e4ac0fee543196ed77393c77",
+    "src/ai4algebra/search/_records.py": "2c337b5647bd68327edaee359ca614119292cccdd5d6263f763bed09e09d8d5e",
+    "src/ai4algebra/search/_solve.py": "3bc24cbd2f406625d9585c0744f057857126c0d9faf57165b028c1f3d0f91210",
+    "src/ai4algebra/selected_benchmark.py": "843a771bde2d44eeef679d0b75a244a8202a91bf1585015259eab323be352e5f",
+    "src/ai4algebra/selected_full.py": "0a91e0b82aa0eeae3f37cc9183741cb7a887df7d97ac7f1b1629210bb0327e54",
+    "src/ai4algebra/training/__init__.py": "38fe3d462b218a68b6424de4672ec1079f6c3ae9ef450edb8286a12051867f64",
+    "src/ai4algebra/training/_artifacts.py": "02a1bebf3f2b835b6af667f770e64ecb66da039ee4c3e27777c6b3e5fd62f090",
+    "src/ai4algebra/training/_runtime.py": "565a53f3fe237e00d5c1812ad93249fe20371936b900dd43b958ca5e7aad61c5",
+    "src/ai4algebra/training/_train.py": "f8b6f43463cfee0e900b607ce97a6e21c435ce4d65635c0b53ffde306846cec2",
+    "src/ai4algebra/verification/__init__.py": "e0a6cee627b7a121cf81a24458c1acc5facf8838b17226f6815bb2bdb6970dfb",
+    "src/ai4algebra/verification/_policy.py": "6776f384d3e7bd2aef03e93f788bdb3b52dd1bebd71b86c91878bd809378c3e6",
+    "src/ai4algebra/verification/_verifier.py": "b0bc00640f1ba715f6ed2c43f3dcf6229ba788b6acb046e2734ca0c1a588e59c",
+    "AI4Algebra/Bridge/Main.lean": "14fd0952c7906b7235c2769b75e79a0f2fc5990621f100cda2180b24b405f7ea",
+    "AI4Algebra/Verification/Audit.lean": "cb07a8afb2c6894100f04c31dd8943989ae9f1bec67570faa0a6d906245baf39",
+    "AI4Algebra/Verification/AuditFixture.lean": "e8ca3d51bf64dbb09803ba2c91a7919838712b9681b164144a7538b3a07dfce0",
+    "AI4Algebra/Verification/GoldFixture.lean": "9a0d7dfb9ad342c60573190bad16db805e21deb5d6d569c6194c5cbfe67cd991",
+    "AI4Algebra/Verification/Main.lean": "faed3284704942dbb700fc53d5d9cc1ac04b0673f0bb42b5dd9c0708e8b27540",
+    "AI4Algebra/Verification/Replay.lean": "6b6eb328768f76afd34c9e7702bb4ab0caced540f48f824e5a36e955e37c045f",
+    "lean-toolchain": "cdbc6c372a2b37ad94430a6cec69cedfa4d36f255bfd968773fd91bf7a1746bf",
+    "lakefile.toml": "bbb649b98b7d07900e8a9c9b81c9b6142d6bb772cc47fb00a84794216328f6de",
+    "lake-manifest.json": "4ca4c6e5d59d6aa80ad2c58e57ab51a29ede1e89dc94e48dd386bec7762cb083",
+    "AI4Algebra/Benchmarks/SelectedDefinitions.lean": "6e345400288b89f52b1ea501c5ff80563ff89288f466acb45b273bcdec8d6254",
+    ".lake/build/lib/lean/AI4Algebra/Benchmarks/SelectedDefinitions.olean": "86110cdef03f3e817c371c6bdc3d87c100c7c0b793cf13ccb681c9fd45c814e3"
+  },
+  "problems": [
+    {
+      "schema_version": 1,
+      "task_id": "zmod3-order-warmup",
+      "source": {
+        "schema_version": 1,
+        "kind": "authored-fixture",
+        "source_id": "zmod3-order-warmup",
+        "revision": "1",
+        "location": "data/selected/zmod3-warmup.md",
+        "content_digest": "aa97252b9656f8de9aac58714c808b95561a5e26763c49ef18ab01d1d813a306",
+        "attribution": "AI4Algebra authored bootstrap exercise",
+        "license_ref": "Repository license"
+      },
+      "informal_statement": "Prove that the additive order of 1 in Z/3Z is 3.",
+      "family_id": "selected-exercise-11",
+      "split": "train",
+      "imports": [
+        "Mathlib.Data.ZMod.Basic"
+      ],
+      "lean_name": "AI4Algebra.Benchmarks.SelectedAttempt.zmod3_warmup",
+      "lean_statement": "addOrderOf (1 : ZMod 3) = 3",
+      "mapping_evidence_id": "zmod3-order-review",
+      "universes": [],
+      "binders": [],
+      "statement_digest": "6655a91a0adfc3c6a26f41b16b3954fe16f3631ffefd4137e92aeb020c3d0268"
+    },
+    {
+      "schema_version": 1,
+      "task_id": "exercise-11",
+      "source": {
+        "schema_version": 1,
+        "kind": "user_selected_exercise",
+        "source_id": "exercise-11",
+        "revision": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+        "location": "data/training_questions.md",
+        "content_digest": "2619c9aeadc349114f8ebd39d67dfa7eb4ae268d82e6548626c54f47f26b5084",
+        "attribution": "User-selected group theory exercises",
+        "license_ref": "Original textbook and license unspecified"
+      },
+      "informal_statement": "Find the order of every element of the additive group $\\mathbb{Z}/12\\mathbb{Z}$.\n\n**Value:** Builds concrete intuition for element order and cyclic groups.",
+      "family_id": "selected-exercise-11",
+      "split": "train",
+      "imports": [
+        "Mathlib.Data.ZMod.Basic"
+      ],
+      "lean_name": "AI4Algebra.Benchmarks.SelectedAttempt.exercise_11",
+      "lean_statement": "addOrderOf (0 : ZMod 12) = 1 \u2227 addOrderOf (1 : ZMod 12) = 12 \u2227 addOrderOf (2 : ZMod 12) = 6 \u2227 addOrderOf (3 : ZMod 12) = 4 \u2227 addOrderOf (4 : ZMod 12) = 3 \u2227 addOrderOf (5 : ZMod 12) = 12 \u2227 addOrderOf (6 : ZMod 12) = 2 \u2227 addOrderOf (7 : ZMod 12) = 12 \u2227 addOrderOf (8 : ZMod 12) = 3 \u2227 addOrderOf (9 : ZMod 12) = 4 \u2227 addOrderOf (10 : ZMod 12) = 6 \u2227 addOrderOf (11 : ZMod 12) = 12",
+      "mapping_evidence_id": "selected-mapping-11",
+      "universes": [],
+      "binders": [],
+      "statement_digest": "37279f40458e90d621fa278a741809a304a9de0151bccbfedca3fa3b82d3f221"
+    }
+  ],
+  "policies": [
+    {
+      "schema_version": 1,
+      "task_id": "zmod3-order-warmup",
+      "statement_digest": "6655a91a0adfc3c6a26f41b16b3954fe16f3631ffefd4137e92aeb020c3d0268",
+      "allowed_imports": [
+        "Mathlib.Data.ZMod.Basic"
+      ],
+      "allowed_declarations": [
+        "addOrderOf_eq_iff",
+        "Nat.zero_lt_succ"
+      ],
+      "forbidden_declarations": [
+        "ZMod.addOrderOf_coe",
+        "ZMod.addOrderOf_coe'",
+        "ZMod.addOrderOf_one",
+        "addOrderOf_nsmul",
+        "addOrderOf_nsmul'",
+        "IsOfFinAddOrder.addOrderOf_nsmul",
+        "AI4Algebra.Benchmarks.Gold.Selected.exercise11"
+      ],
+      "forbidden_imports": [
+        "AI4Algebra.Benchmarks.Gold"
+      ],
+      "bundle_digest": "15ba161d3b26b4711e3f96cded985062e8b70352b661779db5bc8b83d8c34d03",
+      "eligibility_digest": "d18d6deed807b6e0073459b5e0a4fae75351f2d9a8be537e650634cf25c38490",
+      "policy_digest": "15ba161d3b26b4711e3f96cded985062e8b70352b661779db5bc8b83d8c34d03"
+    },
+    {
+      "schema_version": 1,
+      "task_id": "exercise-11",
+      "statement_digest": "37279f40458e90d621fa278a741809a304a9de0151bccbfedca3fa3b82d3f221",
+      "allowed_imports": [
+        "Mathlib.Data.ZMod.Basic"
+      ],
+      "allowed_declarations": [
+        "addOrderOf_eq_iff",
+        "Nat.zero_lt_succ"
+      ],
+      "forbidden_declarations": [
+        "ZMod.addOrderOf_coe",
+        "ZMod.addOrderOf_coe'",
+        "ZMod.addOrderOf_one",
+        "addOrderOf_nsmul",
+        "addOrderOf_nsmul'",
+        "IsOfFinAddOrder.addOrderOf_nsmul",
+        "AI4Algebra.Benchmarks.Gold.Selected.exercise11"
+      ],
+      "forbidden_imports": [
+        "AI4Algebra.Benchmarks.Gold"
+      ],
+      "bundle_digest": "15ba161d3b26b4711e3f96cded985062e8b70352b661779db5bc8b83d8c34d03",
+      "eligibility_digest": "fd25e23f192fd713b24bf65cdf4d694b06ee5030591c08028b3487991fdc496d",
+      "policy_digest": "15ba161d3b26b4711e3f96cded985062e8b70352b661779db5bc8b83d8c34d03"
+    }
+  ]
+}

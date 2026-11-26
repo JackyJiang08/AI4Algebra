@@ -1,0 +1,92 @@
+{
+  "run": {
+    "singleton": 1,
+    "version": 1,
+    "run_id": "exercise11-full-20261125",
+    "price_digest": "282e5968995a8b02934c89634cfd7c9f37abf4a894d15eb930667467882fc43c",
+    "budget": 500000000,
+    "blocked": 0
+  },
+  "reservations": [
+    {
+      "id": "844c87e15c494c6091da6ed69554a454",
+      "input_bound": 2064,
+      "output_bound": 1536,
+      "reserved": 77952000,
+      "actual": 32112000,
+      "input_used": 2064,
+      "output_used": 390,
+      "cached_used": 0
+    },
+    {
+      "id": "bfb4486ae5454411b20607853de65d3a",
+      "input_bound": 2348,
+      "output_bound": 1536,
+      "reserved": 80224000,
+      "actual": 20904000,
+      "input_used": 2348,
+      "output_used": 53,
+      "cached_used": 0
+    },
+    {
+      "id": "f3a665fee5d848b19deb88de25a612c2",
+      "input_bound": 2348,
+      "output_bound": 1536,
+      "reserved": 80224000,
+      "actual": 21984000,
+      "input_used": 2348,
+      "output_used": 80,
+      "cached_used": 0
+    },
+    {
+      "id": "ce2722f88ba144dc9c88324131d109c5",
+      "input_bound": 2073,
+      "output_bound": 1536,
+      "reserved": 78024000,
+      "actual": 36784000,
+      "input_used": 2073,
+      "output_used": 505,
+      "cached_used": 0
+    },
+    {
+      "id": "a3d598f4ee1747b0bece3e4ae2fe69a5",
+      "input_bound": 2105,
+      "output_bound": 1536,
+      "reserved": 78280000,
+      "actual": 29640000,
+      "input_used": 2105,
+      "output_used": 320,
+      "cached_used": 0
+    },
+    {
+      "id": "b1b7bc4ae30b46459359eae630b59ee3",
+      "input_bound": 2087,
+      "output_bound": 1536,
+      "reserved": 78136000,
+      "actual": 34776000,
+      "input_used": 2087,
+      "output_used": 452,
+      "cached_used": 0
+    },
+    {
+      "id": "cb91f3fcd27b4f288a8872685c8159e8",
+      "input_bound": 2064,
+      "output_bound": 1536,
+      "reserved": 77952000,
+      "actual": 25032000,
+      "input_used": 2064,
+      "output_used": 213,
+      "cached_used": 0
+    },
+    {
+      "id": "e94bbb7c0581415d882b078c8b8718dc",
+      "input_bound": 2348,
+      "output_bound": 1536,
+      "reserved": 80224000,
+      "actual": 21704000,
+      "input_used": 2348,
+      "output_used": 73,
+      "cached_used": 0
+    }
+  ]
+}

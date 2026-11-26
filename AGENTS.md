@@ -32,6 +32,17 @@ asking again for routine permission.
   rewrite shared history. If a push fails, report the actual blocker.
 - Briefly report what was committed, the commit hash, and whether the push succeeded.
 
+## Full-system proof testing
+
+For requested problem tests, use the complete proof-search pipeline: reviewed
+premise retrieval, a compatible trained Double DQN policy, causal return retrieval,
+and independent Lean replay/type/axiom/dependency verification. A deterministic
+basic-tactic run is only an explicitly labeled ablation, never the requested result.
+Record checkpoint identity, optimizer updates, Q-value decisions, retrieval activity
+and all successful/failed attempts. Keep reference solutions out of search inputs.
+Use external theorem/lemma APIs when useful; paid calls share the cap above. If a
+required component is missing, implement it or report the blocker explicitly.
+
 ## Progress updates
 
 While working, briefly summarize what you are currently doing. Give concise updates

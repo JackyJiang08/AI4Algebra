@@ -1,0 +1,5 @@
+{
+  "selected_actions": null,
+  "applicability_probes": null,
+  "reason": "The process was stopped before the in-memory search trace was flushed; no steps are reconstructed."
+}
