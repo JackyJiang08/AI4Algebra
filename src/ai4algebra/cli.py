@@ -13,6 +13,7 @@ from ai4algebra.contracts import Certificate, Identifier, Record, Verdict
 from ai4algebra.corpus import Corpus
 from ai4algebra.evaluation import EvaluationPlan, HeldOutSplit, evaluate, load_training
 from ai4algebra.lean_bridge import BridgeError
+from ai4algebra.learning import DDQNConfig
 from ai4algebra.search import SearchOptions, SearchStatus
 from ai4algebra.training import TrainingOptions, TrainingPlan, train
 from ai4algebra.training._artifacts import (
@@ -175,6 +176,12 @@ def _parser() -> argparse.ArgumentParser:
         help="validated train task, repeat to select several",
     )
     training.add_argument("--seed", type=int, default=7)
+    training.add_argument(
+        "--hidden-layers",
+        type=int,
+        default=DDQNConfig().hidden_layers,
+        help="number of SiLU hidden layers in the proof policy",
+    )
     training.add_argument("--warmup-episodes", type=int, default=1)
     training.add_argument(
         "--episodes",
@@ -415,7 +422,12 @@ def _run_output(
             batch_size=args.batch_size,
         )
         training_plan = TrainingPlan.make(
-            identity, corpus, settings, options, tuple(args.task)
+            identity,
+            corpus,
+            settings,
+            options,
+            tuple(args.task),
+            hidden_layers=args.hidden_layers,
         )
         if (
             directory.path("training.json").exists()

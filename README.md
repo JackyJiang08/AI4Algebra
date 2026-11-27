@@ -150,6 +150,10 @@ uv run python -m ai4algebra evaluate --offline --config configs/lean-elementary.
 uv run python -m ai4algebra evaluate --offline --config configs/lean-elementary.json --training-run runs/example-train-7 --training-run runs/example-train-11 --split test --probes-per-node 2 --stop-on-closure --output runs/example-test
 ```
 
+The proof policy has three 32-unit SiLU hidden layers and a linear scalar Q output.
+Set `train --hidden-layers N` to change the depth. Archived single-hidden-layer ReLU
+checkpoints retain their original scoring function.
+
 Training saves the exact collected transitions/features, optimizer records, checkpoint
 and frozen return memory. New plans use Huber loss to limit the influence of large
 temporal-difference errors. The learner scores successor candidates in batches, and

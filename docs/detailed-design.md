@@ -152,7 +152,7 @@ No incomplete, truncated, verification-rejected, or unsupported episode enters v
 
 ## 10. Learning · R11
 
-**Interface.** `score(state_features, action_features) -> float`, `rank(state, candidate_set) -> ranked IDs`, `update(batch) -> UpdateMetrics`, `save/load(checkpoint)`. Use one small shared scalar network for every pair. For example, concatenate state and candidate features, apply a dense ReLU layer and a scalar output. Score ragged batches by flattening real candidate rows and tracking segment offsets, or pad and mask. Candidate position has no learned meaning.
+**Interface.** `score(state_features, action_features) -> float`, `rank(state, candidate_set) -> ranked IDs`, `update(batch) -> UpdateMetrics`, `save/load(checkpoint)`. Use one small shared scalar network for every pair. The default proof policy concatenates state and candidate features, applies three 32-unit SiLU hidden layers, and produces a linear scalar output. Score ragged batches by flattening real candidate rows and tracking segment offsets, or pad and mask. Candidate position has no learned meaning.
 
 For each sampled transition, evaluate the chosen state/candidate pair. For a verified terminal step the target is the observed reward. Otherwise select a legal successor candidate by the online network and use the target network to evaluate the same candidate.
 

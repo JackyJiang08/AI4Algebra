@@ -2,7 +2,7 @@
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Annotated, cast
+from typing import Annotated, Literal, cast
 
 from pydantic import (
     Field,
@@ -30,19 +30,37 @@ from ai4algebra.representation import (
 )
 
 NonnegativeInt = Annotated[int, Field(ge=0)]
+Activation = Literal["silu", "relu"]
 
 
 class DDQNConfig(Record):
     hidden_size: Annotated[int, Field(gt=0)] = 32
+    hidden_layers: Annotated[int, Field(gt=0)] = 3
+    activation: Activation = "silu"
     gamma: Annotated[float, Field(ge=0, le=1)] = 0.99
     learning_rate: Annotated[float, Field(gt=0)] = 0.01
     target_update_interval: Annotated[int, Field(gt=0)] = 20
     seed: NonnegativeInt = 0
     huber_delta: Annotated[float, Field(gt=0)] | None = None
 
+    @model_validator(mode="before")
+    @classmethod
+    def _legacy_architecture(cls, value: object) -> object:
+        if (
+            isinstance(value, dict)
+            and "schema_version" in value
+            and not ({"hidden_layers", "activation"} & value.keys())
+        ):
+            return {**value, "hidden_layers": 1, "activation": "relu"}
+        return value
+
     @model_serializer(mode="wrap")
     def _serialize(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:
         data = cast(dict[str, object], handler(self))
+        if self.activation == "relu" and self.hidden_layers == 1:
+            # Archived single-layer checkpoints predate architecture fields.
+            data.pop("activation", None)
+            data.pop("hidden_layers", None)
         if self.huber_delta is None:
             # Preserve the serialized configuration and digest of MSE checkpoints.
             data.pop("huber_delta", None)

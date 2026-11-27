@@ -64,6 +64,8 @@ class TrainingPlan(Record):
         settings: TrainingOptions,
         search: SearchOptions,
         task_ids: tuple[str, ...] = (),
+        *,
+        hidden_layers: int = DDQNConfig().hidden_layers,
     ) -> "TrainingPlan":
         allowed = {problem.task_id for problem in corpus.problems("train")}
         if not task_ids:
@@ -85,7 +87,12 @@ class TrainingPlan(Record):
             search=search,
             encoder=encoder.config,
             encoder_digest=encoder.encoder_digest,
-            ddqn=DDQNConfig(seed=initial, target_update_interval=2, huber_delta=1.0),
+            ddqn=DDQNConfig(
+                seed=initial,
+                hidden_layers=hidden_layers,
+                target_update_interval=2,
+                huber_delta=1.0,
+            ),
             action_seed=action,
             replay_seed=replay,
             task_ids=task_ids,

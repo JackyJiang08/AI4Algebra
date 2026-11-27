@@ -56,8 +56,7 @@ class CandidateDDQN:
         self._config = DDQNConfig.from_json(config.to_json())
         self._online = ScalarQ.initialize(
             encoder.state_size + encoder.action_size,
-            self.config.hidden_size,
-            self.config.seed,
+            self.config,
         )
         self._target = self._online.copy()
         self._update_steps = 0
@@ -355,21 +354,10 @@ class CandidateDDQN:
         ):
             raise ValueError("checkpoint encoder does not match")
         input_size = encoder.state_size + encoder.action_size
-        online = ScalarQ.restore(
-            artifact.online, input_size, artifact.config.hidden_size
-        )
-        target = ScalarQ.restore(
-            artifact.target, input_size, artifact.config.hidden_size
-        )
-        for array in (
-            online.weights,
-            online.bias,
-            online.readout,
-            target.weights,
-            target.bias,
-            target.readout,
-        ):
-            array.setflags(write=False)
+        online = ScalarQ.restore(artifact.online, input_size, artifact.config)
+        target = ScalarQ.restore(artifact.target, input_size, artifact.config)
+        online.freeze()
+        target.freeze()
         learner = cls(encoder, artifact.metadata.policy_digest, artifact.config)
         learner._online = online
         learner._target = target

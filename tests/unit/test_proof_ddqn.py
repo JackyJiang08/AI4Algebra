@@ -26,7 +26,7 @@ from ai4algebra.learning import (
     LearningSample,
     encode_decision,
 )
-from ai4algebra.learning._network import FloatArray
+from ai4algebra.learning._network import FloatArray, ScalarQ
 from ai4algebra.memory import ReturnMemory
 from ai4algebra.representation import (
     DecisionContext,
@@ -108,6 +108,8 @@ def _fixed_learner(huber_delta: float | None = None) -> CandidateDDQN:
         POLICY,
         DDQNConfig(
             hidden_size=1,
+            hidden_layers=1,
+            activation="relu",
             gamma=0.5,
             learning_rate=0.01,
             target_update_interval=2,
@@ -116,11 +118,19 @@ def _fixed_learner(huber_delta: float | None = None) -> CandidateDDQN:
     )
     action_start = ENCODER.state_size
     for network in (learner._online, learner._target):
-        network.weights.fill(0.0)
+        network.layers[0].weights.fill(0.0)
         network.readout.fill(1.0)
-    learner._online.weights[action_start : action_start + 3, 0] = (1.0, 3.0, 100.0)
-    learner._target.weights[action_start : action_start + 3, 0] = (10.0, 0.0, 102.0)
-    learner._target.weights[2, 0] = 4.0  # State feature for remaining depth.
+    learner._online.layers[0].weights[action_start : action_start + 3, 0] = (
+        1.0,
+        3.0,
+        100.0,
+    )
+    learner._target.layers[0].weights[action_start : action_start + 3, 0] = (
+        10.0,
+        0.0,
+        102.0,
+    )
+    learner._target.layers[0].weights[2, 0] = 4.0  # State feature for remaining depth.
     learner._target.offset = -2.0
     return learner
 
@@ -158,7 +168,7 @@ def test_shared_scores_are_invariant_to_order_and_masked_padding() -> None:
         expanded.state, expanded.eligible_actions[1]
     )
 
-    learner._online.weights[ENCODER.state_size + 1, 0] = 1.0
+    learner._online.layers[0].weights[ENCODER.state_size + 1, 0] = 1.0
     tied = tuple(sorted((assumption.candidate_id, reflexivity.candidate_id)))
     assert learner.rank(original) == learner.rank(padded) == tied
     assert (
@@ -452,10 +462,10 @@ def test_selected_pair_gradient_matches_finite_differences_and_target_is_detache
         return (learner.score(decision.state, sample.chosen_action) - target) ** 2
 
     checks = (
-        (network.weights, (2, 0)),
-        (network.weights, (ENCODER.state_size, 0)),
-        (network.weights, (ENCODER.state_size + 1, 0)),
-        (network.bias, (0,)),
+        (network.layers[0].weights, (2, 0)),
+        (network.layers[0].weights, (ENCODER.state_size, 0)),
+        (network.layers[0].weights, (ENCODER.state_size + 1, 0)),
+        (network.layers[0].bias, (0,)),
         (network.readout, (0,)),
     )
     step = 1e-6
@@ -477,10 +487,10 @@ def test_selected_pair_gradient_matches_finite_differences_and_target_is_detache
     metrics = learner.update((sample,))
     assert metrics.loss == 1.0
     updated = (
-        network.weights,
-        network.weights,
-        network.weights,
-        network.bias,
+        network.layers[0].weights,
+        network.layers[0].weights,
+        network.layers[0].weights,
+        network.layers[0].bias,
         network.readout,
     )
     for (_, updated_index), array, (original, gradient) in zip(
@@ -492,8 +502,44 @@ def test_selected_pair_gradient_matches_finite_differences_and_target_is_detache
     assert -network.offset / learner.config.learning_rate == pytest.approx(
         (plus - minus) / (2.0 * step)
     )
-    assert network.weights[ENCODER.state_size + 1, 0] == 3.0
+    assert network.layers[0].weights[ENCODER.state_size + 1, 0] == 3.0
     assert learner._target.snapshot() == old_target
+
+
+def test_deep_silu_forward_and_every_parameter_gradient() -> None:
+    config = DDQNConfig(hidden_size=2, seed=19)
+    assert (config.hidden_layers, config.activation) == (3, "silu")
+    network = ScalarQ.initialize(2, config)
+    pairs = np.array([[-1.0, 2.0], [0.5, -0.25]])
+    targets = np.array([0.2, -0.7])
+    expected = pairs
+    for layer in network.layers:
+        z = expected @ layer.weights + layer.bias
+        expected = z / (1.0 + np.exp(-z))
+    np.testing.assert_allclose(
+        network.predict(pairs), expected @ network.readout + network.offset
+    )
+    trained = network.copy()
+    rate = 0.01
+    trained.train(pairs, targets, rate)
+
+    def parameters(net: ScalarQ) -> list[FloatArray]:
+        return [
+            array for layer in net.layers for array in (layer.weights, layer.bias)
+        ] + [net.readout]
+
+    step = 1e-6
+    for before, after in zip(parameters(network), parameters(trained), strict=True):
+        for index in np.ndindex(before.shape):
+            original = before[index]
+            before[index] = original + step
+            plus = np.mean((network.predict(pairs) - targets) ** 2)
+            before[index] = original - step
+            minus = np.mean((network.predict(pairs) - targets) ** 2)
+            before[index] = original
+            assert (original - after[index]) / rate == pytest.approx(
+                (plus - minus) / (2 * step), abs=1e-8
+            )
 
 
 def test_hard_target_sync_counts_optimizer_updates_only() -> None:
@@ -502,7 +548,9 @@ def test_hard_target_sync_counts_optimizer_updates_only() -> None:
     batch = (_sample(decision, None, terminated=True),)
     initial = learner._online.snapshot()
     assert learner._target.snapshot() == initial
-    assert not np.shares_memory(learner._online.weights, learner._target.weights)
+    assert not np.shares_memory(
+        learner._online.layers[0].weights, learner._target.layers[0].weights
+    )
     assert not learner.update(batch).target_synced
     skipped = learner.update((_sample(decision, None, truncated=True),))
     assert skipped.update_steps == 1
@@ -510,7 +558,9 @@ def test_hard_target_sync_counts_optimizer_updates_only() -> None:
     second = learner.update(batch)
     assert second.target_synced and second.update_steps == 2
     assert learner._target.snapshot() == learner._online.snapshot()
-    assert not np.shares_memory(learner._online.weights, learner._target.weights)
+    assert not np.shares_memory(
+        learner._online.layers[0].weights, learner._target.layers[0].weights
+    )
 
 
 @pytest.mark.parametrize(
@@ -622,11 +672,17 @@ def test_retrieval_blends_concrete_ids_for_behavior_before_epsilon() -> None:
     assert calls == 4
 
 
-@pytest.mark.parametrize("huber_delta", [None, 1.0])
+@pytest.mark.parametrize(
+    ("huber_delta", "deep"), [(None, False), (1.0, False), (1.0, True)]
+)
 def test_evaluation_checkpoint_round_trip_and_compatibility(
-    tmp_path: Path, huber_delta: float | None
+    tmp_path: Path, huber_delta: float | None, deep: bool
 ) -> None:
-    learner = _fixed_learner(huber_delta)
+    learner = (
+        CandidateDDQN(ENCODER, POLICY, DDQNConfig(huber_delta=huber_delta))
+        if deep
+        else _fixed_learner(huber_delta)
+    )
     decision = _decision(_observation("root"), ("assumption",), (True,))
     successor = _decision(
         _observation("final"), ("assumption", "reflexivity"), (True, True)
@@ -655,6 +711,8 @@ def test_evaluation_checkpoint_round_trip_and_compatibility(
     original = learner.save(checkpoint, metadata)
     payload = json.loads(checkpoint.read_text(encoding="utf-8"))
     assert payload["artifact_digest"] == original
+    assert payload["config"].get("activation", "relu") == learner.config.activation
+    assert payload["config"].get("hidden_layers", 1) == learner.config.hidden_layers
     assert payload["config"].get("huber_delta") == huber_delta
     assert ("huber_delta" in payload["config"]) == (huber_delta is not None)
     restored = CandidateDDQN.load(

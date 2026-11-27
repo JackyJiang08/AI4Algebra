@@ -1,0 +1,247 @@
+{
+  "task_ids": [
+    "group-inverse-identity"
+  ],
+  "verified_source_episodes": 2,
+  "transitions": 4,
+  "scope": "Fixed train-split replay; RMSE against observed discounted returns on training transitions",
+  "results": [
+    {
+      "architecture": "relu-1x32-seed7",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 7,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 0.9828530730635194,
+      "return_rmse_at_128": 0.10130092426179839,
+      "final_return_rmse": 0.0001863536390002055,
+      "final_training_huber": 2.7916585674379404e-08,
+      "checkpoint_digest": "463c30709e055419215f38e1999f916dd1989bb33ae9a2ab3fcb89625d1fc532"
+    },
+    {
+      "architecture": "relu-1x32-seed11",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 11,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 1.0944653684091152,
+      "return_rmse_at_128": 0.05383410054157408,
+      "final_return_rmse": 1.3979708651493023e-11,
+      "final_training_huber": 2.531493370652362e-22,
+      "checkpoint_digest": "b18be4defebfd807ace4edb392a2ee0a6ea89ede5b4f6e1c3231111b44866eda"
+    },
+    {
+      "architecture": "relu-1x32-seed23",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 23,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 0.8946524797967822,
+      "return_rmse_at_128": 0.06453617165810013,
+      "final_return_rmse": 3.215240753803334e-06,
+      "final_training_huber": 8.363644368505881e-12,
+      "checkpoint_digest": "53e2619e6e677b6ad026ed43c6279f91c2d477ce0334e7b6ec72b52b6472235c"
+    },
+    {
+      "architecture": "silu-1x32-seed7",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "hidden_layers": 1,
+        "activation": "silu",
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 7,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 0.949409513032314,
+      "return_rmse_at_128": 0.11034184325580106,
+      "final_return_rmse": 0.0006923792983400869,
+      "final_training_huber": 3.651306382855893e-07,
+      "checkpoint_digest": "130d7e1b4b6c2c5cbc14355170e23ebfeae2db0583253af6693504d438780a05"
+    },
+    {
+      "architecture": "silu-1x32-seed11",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "hidden_layers": 1,
+        "activation": "silu",
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 11,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 1.1279232580138083,
+      "return_rmse_at_128": 0.12950880144178073,
+      "final_return_rmse": 4.956962761856435e-05,
+      "final_training_huber": 1.6665545864372187e-09,
+      "checkpoint_digest": "0c9b97799b82e18be6235380b2521def34778e4deea38855b2fdc662b4e4c139"
+    },
+    {
+      "architecture": "silu-1x32-seed23",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "hidden_layers": 1,
+        "activation": "silu",
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 23,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 1.0495689594223012,
+      "return_rmse_at_128": 0.06699168830024449,
+      "final_return_rmse": 5.4131422474822325e-05,
+      "final_training_huber": 2.4235177681869687e-09,
+      "checkpoint_digest": "3628dcc1e842a1c30c2f79ec83551ba3ccc24f650a4ce79a53abbc507d2732b6"
+    },
+    {
+      "architecture": "silu-3x32-seed7",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "hidden_layers": 3,
+        "activation": "silu",
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 7,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 0.947308252258091,
+      "return_rmse_at_128": 0.26576703540677665,
+      "final_return_rmse": 0.004539751778338616,
+      "final_training_huber": 1.9342865592886456e-05,
+      "checkpoint_digest": "8b148b112be811e0e2fa31929420be15436d376ede5245b71b4bc1a7d5ea719b"
+    },
+    {
+      "architecture": "silu-3x32-seed11",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "hidden_layers": 3,
+        "activation": "silu",
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 11,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 0.9627844806526534,
+      "return_rmse_at_128": 0.14514274633558874,
+      "final_return_rmse": 0.0019336164075846095,
+      "final_training_huber": 3.2221431343874515e-06,
+      "checkpoint_digest": "47c10754563e032df15ec963e3e40cb7b6c0a436ded7421ce69c74227d076ea4"
+    },
+    {
+      "architecture": "silu-3x32-seed23",
+      "source_run": "run-954fdd9a231fe32a",
+      "samples": [
+        "e28a1c6a2beb84f0316794265871684dab52202be24c43bbfa7333b837d68378",
+        "0e794eec5ab47b6790bd8ecb30675b498a2691e32736e58a7d90300534168f72",
+        "010acb3b58f8897e329905bd42d45bde06519d617167f7a0cb6b11dacff9b8d7",
+        "c2f5483ffc41468ea1c2983a3445007eff7d027b4686225dd793947a8e46cf7c"
+      ],
+      "config": {
+        "schema_version": 1,
+        "hidden_size": 32,
+        "hidden_layers": 3,
+        "activation": "silu",
+        "gamma": 0.99,
+        "learning_rate": 0.01,
+        "target_update_interval": 2,
+        "seed": 23,
+        "huber_delta": 1.0
+      },
+      "updates": 1024,
+      "initial_return_rmse": 1.020673625924823,
+      "return_rmse_at_128": 0.18724415480882634,
+      "final_return_rmse": 0.009653673405836366,
+      "final_training_huber": 9.479904012231621e-05,
+      "checkpoint_digest": "984f90669a47f4102ae984179cf66076e1a5c8b19ab417695f99398b9b180a8e"
+    }
+  ]
+}
