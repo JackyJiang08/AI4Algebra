@@ -166,6 +166,10 @@ automatically translate arbitrary Stacks pages into Lean.
 
 ### Export local training tactics
 
+The [subgroup and homomorphism collection](data/training/subgroups/README.md)
+includes 11 worked exercises with Lean statements, reference proofs and ordered
+tactic annotations in a local JSONL file.
+
 ```powershell
 uv run python -m ai4algebra export-tactics --include-selected --output runs/training-lean-solutions
 uv run python -m ai4algebra export-tactics --manifest data/manifests/stacks-pilot.json --output runs/training-lean-solutions
