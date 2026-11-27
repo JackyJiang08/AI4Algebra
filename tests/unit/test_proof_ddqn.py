@@ -563,6 +563,43 @@ def test_hard_target_sync_counts_optimizer_updates_only() -> None:
     )
 
 
+def test_polyak_updates_every_target_parameter_after_each_optimizer_step() -> None:
+    learner = CandidateDDQN(ENCODER, POLICY, DDQNConfig())
+    decision = _decision(_observation("root"), ("assumption",), (True,))
+    batch = (_sample(decision, None, terminated=True),)
+
+    def parameters(network: ScalarQ) -> tuple[FloatArray, ...]:
+        return (
+            *(
+                array
+                for layer in network.layers
+                for array in (layer.weights, layer.bias)
+            ),
+            network.readout,
+            np.array(network.offset),
+        )
+
+    assert learner.config.tau == 0.01
+    assert learner._target.snapshot() == learner._online.snapshot()
+    for step in (1, 2):
+        previous = tuple(array.copy() for array in parameters(learner._target))
+        result = learner.update(batch)
+        assert result.update_steps == step and result.target_synced
+        assert learner._target.snapshot() != learner._online.snapshot()
+        for old, online, target in zip(
+            previous,
+            parameters(learner._online),
+            parameters(learner._target),
+            strict=True,
+        ):
+            np.testing.assert_allclose(target, 0.99 * old + 0.01 * online, atol=1e-15)
+
+    before_skip = learner._target.snapshot()
+    skipped = learner.update((_sample(decision, None, truncated=True),))
+    assert skipped.update_steps == 2 and not skipped.target_synced
+    assert learner._target.snapshot() == before_skip
+
+
 @pytest.mark.parametrize(
     ("reward", "loss", "gradient"),
     [(0.75, 0.03125, 0.25), (101.0, 99.5, -1.0), (-1e155, 1e155, 1.0)],
@@ -715,6 +752,8 @@ def test_evaluation_checkpoint_round_trip_and_compatibility(
     assert payload["config"].get("hidden_layers", 1) == learner.config.hidden_layers
     assert payload["config"].get("huber_delta") == huber_delta
     assert ("huber_delta" in payload["config"]) == (huber_delta is not None)
+    assert payload["config"].get("tau") == (0.01 if deep else None)
+    assert payload["config"].get("target_update_interval") == (None if deep else 2)
     restored = CandidateDDQN.load(
         checkpoint,
         encoder=ENCODER,

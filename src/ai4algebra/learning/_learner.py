@@ -289,9 +289,14 @@ class CandidateDDQN:
                     huber_delta=self.config.huber_delta,
                 )
                 self._update_steps += 1
-                synced = self.update_steps % self.config.target_update_interval == 0
-                if synced:
+                tau = self.config.tau
+                interval = self.config.target_update_interval
+                if tau is not None:
+                    self._target.polyak_update(self._online, tau)
+                    synced = True
+                elif interval is not None and self.update_steps % interval == 0:
                     self._target = self._online.copy()
+                    synced = True
             return UpdateMetrics(
                 loss=loss,
                 target_mean=target_mean,

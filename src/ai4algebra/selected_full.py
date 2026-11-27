@@ -325,7 +325,7 @@ def _run_owned(
     config = config.model_copy(update={"limits": LIMITS})
     budget_directory = output if budget_run is None else budget_run
     bootstrap_options = OPTIONS.model_copy(update={"stop_on_closure": True})
-    ddqn = DDQNConfig(seed=7, target_update_interval=2, huber_delta=1.0)
+    ddqn = DDQNConfig(seed=7, huber_delta=1.0)
     tasks, policies = problems_and_policies(root)
     warmup, target = tasks
     directory.put(

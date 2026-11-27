@@ -3,8 +3,10 @@ import json
 import numpy as np
 import pytest
 
+from retrieval_ddqn.config import Config
 from retrieval_ddqn.contracts import Transition
 from retrieval_ddqn.learner import MLP, DoubleDQNLearner, double_dqn_targets
+from retrieval_ddqn.train import make_learner as make_training_learner
 
 
 def make_learner(seed: int = 11) -> DoubleDQNLearner:
@@ -104,3 +106,24 @@ def test_hard_sync_and_json_round_trip_between_syncs() -> None:
     assert restored.state_dict() == learner.state_dict()
     assert learner.update_steps == 2
     assert learner.online.state_dict() == learner.target.state_dict()
+
+
+def test_synthetic_training_uses_polyak_by_default() -> None:
+    config = Config(chain_length=3)
+    learner = make_training_learner(config)
+    batch = [
+        Transition((1.0, 0.0, 0.0), 1, 3.0, (0.0, 1.0, 0.0), True, False, 0, "train-0")
+    ]
+    assert config.to_dict()["tau"] == 0.01
+    assert "target_update_interval" not in config.to_dict()
+    for _ in range(2):
+        previous = learner.target.state_dict()
+        learner.update(batch)
+        online = learner.online.state_dict()
+        target = learner.target.state_dict()
+        assert target != previous and target != online
+        for name, parameter in target.items():
+            expected = 0.99 * np.asarray(previous[name]) + 0.01 * np.asarray(
+                online[name]
+            )
+            np.testing.assert_allclose(parameter, expected, atol=1e-15)

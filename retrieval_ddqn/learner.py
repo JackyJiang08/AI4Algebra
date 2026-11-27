@@ -6,6 +6,7 @@ from typing import TypedDict, cast
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
+from .config import resolve_target_tau
 from .contracts import Transition
 
 FloatArray = NDArray[np.float64]
@@ -96,6 +97,12 @@ class MLP:
     def copy_from(self, other: "MLP") -> None:
         self.load_state_dict(other._parameters())
 
+    def polyak_update(self, online: "MLP", tau: float) -> None:
+        parameters = online._parameters()
+        for name, target in self._parameters().items():
+            target *= 1.0 - tau
+            target += tau * parameters[name]
+
     def state_dict(self) -> NetworkState:
         return {
             name: cast(list[float] | list[list[float]], value.tolist())
@@ -154,14 +161,15 @@ class DoubleDQNLearner:
         seed: int,
         gamma: float,
         learning_rate: float,
-        target_update_interval: int,
+        target_update_interval: int | None = None,
+        *,
+        tau: float | None = None,
     ) -> None:
         if not 0 <= gamma <= 1:
             raise ValueError("gamma must be between zero and one")
         if not np.isfinite(learning_rate) or learning_rate <= 0:
             raise ValueError("learning_rate must be finite and positive")
-        if type(target_update_interval) is not int or target_update_interval < 1:
-            raise ValueError("target_update_interval must be a positive integer")
+        self.tau = resolve_target_tau(target_update_interval, tau)
         self.online = MLP(state_dim, action_count, hidden_dim, seed)
         self.target = MLP(state_dim, action_count, hidden_dim, seed)
         self.target.copy_from(self.online)
@@ -188,7 +196,12 @@ class DoubleDQNLearner:
             self.learning_rate,
         )
         self.update_steps += 1
-        if self.update_steps % self.target_update_interval == 0:
+        if self.tau is not None:
+            self.target.polyak_update(self.online, self.tau)
+        elif (
+            self.target_update_interval is not None
+            and self.update_steps % self.target_update_interval == 0
+        ):
             self.target.copy_from(self.online)
         return {
             "loss": loss,

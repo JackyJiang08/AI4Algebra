@@ -17,7 +17,7 @@ class Config:
     learning_rate: float = 0.01
     batch_size: int = 16
     replay_capacity: int = 2000
-    target_update_interval: int = 20
+    target_update_interval: int | None = None
     epsilon_start: float = 0.8
     epsilon_end: float = 0.1
     retrieval_enabled: bool = True
@@ -25,6 +25,7 @@ class Config:
     retrieval_capacity: int = 2000
     retrieval_k: int = 3
     retrieval_max_distance: float = 0.01
+    tau: float | None = None
 
     def __post_init__(self) -> None:
         for name in (
@@ -35,7 +36,6 @@ class Config:
             "hidden_dim",
             "batch_size",
             "replay_capacity",
-            "target_update_interval",
             "retrieval_capacity",
             "retrieval_k",
         ):
@@ -44,6 +44,8 @@ class Config:
                 raise ValueError(
                     f"{name} must be a valid positive integer (seed may be zero)"
                 )
+        tau = resolve_target_tau(self.target_update_interval, self.tau)
+        object.__setattr__(self, "tau", tau)
         if self.chain_length < 3:
             raise ValueError("chain_length must be >= 3")
         if self.batch_size > self.replay_capacity:
@@ -63,8 +65,25 @@ class Config:
             raise ValueError("retrieval_enabled must be boolean")
 
     def to_dict(self) -> dict[str, int | float | bool]:
-        return asdict(self)
+        return {
+            name: value for name, value in asdict(self).items() if value is not None
+        }
 
     @classmethod
     def load(cls, path: str | Path) -> "Config":
         return cls(**json.loads(Path(path).read_text(encoding="utf-8-sig")))
+
+
+def resolve_target_tau(interval: int | None, tau: float | None) -> float | None:
+    """Keep explicit hard-update intervals on historical configurations."""
+    if interval is not None:
+        if type(interval) is not int or interval < 1:
+            raise ValueError("target_update_interval must be a positive integer")
+        if tau is not None:
+            raise ValueError("tau and target_update_interval are mutually exclusive")
+        return None
+    if tau is None:
+        return 0.01
+    if type(tau) not in (int, float) or not 0 < tau <= 1:
+        raise ValueError("tau must be in (0, 1]")
+    return tau

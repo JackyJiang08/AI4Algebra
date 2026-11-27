@@ -40,6 +40,7 @@ def make_learner(config: Config) -> DoubleDQNLearner:
         config.gamma,
         config.learning_rate,
         config.target_update_interval,
+        tau=config.tau,
     )
 
 

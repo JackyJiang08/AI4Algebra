@@ -8,7 +8,7 @@
   "learning_rate": 0.01,
   "batch_size": 16,
   "replay_capacity": 2000,
-  "target_update_interval": 20,
+  "tau": 0.01,
   "epsilon_start": 0.8,
   "epsilon_end": 0.1,
   "retrieval_enabled": true,

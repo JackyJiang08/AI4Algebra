@@ -33,7 +33,9 @@ standard representatives in `ZMod 12`.
    publish discounted returns with a causal availability time.
 6. Perform 32 optimizer updates. The online network selects the maximizing
    successor action; the target network evaluates that selected action. Terminal
-   samples do not bootstrap. Synchronize the target every two updates. Save and
+   samples do not bootstrap. Fresh runs apply Polyak averaging with tau 0.01 after
+   every optimizer step. The archived experiment copied the target every two
+   updates. Save and
    reload a checkpoint bound to the encoder, policy, source catalog and frozen
    return memory.
 7. Run best-first search on the complete Exercise 11 statement with that frozen

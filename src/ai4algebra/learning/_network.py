@@ -86,6 +86,18 @@ class ScalarQ:
             self.offset,
         )
 
+    def polyak_update(self, online: Self, tau: float) -> None:
+        """Move every target parameter toward the post-update online network."""
+        keep = 1.0 - tau
+        for target_layer, online_layer in zip(self.layers, online.layers, strict=True):
+            target_layer.weights *= keep
+            target_layer.weights += tau * online_layer.weights
+            target_layer.bias *= keep
+            target_layer.bias += tau * online_layer.bias
+        self.readout *= keep
+        self.readout += tau * online.readout
+        self.offset = keep * self.offset + tau * online.offset
+
     def _forward(
         self,
         pairs: FloatArray,

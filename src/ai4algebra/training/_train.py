@@ -90,7 +90,6 @@ class TrainingPlan(Record):
             ddqn=DDQNConfig(
                 seed=initial,
                 hidden_layers=hidden_layers,
-                target_update_interval=2,
                 huber_delta=1.0,
             ),
             action_seed=action,

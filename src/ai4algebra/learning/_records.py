@@ -39,20 +39,28 @@ class DDQNConfig(Record):
     activation: Activation = "silu"
     gamma: Annotated[float, Field(ge=0, le=1)] = 0.99
     learning_rate: Annotated[float, Field(gt=0)] = 0.01
-    target_update_interval: Annotated[int, Field(gt=0)] = 20
+    target_update_interval: Annotated[int, Field(gt=0)] | None = None
     seed: NonnegativeInt = 0
     huber_delta: Annotated[float, Field(gt=0)] | None = None
+    tau: Annotated[float, Field(gt=0, le=1)] | None = 0.01
 
     @model_validator(mode="before")
     @classmethod
-    def _legacy_architecture(cls, value: object) -> object:
-        if (
-            isinstance(value, dict)
-            and "schema_version" in value
-            and not ({"hidden_layers", "activation"} & value.keys())
-        ):
-            return {**value, "hidden_layers": 1, "activation": "relu"}
+    def _legacy_defaults(cls, value: object) -> object:
+        if isinstance(value, dict):
+            if value.get("target_update_interval") is not None and "tau" not in value:
+                value = {**value, "tau": None}
+            if "schema_version" in value and not (
+                {"hidden_layers", "activation"} & value.keys()
+            ):
+                value = {**value, "hidden_layers": 1, "activation": "relu"}
         return value
+
+    @model_validator(mode="after")
+    def _validate_target_update(self) -> Self:
+        if (self.tau is None) == (self.target_update_interval is None):
+            raise ValueError("specify exactly one of tau and target_update_interval")
+        return self
 
     @model_serializer(mode="wrap")
     def _serialize(self, handler: SerializerFunctionWrapHandler) -> dict[str, object]:
@@ -64,6 +72,11 @@ class DDQNConfig(Record):
         if self.huber_delta is None:
             # Preserve the serialized configuration and digest of MSE checkpoints.
             data.pop("huber_delta", None)
+        if self.tau is None:
+            # Historical hard-update checkpoints had no tau field.
+            data.pop("tau", None)
+        if self.target_update_interval is None:
+            data.pop("target_update_interval", None)
         return data
 
 
@@ -272,4 +285,5 @@ class UpdateMetrics:
     no_eligible_next_actions: int
     bootstrapped_truncations: int
     update_steps: int
+    # True when this optimizer step applied a soft update or a legacy hard copy.
     target_synced: bool
